@@ -17,7 +17,7 @@ export default async function BrandsPage() {
   const brands = await client.fetch<SanityBrand[]>(BRANDS_QUERY, {}, options);
 
   return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8">
+    <main className="container mx-auto min-h-screen max-w-5xl p-8">
       <h1 className="text-4xl font-bold mb-8">Running Shoe Brands</h1>
       <BrandsTable brands={brands} />
     </main>
