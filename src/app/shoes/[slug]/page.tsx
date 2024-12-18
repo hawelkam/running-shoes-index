@@ -14,6 +14,7 @@ type SanityRunningShoe = SanityDocument & {
   image: { url: string };
 };
 //TODO: display info
+type Params = Promise<{ slug: string }>;
 
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
@@ -31,8 +32,10 @@ async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   }
 }
 
-const ShoePage = async ({ params }: { params: { slug: string } }) => {
-  const shoe = await getShoe((await params).slug);
+const ShoePage = async (props: { params: Params }) => {
+  const params = await props.params;
+  const slug = params.slug;
+  const shoe = await getShoe(slug);
 
   if (!shoe) {
     notFound(); // Trigger 404 page if the shoe is not found
@@ -67,7 +70,7 @@ const ShoePage = async ({ params }: { params: { slug: string } }) => {
         </ul>
       </div>
       <div>
-        <h2>Reviewer's note</h2>
+        <h2>Reviewer&apos;s note</h2>
         <ul>
           <li>Weight: </li>
           <li>Shoe size: </li>

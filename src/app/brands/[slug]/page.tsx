@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import { SanityBrand } from "../page";
 
+type Params = Promise<{ slug: string }>;
 async function getBrand(slug: string): Promise<SanityBrand | null> {
   try {
     const brand = await client.fetch<SanityBrand>(
@@ -19,8 +20,10 @@ async function getBrand(slug: string): Promise<SanityBrand | null> {
   }
 }
 
-const BrandPage = async ({ params }: { params: { slug: string } }) => {
-  const brand = await getBrand((await params).slug);
+const BrandPage = async (props: { params: Params }) => {
+  const params = await props.params;
+  const slug = params.slug;
+  const brand = await getBrand(slug);
 
   if (!brand) {
     notFound(); // Trigger 404 page if the shoe is not found

@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 interface GridViewProps {
-  items: any[];
+  items: ReactNode[];
 }
 
 export default function GridView({ items }: GridViewProps) {
