@@ -92,55 +92,105 @@ const ShoePage = async (props: { params: Params }) => {
         </div>
         <div className="py-4 border-b border-gray-200 flex items-center justify-between">
           <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
-            Colours
+            Price
           </p>
           <div className="flex items-center justify-center">
             <p className="text-sm leading-none text-gray-600 dark:text-gray-300">
-              Smoke Blue with red accents
+              {shoe.pricePln}zł | {shoe.priceEur}€ | {shoe.priceUsd}$
             </p>
-            <div className="w-6 h-6 bg-gradient-to-b from-gray-900 to-indigo-500 ml-3 mr-4 cursor-pointer"></div>
-            <svg
-              className="cursor-pointer text-gray-300 dark:text-white"
-              width="6"
-              height="10"
-              viewBox="0 0 6 10"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 1L5 5L1 9"
-                stroke="currentColor"
-                stroke-width="1.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
           </div>
         </div>
-        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
-            Size
-          </p>
-          <div className="flex items-center justify-center">
-            <p className="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3">
-              38.2
+        {shoe.category && (
+          <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+            <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
+              Category
             </p>
-            <svg
-              className="text-gray-300 dark:text-white cursor-pointer"
-              width="6"
-              height="10"
-              viewBox="0 0 6 10"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <div className="flex gap-2 items-center justify-center">
+              {shoe.category.map((cat, index) => (
+                <div
+                  className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
+                  key={`${shoe.name}-category-${index}`}
+                >
+                  <div className="mt-px">{cat}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="py-4 border-b border-gray-200">
+          <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
+            Specification
+          </p>
+          <p className="text-base leading-4 mt-7 text-gray-600 dark:text-gray-300">
+            Men&apos;s weight: {shoe.weightM}g
+          </p>
+          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
+            Men&apos;s drop: {shoe.dropM}mm
+          </p>
+          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
+            Men&apos;s stack height: {shoe.heelStackM}mm -{" "}
+            {shoe.heelStackM - shoe.dropM}mm
+          </p>
+          <p className="text-base leading-4 mt-7 text-gray-600 dark:text-gray-300">
+            Women&apos;s weight: {shoe.weightW}g
+          </p>
+          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
+            Women&apos;s drop: {shoe.dropW}mm
+          </p>
+          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
+            Women&apos;s stack height: {shoe.heelStackW}mm -{" "}
+            {shoe.heelStackW - shoe.dropW}mm
+          </p>
+          <p className="text-base leading-4 mt-7 text-gray-600 dark:text-gray-300">
+            Foam: {shoe.foam}
+          </p>
+          <p className="text-base leading-4 text-gray-600 dark:text-gray-300 mt-4">
+            Plate: {shoe.plate}
+          </p>
+          <p className="text-base leading-4 text-gray-600 dark:text-gray-300 mt-4">
+            Outsole: {shoe.outsole}
+          </p>
+          <p className="text-base leading-4 text-gray-600 dark:text-gray-300 mt-4">
+            Notes: {shoe.notes}
+          </p>
+        </div>
+        <div>
+          <div className="border-t border-b py-4 mt-7 border-gray-200">
+            <div
+              data-menu
+              className="flex justify-between items-center cursor-pointer"
             >
-              <path
-                d="M1 1L5 5L1 9"
-                stroke="currentColor"
-                stroke-width="1.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+              <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
+                Review
+              </p>
+            </div>
+            <div
+              className="hidden pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 dark:text-gray-300"
+              id="sect"
+            >
+              You will be responsible for paying for your own shipping costs for
+              returning your item. Shipping costs are nonrefundable
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="border-b py-4 border-gray-200">
+            <div
+              data-menu
+              className="flex justify-between items-center cursor-pointer"
+            >
+              <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
+                Previous version
+              </p>
+            </div>
+            <div
+              className="pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 dark:text-gray-300"
+              id="sect"
+            >
+              If you have any questions on how to return your item to us,
+              contact us.
+            </div>
           </div>
         </div>
         <button className="dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 hover:bg-gray-700 focus:outline-none">
@@ -183,111 +233,6 @@ const ShoePage = async (props: { params: Params }) => {
           </svg>
           Check availability in store
         </button>
-        <div>
-          <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 dark:text-gray-300 mt-7">
-            It is a long established fact that a reader will be distracted by
-            thereadable content of a page when looking at its layout. The point
-            of usingLorem Ipsum is that it has a more-or-less normal
-            distribution of letters.
-          </p>
-          <p className="text-base leading-4 mt-7 text-gray-600 dark:text-gray-300">
-            Product Code: 8BN321AF2IF0NYA
-          </p>
-          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
-            Length: 13.2 inches
-          </p>
-          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
-            Height: 10 inches
-          </p>
-          <p className="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">
-            Depth: 5.1 inches
-          </p>
-          <p className="md:w-96 text-base leading-normal text-gray-600 dark:text-gray-300 mt-4">
-            Composition: 100% calf leather, inside: 100% lamb leather
-          </p>
-        </div>
-        <div>
-          <div className="border-t border-b py-4 mt-7 border-gray-200">
-            <div
-              data-menu
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
-                Shipping and returns
-              </p>
-              <button
-                className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                role="button"
-                aria-label="show or hide"
-              >
-                <svg
-                  className="transform text-gray-300 dark:text-white"
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 1L5 5L1 1"
-                    stroke="currentColor"
-                    stroke-width="1.25"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              className="hidden pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 dark:text-gray-300"
-              id="sect"
-            >
-              You will be responsible for paying for your own shipping costs for
-              returning your item. Shipping costs are nonrefundable
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="border-b py-4 border-gray-200">
-            <div
-              data-menu
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800 dark:text-gray-300">
-                Contact us
-              </p>
-              <button
-                className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                role="button"
-                aria-label="show or hide"
-              >
-                <svg
-                  className="transform text-gray-300 dark:text-white"
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 1L5 5L1 1"
-                    stroke="currentColor"
-                    stroke-width="1.25"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              className="hidden pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 dark:text-gray-300"
-              id="sect"
-            >
-              If you have any questions on how to return your item to us,
-              contact us.
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
