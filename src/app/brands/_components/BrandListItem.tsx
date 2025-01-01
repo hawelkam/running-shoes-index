@@ -8,10 +8,10 @@ interface BrandListItemProps {
 
 const BrandListItem = ({ brand }: BrandListItemProps) => {
   return (
-    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+    <tr className="bg-white border-b">
       <th
         scope="row"
-        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
       >
         {brand.name}
       </th>
@@ -27,7 +27,7 @@ const BrandListItem = ({ brand }: BrandListItemProps) => {
       <td className="px-6 py-4 text-right">
         <Link
           href={`/brands/${brand.slug.current}`}
-          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+          className="font-medium text-blue-600hover:underline"
         >
           Learn more
         </Link>

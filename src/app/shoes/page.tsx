@@ -1,14 +1,47 @@
+import ListView from "@/_components/ListView";
 import { client } from "@/sanity/client";
 import { SanityDocument } from "next-sanity";
-import Link from "next/link";
+import ShoesListItem from "./_components/ShoesListItem";
+import ShoesListHeader from "./_components/ShoesListHeader";
 
 const SHOES_QUERY = `*[
   _type == "runningShoe" && defined(slug.current)
-]|order(releaseDate desc)[0...12]{_id, name, slug, releaseDatePL}`;
+]|order(lower(name) asc)[0...50]{_id, name, slug, releaseDatePL, image}`;
 
-type SanityRunningShoe = SanityDocument & {
+export type SanityRunningShoe = SanityDocument & {
   name: string;
-  releaseDatePL: Date;
+  brand: { name: string };
+  shoeType: { name: string };
+  pricePln: number;
+  priceEur: number;
+  priceUsd: number;
+  stability: string;
+  category: string[];
+  wideAvailable: boolean;
+  waterproofAvailable: boolean;
+  weightM: number;
+  dropM: number;
+  heelStackM: number;
+  weightW: number;
+  dropW: number;
+  heelStackW: number;
+  slug: { current: string };
+  releaseDatePL: string;
+  releaseDateEU: string;
+  foam: string[];
+  plate: string;
+  outsole: string[];
+  notes: string;
+  image: { url: string };
+  previousVersion: { name: string; slug: { current: string } };
+  reviewedWeight: number;
+  reviewedSize: number;
+  ytReviewEN: string;
+  ytReviewPL: string;
+  igReviewPL: string;
+  igReviewEN: string;
+  ttReviewPL: string;
+  ttReviewEN: string;
 };
 
 //TODO: add links to specific shoe types
@@ -24,16 +57,12 @@ export default async function Shoes() {
   return (
     <main className="container mx-auto min-h-screen max-w-3xl p-8">
       <h1 className="text-4xl font-bold mb-8">Running Shoes Index</h1>
-      <ul className="flex flex-col gap-y-4">
-        {shoes.map((shoe) => (
-          <li className="hover:underline" key={shoe._id}>
-            <Link href={`/shoes/${shoe.slug.current}`}>
-              <h2 className="text-xl font-semibold">{shoe.name}</h2>
-              <p>{new Date(shoe.releaseDatePL).toLocaleDateString()}</p>
-            </Link>
-          </li>
+      <ListView
+        listViewHeader={<ShoesListHeader />}
+        listViewItems={shoes.map((shoe) => (
+          <ShoesListItem shoe={shoe} key={shoe._id} />
         ))}
-      </ul>
+      />
     </main>
   );
 }

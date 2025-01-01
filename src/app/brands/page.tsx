@@ -5,7 +5,7 @@ import BrandsTable from "./_components/BrandsTable";
 
 const BRANDS_QUERY = `*[
   _type == "brand" && defined(slug.current)
-]|order(releaseDate desc)[0...30]{_id, slug, name, image}`;
+]|order(name asc)[0...30]{_id, slug, name, image}`;
 
 const options = { next: { revalidate: 30 } };
 
