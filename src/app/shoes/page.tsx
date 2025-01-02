@@ -16,7 +16,7 @@ export type SanityRunningShoe = SanityDocument & {
   priceEur: number;
   priceUsd: number;
   stability: string;
-  category: string[];
+  category?: { name: string }[];
   wideAvailable: boolean;
   waterproofAvailable: boolean;
   weightM: number;
@@ -28,9 +28,10 @@ export type SanityRunningShoe = SanityDocument & {
   slug: { current: string };
   releaseDatePL: string;
   releaseDateEU: string;
-  foam: string[];
+  upper: { name: string }[];
+  foam: { name: string }[];
   plate: string;
-  outsole: string[];
+  outsole?: { name: string }[];
   notes: string;
   image: { url: string };
   previousVersion: { name: string; slug: { current: string } };

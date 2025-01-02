@@ -8,7 +8,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, pricePln, priceEur, priceUsd, category, stability, weightM, dropM, heelStackM, weightW, dropW, heelStackW, releaseDatePL, releaseDateEU, foam, plate, outsole, notes, previousVersion->, image, reviewedWeight, reviewedSize, ytReviewPL, ytReviewEN, igReviewPL, igReviewEN, ttReviewPL, ttReviewEN}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, pricePln, priceEur, priceUsd, category[]->, stability, weightM, dropM, heelStackM, weightW, dropW, heelStackW, releaseDatePL, releaseDateEU, upper[]->, foam[]->, plate, outsole[]->, notes, previousVersion->, image, reviewedWeight, reviewedSize, ytReviewPL, ytReviewEN, igReviewPL, igReviewEN, ttReviewPL, ttReviewEN}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -171,7 +171,9 @@ const ShoePage = async (props: { params: Params }) => {
                         className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
                         key={`${shoe.name}-category-${index}`}
                       >
-                        <div className="mt-px">{cat}</div>
+                        <div className="mt-px">
+                          {shoe.category?.map((c) => c.name).join(", ")}
+                        </div>
                       </div>
                     ))}
                   </td>
@@ -293,7 +295,9 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Foam
                 </th>
-                <td className="px-6 py-4">{shoe.foam}</td>
+                <td className="px-6 py-4">
+                  {shoe.foam.map((f) => f.name).join(", ")}
+                </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
@@ -311,7 +315,9 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Outsole
                 </th>
-                <td className="px-6 py-4">{shoe.outsole}</td>
+                <td className="px-6 py-4">
+                  {shoe.outsole?.map((o) => o.name).join(", ")}
+                </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
