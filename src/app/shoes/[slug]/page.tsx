@@ -171,9 +171,7 @@ const ShoePage = async (props: { params: Params }) => {
                         className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
                         key={`${shoe.name}-category-${index}`}
                       >
-                        <div className="mt-px">
-                          {shoe.category?.map((c) => c.name).join(", ")}
-                        </div>
+                        <div className="mt-px">{cat.name}</div>
                       </div>
                     ))}
                   </td>
@@ -247,7 +245,8 @@ const ShoePage = async (props: { params: Params }) => {
                   Men&apos;s stack height
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.heelStackM}mm - {shoe.heelStackM - shoe.dropM}mm
+                  {shoe.heelStackM &&
+                    `${shoe.heelStackM}mm - ${shoe.heelStackM - shoe.dropM}mm`}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -276,7 +275,8 @@ const ShoePage = async (props: { params: Params }) => {
                   Women&apos;s stack height
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.heelStackW}mm - {shoe.heelStackW - shoe.dropW}mm
+                  {shoe.heelStackW &&
+                    `${shoe.heelStackW}mm - ${shoe.heelStackW - shoe.dropW}mm`}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -296,7 +296,7 @@ const ShoePage = async (props: { params: Params }) => {
                   Foam
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.foam.map((f) => f.name).join(", ")}
+                  {shoe.foam?.map((f) => f.name).join(", ")}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">

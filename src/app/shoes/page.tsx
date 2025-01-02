@@ -28,8 +28,8 @@ export type SanityRunningShoe = SanityDocument & {
   slug: { current: string };
   releaseDatePL: string;
   releaseDateEU: string;
-  upper: { name: string }[];
-  foam: { name: string }[];
+  upper?: { name: string }[];
+  foam?: { name: string }[];
   plate: string;
   outsole?: { name: string }[];
   notes: string;
