@@ -2,6 +2,7 @@ import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React from "react";
 import { SanityRunningShoe } from "../page";
+import Link from "next/link";
 
 type Params = Promise<{ slug: string }>;
 
@@ -30,7 +31,7 @@ const ShoePage = async (props: { params: Params }) => {
     notFound(); // Trigger 404 page if the shoe is not found
   }
   return (
-    <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+    <div className="md:flex items-start justify-center py-12 2xl:px-40 md:px-6 px-4">
       <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
         {shoe.image && (
           <img
@@ -41,12 +42,12 @@ const ShoePage = async (props: { params: Params }) => {
         )}
         <div>
           <div className="border-t border-b py-4 mt-7 border-gray-200">
-            <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full 2xl:w-1/2">
+            <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                   <tr>
                     <th scope="row" className="px-6 py-3">
-                      REVIEWS
+                      MY REVIEW
                     </th>
                     <th></th>
                   </tr>
@@ -57,7 +58,20 @@ const ShoePage = async (props: { params: Params }) => {
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                      English reviews
+                      Reviewed shoe specs
+                    </th>
+                    <td className="px-6 py-4 flex gap-2">
+                      {shoe.reviewedWeight &&
+                        shoe.reviewedSize &&
+                        `${shoe.reviewedWeight}g | ${shoe.reviewedSize}EU`}
+                    </td>
+                  </tr>
+                  <tr className="odd:bg-white even:bg-gray-50 border-b">
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    >
+                      English review
                     </th>
                     <td className="px-6 py-4 flex gap-2">
                       {shoe.ytReviewEN && <a href={shoe.ytReviewEN}>YouTube</a>}
@@ -72,7 +86,7 @@ const ShoePage = async (props: { params: Params }) => {
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                      Polish reviews
+                      Polish review
                     </th>
                     <td className="px-6 py-4 flex gap-2">
                       {shoe.ytReviewPL && <a href={shoe.ytReviewPL}>YouTube</a>}
@@ -87,58 +101,85 @@ const ShoePage = async (props: { params: Params }) => {
             </div>
           </div>
         </div>
-        <div>
-          <div className="border-b py-4 border-gray-200">
-            <div
-              data-menu
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800">
-                Previous version
-              </p>
-              <button className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 hover:bg-gray-700 focus:outline-none">
+        {shoe.previousVersion && (
+          <div>
+            <div className="border-b py-4 border-gray-200">
+              <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="row" className="px-6 py-3">
+                        PREVIOUS VERSION
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="odd:bg-white even:bg-gray-50 border-b">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        Name
+                      </th>
+                      <td className="px-6 py-4 flex gap-2">
+                        <Link
+                          href={`/shoes/${shoe.previousVersion.slug.current}`}
+                          className="underline"
+                        >
+                          {shoe.previousVersion.name}
+                        </Link>
+                      </td>
+                    </tr>
+                    <tr className="odd:bg-white even:bg-gray-50 border-b">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        Release date
+                      </th>
+                      <td className="px-6 py-4 flex gap-2">
+                        {Intl.DateTimeFormat("en-GB", {
+                          month: "short",
+                          year: "numeric",
+                        }).format(new Date(shoe.previousVersion.releaseDateEU))}
+                      </td>
+                    </tr>
+                    <tr className="odd:bg-white even:bg-gray-50 border-b">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        Image
+                      </th>
+                      <td className="px-6 py-4 flex gap-2">
+                        {shoe.image && (
+                          <img
+                            className="rounded-lg max-w-52"
+                            src={`${shoe.previousVersion.image.url}`}
+                            alt=""
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 hover:bg-gray-700 focus:outline-none gap-2">
                 <svg
-                  className="mr-3 text-white"
-                  width="16"
-                  height="17"
-                  viewBox="0 0 16 17"
-                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#e8eaed"
                 >
-                  <path
-                    d="M7.02301 7.18999C7.48929 6.72386 7.80685 6.12992 7.93555 5.48329C8.06425 4.83666 7.9983 4.16638 7.74604 3.55724C7.49377 2.94809 7.06653 2.42744 6.51835 2.06112C5.97016 1.6948 5.32566 1.49928 4.66634 1.49928C4.00703 1.49928 3.36252 1.6948 2.81434 2.06112C2.26615 2.42744 1.83891 2.94809 1.58665 3.55724C1.33439 4.16638 1.26843 4.83666 1.39713 5.48329C1.52583 6.12992 1.8434 6.72386 2.30968 7.18999L4.66634 9.54749L7.02301 7.18999Z"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M4.66699 4.83333V4.84166"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M13.69 13.8567C14.1563 13.3905 14.4738 12.7966 14.6025 12.15C14.7312 11.5033 14.6653 10.8331 14.413 10.2239C14.1608 9.61476 13.7335 9.09411 13.1853 8.72779C12.6372 8.36148 11.9926 8.16595 11.3333 8.16595C10.674 8.16595 10.0295 8.36148 9.48133 8.72779C8.93314 9.09411 8.5059 9.61476 8.25364 10.2239C8.00138 10.8331 7.93543 11.5033 8.06412 12.15C8.19282 12.7966 8.51039 13.3905 8.97667 13.8567L11.3333 16.2142L13.69 13.8567Z"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M11.333 11.5V11.5083"
-                    stroke="currentColor"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <path d="m320-160-56-57 103-103H80v-80h287L264-503l56-57 200 200-200 200Zm320-240L440-600l200-200 56 57-103 103h287v80H593l103 103-56 57Z" />
                 </svg>
                 Compare with previous version
               </button>
             </div>
           </div>
-        </div>
+        )}
       </div>
       <div className="md:hidden">
         {shoe.image && (
@@ -159,7 +200,7 @@ const ShoePage = async (props: { params: Params }) => {
           </h1>
         </div>
 
-        <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full 2xl:w-1/2">
+        <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>

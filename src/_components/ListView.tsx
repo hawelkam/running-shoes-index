@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import PaginationControls from "./PaginationControls";
 
 interface ListViewProps {
   listViewHeader: ReactElement;
@@ -17,6 +18,7 @@ export default function ListView({
         </thead>
         <tbody>{listViewItems}</tbody>
       </table>
+      <PaginationControls />
     </div>
   );
 }
