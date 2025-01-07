@@ -9,7 +9,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, pricePln, priceEur, priceUsd, category[]->, stability, weightM, dropM, heelStackM, weightW, dropW, heelStackW, releaseDatePL, releaseDateEU, upper[]->, foam[]->, plate, outsole[]->, notes, previousVersion->, image, reviewedWeight, reviewedSize, ytReviewPL, ytReviewEN, igReviewPL, igReviewEN, ttReviewPL, ttReviewEN}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, releaseInfo, category[]->, stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion->, image, review}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -40,67 +40,84 @@ const ShoePage = async (props: { params: Params }) => {
             src={shoe.image.url}
           />
         )}
-        <div>
-          <div className="border-t border-b py-4 mt-7 border-gray-200">
-            <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="row" className="px-6 py-3">
-                      MY REVIEW
-                    </th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="odd:bg-white even:bg-gray-50 border-b">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      Reviewed shoe specs
-                    </th>
-                    <td className="px-6 py-4 flex gap-2">
-                      {shoe.reviewedWeight &&
-                        shoe.reviewedSize &&
-                        `${shoe.reviewedWeight}g | ${shoe.reviewedSize}EU`}
-                    </td>
-                  </tr>
-                  <tr className="odd:bg-white even:bg-gray-50 border-b">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      English review
-                    </th>
-                    <td className="px-6 py-4 flex gap-2">
-                      {shoe.ytReviewEN && <a href={shoe.ytReviewEN}>YouTube</a>}
-                      {shoe.igReviewEN && (
-                        <a href={shoe.igReviewEN}>Instagram</a>
-                      )}
-                      {shoe.ttReviewEN && <a href={shoe.ttReviewEN}>TikTok</a>}
-                    </td>
-                  </tr>
-                  <tr className="odd:bg-white even:bg-gray-50 border-b">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                      Polish review
-                    </th>
-                    <td className="px-6 py-4 flex gap-2">
-                      {shoe.ytReviewPL && <a href={shoe.ytReviewPL}>YouTube</a>}
-                      {shoe.igReviewPL && (
-                        <a href={shoe.igReviewPL}>Instagram</a>
-                      )}
-                      {shoe.ttReviewPL && <a href={shoe.ttReviewPL}>TikTok</a>}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        {shoe.review && (
+          <div>
+            <div className="border-t border-b py-4 mt-7 border-gray-200">
+              <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                      <th scope="row" className="px-6 py-3">
+                        MY REVIEW
+                      </th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="odd:bg-white even:bg-gray-50 border-b">
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        Reviewed shoe specs
+                      </th>
+                      <td className="px-6 py-4 flex gap-2">
+                        {shoe.review.shoeInfo &&
+                          `${shoe.review.shoeInfo.weight}g | ${shoe.review.shoeInfo.sizeEU}EU | ${shoe.review.shoeInfo.sizeUS}US`}
+                      </td>
+                    </tr>
+                    {shoe.review.enReview && (
+                      <tr className="odd:bg-white even:bg-gray-50 border-b">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          English review
+                        </th>
+                        <td className="px-6 py-4 flex gap-2">
+                          {shoe.review.enReview.youtube && (
+                            <a href={shoe.review.enReview.youtube}>YouTube</a>
+                          )}
+                          {shoe.review.enReview.instagram && (
+                            <a href={shoe.review.enReview.instagram}>
+                              Instagram
+                            </a>
+                          )}
+                          {shoe.review.enReview.tiktok && (
+                            <a href={shoe.review.enReview.tiktok}>TikTok</a>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                    {shoe.review.plReview && (
+                      <tr className="odd:bg-white even:bg-gray-50 border-b">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          Polish review
+                        </th>
+                        <td className="px-6 py-4 flex gap-2">
+                          {shoe.review.plReview.youtube && (
+                            <a href={shoe.review.plReview.youtube}>YouTube</a>
+                          )}
+                          {shoe.review.plReview.instagram && (
+                            <a href={shoe.review.plReview.instagram}>
+                              Instagram
+                            </a>
+                          )}
+                          {shoe.review.plReview.tiktok && (
+                            <a href={shoe.review.plReview.tiktok}>TikTok</a>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         {shoe.previousVersion && (
           <div>
             <div className="border-b py-4 border-gray-200">
@@ -142,7 +159,9 @@ const ShoePage = async (props: { params: Params }) => {
                         {Intl.DateTimeFormat("en-GB", {
                           month: "short",
                           year: "numeric",
-                        }).format(new Date(shoe.previousVersion.releaseDateEU))}
+                        }).format(
+                          new Date(shoe.previousVersion.releaseInfo.eu.date)
+                        )}
                       </td>
                     </tr>
                     <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -207,7 +226,9 @@ const ShoePage = async (props: { params: Params }) => {
                 <th scope="row" className="px-6 py-3">
                   General info
                 </th>
-                <th></th>
+                <th>EU</th>
+                <th>US</th>
+                <th>PL</th>
               </tr>
             </thead>
             <tbody>
@@ -218,10 +239,56 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Price
                 </th>
-                <td className="px-6 py-4">
-                  {shoe.pricePln}zł | {shoe.priceEur}€ | {shoe.priceUsd}$
-                </td>
+                <td className="py-4">{shoe.releaseInfo.eu.price}€</td>
+                <td className="py-4">{shoe.releaseInfo.us?.price}$</td>
+                <td className="py-4">{shoe.releaseInfo.pl.price}zł</td>
               </tr>
+
+              {shoe.releaseInfo && (
+                <tr className="odd:bg-white even:bg-gray-50 border-b">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                  >
+                    Release date
+                  </th>
+                  <td className="py-4">
+                    {shoe.releaseInfo.eu?.date &&
+                      Intl.DateTimeFormat("en-GB", {
+                        month: "short",
+                        year: "numeric",
+                      }).format(new Date(shoe.releaseInfo.eu.date))}
+                  </td>
+                  <td className="py-4">
+                    {shoe.releaseInfo.us?.date &&
+                      Intl.DateTimeFormat("en-GB", {
+                        month: "short",
+                        year: "numeric",
+                      }).format(new Date(shoe.releaseInfo.us.date))}
+                  </td>
+                  <td className="py-4">
+                    {shoe.releaseInfo.pl?.date &&
+                      Intl.DateTimeFormat("en-GB", {
+                        month: "short",
+                        year: "numeric",
+                      }).format(new Date(shoe.releaseInfo.pl.date))}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="row" className="px-6 py-3">
+                  Specification
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
               {shoe.category && (
                 <tr className="odd:bg-white even:bg-gray-50 border-b">
                   <th
@@ -242,48 +309,6 @@ const ShoePage = async (props: { params: Params }) => {
                   </td>
                 </tr>
               )}
-              {shoe.releaseDateEU && (
-                <tr className="odd:bg-white even:bg-gray-50 border-b">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    Release date
-                  </th>
-                  <td className="px-6 py-4 flex gap-2">
-                    {Intl.DateTimeFormat("en-GB", {
-                      month: "short",
-                      year: "numeric",
-                    }).format(new Date(shoe.releaseDateEU))}
-                  </td>
-                </tr>
-              )}
-              {shoe.releaseDateEU && (
-                <tr className="odd:bg-white even:bg-gray-50 border-b">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    Polish release date
-                  </th>
-                  <td className="px-6 py-4 flex gap-2">
-                    {Intl.DateTimeFormat("en-GB", {
-                      month: "short",
-                      year: "numeric",
-                    }).format(new Date(shoe.releaseDatePL))}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="row" className="px-6 py-3">
-                  Specification
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
                   scope="row"
@@ -291,7 +316,7 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Men&apos;s weight
                 </th>
-                <td className="px-6 py-4">{shoe.weightM}g</td>
+                <td className="px-6 py-4">{shoe.specs.m?.weight}g</td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
@@ -300,7 +325,7 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Men&apos;s drop
                 </th>
-                <td className="px-6 py-4">{shoe.dropM}mm</td>
+                <td className="px-6 py-4">{shoe.specs.m?.drop}mm</td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
@@ -310,8 +335,8 @@ const ShoePage = async (props: { params: Params }) => {
                   Men&apos;s stack height
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.heelStackM &&
-                    `${shoe.heelStackM}mm - ${shoe.heelStackM - shoe.dropM}mm`}
+                  {shoe.specs.m?.heelStack &&
+                    `${shoe.specs.m?.heelStack}mm - ${shoe.specs.m?.heelStack - shoe.specs.m!.drop!}mm`}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -321,7 +346,7 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Women&apos;s weight
                 </th>
-                <td className="px-6 py-4">{shoe.weightW}g</td>
+                <td className="px-6 py-4">{shoe.specs.w?.weight}g</td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
@@ -330,7 +355,7 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Women&apos;s drop
                 </th>
-                <td className="px-6 py-4">{shoe.dropW}mm</td>
+                <td className="px-6 py-4">{shoe.specs.w?.drop}mm</td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
@@ -340,8 +365,8 @@ const ShoePage = async (props: { params: Params }) => {
                   Women&apos;s stack height
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.heelStackW &&
-                    `${shoe.heelStackW}mm - ${shoe.heelStackW - shoe.dropW}mm`}
+                  {shoe.specs.w?.heelStack &&
+                    `${shoe.specs.w?.heelStack}mm - ${shoe.specs.w?.heelStack - shoe.specs.w!.drop!}mm`}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -358,10 +383,21 @@ const ShoePage = async (props: { params: Params }) => {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
+                  Upper
+                </th>
+                <td className="px-6 py-4">
+                  {shoe.specs.upper?.map((f) => f.name).join(", ")}
+                </td>
+              </tr>
+              <tr className="odd:bg-white even:bg-gray-50 border-b">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                >
                   Foam
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.foam?.map((f) => f.name).join(", ")}
+                  {shoe.specs.foam?.map((f) => f.name).join(", ")}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -371,7 +407,7 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Plate
                 </th>
-                <td className="px-6 py-4">{shoe.plate}</td>
+                <td className="px-6 py-4">{shoe.specs.plate}</td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">
                 <th
@@ -381,7 +417,7 @@ const ShoePage = async (props: { params: Params }) => {
                   Outsole
                 </th>
                 <td className="px-6 py-4">
-                  {shoe.outsole?.map((o) => o.name).join(", ")}
+                  {shoe.specs.outsole?.map((o) => o.name).join(", ")}
                 </td>
               </tr>
               <tr className="odd:bg-white even:bg-gray-50 border-b">

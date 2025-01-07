@@ -10,46 +10,45 @@ export type SanityRunningShoe = SanityDocument & {
   name: string;
   brand: { name: string };
   shoeType: { name: string };
-  pricePln: number;
-  priceEur: number;
-  priceUsd: number;
+  releaseInfo: {
+    pl: { date: string; price: number };
+    eu: { date: string; price: number };
+    us: { date: string; price: number };
+  };
   stability: string;
   category?: { name: string }[];
   wideAvailable: boolean;
   waterproofAvailable: boolean;
-  weightM: number;
-  dropM: number;
-  heelStackM: number;
-  weightW: number;
-  dropW: number;
-  heelStackW: number;
+  specs: {
+    m?: { weight?: number; drop?: number; heelStack?: number };
+    w?: { weight?: number; drop?: number; heelStack?: number };
+    upper?: { name: string }[];
+    foam?: { name: string }[];
+    plate: string;
+    outsole?: { name: string }[];
+  };
   slug: { current: string };
-  releaseDatePL: string;
-  releaseDateEU: string;
-  upper?: { name: string }[];
-  foam?: { name: string }[];
-  plate: string;
-  outsole?: { name: string }[];
   notes: string;
   image: { url: string };
   previousVersion: {
     name: string;
     slug: { current: string };
-    releaseDateEU: string;
+    releaseInfo: {
+      pl: { date: string; price: number };
+      eu: { date: string; price: number };
+      us: { date: string; price: number };
+    };
     image: { url: string };
   };
-  reviewedWeight: number;
-  reviewedSize: number;
-  ytReviewEN: string;
-  ytReviewPL: string;
-  igReviewPL: string;
-  igReviewEN: string;
-  ttReviewPL: string;
-  ttReviewEN: string;
+  review: {
+    shoeInfo: { weight: number; sizeUS: number; sizeEU: number };
+    plReview: { youtube: string; instagram: string; tiktok: string };
+    enReview: { youtube: string; instagram: string; tiktok: string };
+  };
 };
 
 async function getData(lastPageNum: number = 1) {
-  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[${lastPageNum * 10}...${lastPageNum * 10 + 10}]{_id, name, slug, releaseDateEU, image}`;
+  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[${lastPageNum * 10}...${lastPageNum * 10 + 10}]{_id, name, slug, image}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,

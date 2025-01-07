@@ -6,8 +6,8 @@ import ShoesListItem from "../_components/ShoesListItem";
 import { Suspense } from "react";
 
 const SHOES_QUERY = `*[
-  _type == "runningShoe" && defined(slug.current) && releaseDateEU > "2023-12-31" && releaseDateEU < "2025-01-01"
-]|order(lower(name) asc)[0...400]{_id, name, slug, releaseDateEU, image}`;
+  _type == "runningShoe" && defined(slug.current) && releaseInfo.eu.date > "2023-12-31" && releaseInfo.eu.date < "2025-01-01"
+]|order(lower(name) asc)[0...400]{_id, name, slug, releaseInfo, image}`;
 
 export default async function Shoes2025() {
   const shoes = await client.fetch<SanityRunningShoe[]>(
