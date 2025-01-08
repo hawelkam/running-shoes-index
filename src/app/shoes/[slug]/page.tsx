@@ -239,9 +239,9 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   Price
                 </th>
-                <td className="py-4">{shoe.releaseInfo.eu.price}€</td>
+                <td className="py-4">{shoe.releaseInfo.eu?.price}€</td>
                 <td className="py-4">{shoe.releaseInfo.us?.price}$</td>
-                <td className="py-4">{shoe.releaseInfo.pl.price}zł</td>
+                <td className="py-4">{shoe.releaseInfo.pl?.price}zł</td>
               </tr>
 
               {shoe.releaseInfo && (
