@@ -54,18 +54,32 @@ const ShoePage = async (props: { params: Params }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Reviewed shoe specs
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        {shoe.review.shoeInfo &&
-                          `${shoe.review.shoeInfo.weight}g | ${shoe.review.shoeInfo.sizeEU}EU | ${shoe.review.shoeInfo.sizeUS}US`}
-                      </td>
-                    </tr>
+                    {shoe.review.shoeInfo.weight && (
+                      <tr className="odd:bg-white even:bg-gray-50 border-b">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          Reviewed shoe weight
+                        </th>
+                        <td className="px-6 py-4 flex gap-2">
+                          {`${shoe.review.shoeInfo.weight}g | ${Math.round(shoe.review.shoeInfo.weight * 3.5274) / 100}oz.`}
+                        </td>
+                      </tr>
+                    )}
+                    {shoe.review.shoeInfo && (
+                      <tr className="odd:bg-white even:bg-gray-50 border-b">
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                          Reviewed shoe size
+                        </th>
+                        <td className="px-6 py-4 flex gap-2">
+                          {`${shoe.review.shoeInfo.sizeEU}EU | ${shoe.review.shoeInfo.sizeUS}US`}
+                        </td>
+                      </tr>
+                    )}
                     {shoe.review.enReview && (
                       <tr className="odd:bg-white even:bg-gray-50 border-b">
                         <th

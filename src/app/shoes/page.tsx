@@ -1,10 +1,9 @@
 import ListView from "@/_components/ListView";
 import { client } from "@/sanity/client";
 import { SanityDocument } from "next-sanity";
-import ShoesListItem from "./_components/ShoesListItem";
-import ShoesListHeader from "./_components/ShoesListHeader";
 import Link from "next/link";
 import { Suspense } from "react";
+import ShoeCard from "./_components/ShoeCard";
 
 export type SanityRunningShoe = SanityDocument & {
   name: string;
@@ -48,7 +47,7 @@ export type SanityRunningShoe = SanityDocument & {
 };
 
 async function getData(lastPageNum: number = 1) {
-  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[${lastPageNum * 10}...${lastPageNum * 10 + 10}]{_id, name, slug, image}`;
+  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[${lastPageNum * 10}...${lastPageNum * 10 + 10}]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
@@ -80,7 +79,7 @@ export default async function Shoes({
           >
             All Shoes
           </button>
-          <Link href="/shoes/2025">
+          <Link href="/shoes/released/eu/2025">
             <button
               type="button"
               className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
@@ -88,7 +87,7 @@ export default async function Shoes({
               2025
             </button>
           </Link>
-          <Link href="/shoes/2024">
+          <Link href="/shoes/released/eu/2024">
             <button
               type="button"
               className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
@@ -106,9 +105,8 @@ export default async function Shoes({
 
         <h2 className="text-2xl font-bold mb-8">All items</h2>
         <ListView
-          listViewHeader={<ShoesListHeader />}
           listViewItems={shoes.map((shoe) => (
-            <ShoesListItem shoe={shoe} key={shoe._id} />
+            <ShoeCard shoe={shoe} key={shoe._id} />
           ))}
         />
       </main>

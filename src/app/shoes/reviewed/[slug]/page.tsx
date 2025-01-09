@@ -4,13 +4,13 @@ import { Suspense } from "react";
 import { SanityRunningShoe } from "../../page";
 import ShoeCard from "../../_components/ShoeCard";
 
-type Params = Promise<{ slug: string[] }>;
+type Params = Promise<{ slug: string }>;
 
-async function getShoes(slug: string[]): Promise<SanityRunningShoe[]> {
+async function getShoes(slug: string): Promise<SanityRunningShoe[]> {
   try {
     const shoes = await client.fetch<SanityRunningShoe[]>(
       `*[
-  _type == "runningShoe" && defined(slug.current) && releaseInfo.${slug[0] || "eu"}.date > "${slug[1]}-${slug[2] || "01"}-00" && releaseInfo.${slug[0] || "eu"}.date < "${slug[1]}-${slug[2] || "12"}-32"
+  _type == "runningShoe" && defined(slug.current) && defined(review) && releaseInfo.pl.date > "${slug}-01-00" && releaseInfo.pl.date < "${slug}-12-32"
 ]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`,
       {},
       { next: { revalidate: 60 } }
@@ -24,7 +24,7 @@ async function getShoes(slug: string[]): Promise<SanityRunningShoe[]> {
   }
 }
 
-const ReleasesOfDate = async (props: { params: Params }) => {
+const ReviewedInYear = async (props: { params: Params }) => {
   const params = await props.params;
   const slug = params.slug;
   const shoes = await getShoes(slug);
@@ -33,7 +33,9 @@ const ReleasesOfDate = async (props: { params: Params }) => {
     <Suspense>
       <main className="container mx-auto min-h-screen max-w-3xl p-8">
         <h1 className="text-4xl font-bold mb-8">Running Shoes Index</h1>
-        <h2 className="text-2xl font-bold mb-8">Shoes of {slug[0]}</h2>
+        <h2 className="text-2xl font-bold mb-8">
+          Shoes of {slug} reviewed by me
+        </h2>
         <ListView
           listViewItems={shoes.map((shoe) => (
             <ShoeCard shoe={shoe} key={shoe._id} />
@@ -46,14 +48,11 @@ const ReleasesOfDate = async (props: { params: Params }) => {
 
 export async function generateStaticParams() {
   try {
-    return [
-      ["eu", "2024"],
-      ["eu", "2025"],
-    ].map((year) => ({ slug: year }));
+    return ["2024", "2025"].map((year) => ({ slug: year }));
   } catch (error) {
     console.error("Failed to fetch slugs:", error);
     return [];
   }
 }
 
-export default ReleasesOfDate;
+export default ReviewedInYear;
