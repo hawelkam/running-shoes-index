@@ -26,7 +26,7 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
             <div className="flex gap-2">
               {shoe.category?.map((cat) => (
                 <div
-                  className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 hidden md:block"
+                  className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 block"
                   key={cat.name}
                 >
                   {cat.name}
@@ -37,19 +37,19 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
           <h3 className="font-black text-gray-800 md:text-3xl text-xl">
             {`${shoe.name}${shoe.review ? " ✅" : ""}`}
           </h3>
-          <div className="flex flex-col">
+          <div className="gap-4 hidden md:flex">
             {shoe.releaseInfo.eu && (
               <div className="flex gap-2 flex-col md:flex-row">
                 <p>🇪🇺</p>
                 {shoe.releaseInfo.eu?.date && (
-                  <p className="text-md font-normal text-gray-800">
+                  <p className="text-sm font-normal text-gray-800">
                     {Intl.DateTimeFormat("en-GB", {
                       month: "short",
                       year: "numeric",
                     }).format(new Date(shoe.releaseInfo.eu.date))}
                   </p>
                 )}
-                <p className="text-md font-black text-gray-800">
+                <p className="text-sm font-black text-gray-800">
                   €{shoe.releaseInfo.eu.price}
                 </p>
               </div>
@@ -58,14 +58,14 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
               <div className="flex gap-2 flex-col md:flex-row">
                 <p>🇺🇸</p>
                 {shoe.releaseInfo.us?.date && (
-                  <p className="text-md font-normal text-gray-800">
+                  <p className="text-sm font-normal text-gray-800">
                     {Intl.DateTimeFormat("en-GB", {
                       month: "short",
                       year: "numeric",
                     }).format(new Date(shoe.releaseInfo.us.date))}
                   </p>
                 )}
-                <p className="text-md font-black text-gray-800">
+                <p className="text-sm font-black text-gray-800">
                   ${shoe.releaseInfo.us.price}
                 </p>
               </div>
@@ -74,14 +74,14 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
               <div className="flex gap-2 flex-col md:flex-row">
                 <p>🇵🇱</p>
                 {shoe.releaseInfo.pl?.date && (
-                  <p className="text-md font-normal text-gray-800">
+                  <p className="text-sm font-normal text-gray-800">
                     {Intl.DateTimeFormat("en-GB", {
                       month: "short",
                       year: "numeric",
                     }).format(new Date(shoe.releaseInfo.pl.date))}
                   </p>
                 )}
-                <p className="text-md font-black text-gray-800">
+                <p className="text-sm font-black text-gray-800">
                   {shoe.releaseInfo.pl.price}zł
                 </p>
               </div>
