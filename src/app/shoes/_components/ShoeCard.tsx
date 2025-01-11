@@ -44,7 +44,7 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
                 {shoe.releaseInfo.eu?.date && (
                   <p className="text-sm font-normal text-gray-800">
                     {Intl.DateTimeFormat("en-GB", {
-                      month: "short",
+                      month: "numeric",
                       year: "numeric",
                     }).format(new Date(shoe.releaseInfo.eu.date))}
                   </p>
@@ -60,7 +60,7 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
                 {shoe.releaseInfo.us?.date && (
                   <p className="text-sm font-normal text-gray-800">
                     {Intl.DateTimeFormat("en-GB", {
-                      month: "short",
+                      month: "numeric",
                       year: "numeric",
                     }).format(new Date(shoe.releaseInfo.us.date))}
                   </p>
@@ -76,7 +76,7 @@ const ShoeCard = ({ shoe }: ShoeCardProps) => {
                 {shoe.releaseInfo.pl?.date && (
                   <p className="text-sm font-normal text-gray-800">
                     {Intl.DateTimeFormat("en-GB", {
-                      month: "short",
+                      month: "numeric",
                       year: "numeric",
                     }).format(new Date(shoe.releaseInfo.pl.date))}
                   </p>
