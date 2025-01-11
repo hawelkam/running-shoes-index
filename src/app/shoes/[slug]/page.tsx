@@ -3,13 +3,14 @@ import { notFound } from "next/navigation";
 import React from "react";
 import { SanityRunningShoe } from "../page";
 import Link from "next/link";
+import CompareModal from "../_components/CompareModal";
 
 type Params = Promise<{ slug: string }>;
 
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, releaseInfo, category[]->, stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion->, image, review}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, releaseInfo, category[]->, stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, category[]->, slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, review}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -198,18 +199,7 @@ const ShoePage = async (props: { params: Params }) => {
                   </tbody>
                 </table>
               </div>
-              <button className="focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 hover:bg-gray-700 focus:outline-none gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill="#e8eaed"
-                >
-                  <path d="m320-160-56-57 103-103H80v-80h287L264-503l56-57 200 200-200 200Zm320-240L440-600l200-200 56 57-103 103h287v80H593l103 103-56 57Z" />
-                </svg>
-                Compare with previous version
-              </button>
+              <CompareModal shoe={shoe} />
             </div>
           </div>
         )}
