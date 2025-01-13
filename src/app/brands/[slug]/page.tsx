@@ -10,7 +10,7 @@ type Params = Promise<{ slug: string }>;
 async function getBrand(slug: string): Promise<SanityBrand | null> {
   try {
     const brand = await client.fetch<SanityBrand>(
-      `*[_type == "brand" && slug.current == "${slug}"][0]{_id, name, country, officialWebsite, polishWebsite, image, mediaContact, mediaContactPl}`,
+      `*[_type == "brand" && slug.current == "${slug}"][0]{_id, name, country, usWebsite, euWebsite, plWebsite, image, mediaContact, mediaContactPl}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -91,7 +91,9 @@ const BrandPage = async (props: { params: Params }) => {
                       Official website
                     </th>
                     <td className="px-6 py-4 flex gap-2">
-                      {brand.officialWebsite}
+                      {brand.usWebsite && <a href={brand.usWebsite}>US</a>}
+                      {brand.euWebsite && <a href={brand.euWebsite}>EU</a>}
+                      {brand.plWebsite && <a href={brand.plWebsite}>PL</a>}
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -102,7 +104,15 @@ const BrandPage = async (props: { params: Params }) => {
                       Media contact
                     </th>
                     <td className="px-6 py-4 flex gap-2">
-                      {brand.mediaContact}
+                      {brand.usMediaContact && (
+                        <a href={`mailto:"${brand.usMediaContact}"`}>US</a>
+                      )}
+                      {brand.euMediaContact && (
+                        <a href={`mailto:"${brand.euMediaContact}"`}>EU</a>
+                      )}
+                      {brand.plMediaContact && (
+                        <a href={`mailto:"${brand.plMediaContact}"`}>PL</a>
+                      )}
                     </td>
                   </tr>
                 </tbody>

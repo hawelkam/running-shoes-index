@@ -14,10 +14,12 @@ export type SanityBrand = SanityDocument & {
   slug: { current: string };
   image: { url: string };
   country: string;
-  officialWebsite: string;
-  polishWebsite: string;
-  mediaContact: string;
-  mediaContactPl: string;
+  usWebsite: string;
+  euWebsite: string;
+  plWebsite: string;
+  usMediaContact: string;
+  euMediaContact: string;
+  plMediaContact: string;
 };
 
 export default async function BrandsPage() {
