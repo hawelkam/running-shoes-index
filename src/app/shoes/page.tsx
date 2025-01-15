@@ -1,72 +1,23 @@
-import ListView from "@/_components/ListView";
 import { client } from "@/sanity/client";
-import { SanityDocument } from "next-sanity";
 import Link from "next/link";
 import { Suspense } from "react";
-import ShoeCard from "./_components/ShoeCard";
+import { SanityRunningShoe } from "@/_types/RunningShoe";
+import ShoesTable from "./_components/ShoesTable";
+import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
 
-export type SanityRunningShoe = SanityDocument & {
-  name: string;
-  brand: { name: string };
-  shoeType: { name: string };
-  releaseInfo: {
-    pl: { date: string; price: number };
-    eu: { date: string; price: number };
-    us: { date: string; price: number };
-  };
-  stability: string;
-  category?: { name: string }[];
-  wideAvailable: boolean;
-  waterproofAvailable: boolean;
-  specs: {
-    m?: { weight?: number; drop?: number; heelStack?: number };
-    w?: { weight?: number; drop?: number; heelStack?: number };
-    upper?: { name: string }[];
-    foam?: { name: string }[];
-    plate: string;
-    outsole?: { name: string }[];
-  };
-  slug: { current: string };
-  notes: string;
-  image: { url: string };
-  previousVersion: {
-    name: string;
-    slug: { current: string };
-    releaseInfo: {
-      pl: { date: string; price: number };
-      eu: { date: string; price: number };
-      us: { date: string; price: number };
-    };
-    image: { url: string };
-  };
-  review: {
-    shoeInfo: { weight: number; sizeUS: number; sizeEU: number };
-    plReview: { youtube: string; instagram: string; tiktok: string };
-    enReview: { youtube: string; instagram: string; tiktok: string };
-  };
-};
-
-async function getData(lastPageNum: number = 1) {
-  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[${lastPageNum * 10}...${lastPageNum * 10 + 10}]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`;
+async function getData() {
+  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
-    { lastId: lastPageNum },
+    {},
     { next: { revalidate: 30 } }
   );
   return data;
 }
 
-export default async function Shoes({
-  searchParams,
-}: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const page = Number((await searchParams)?.page ?? 0);
-  const shoes = await getData(page);
+export default async function Shoes() {
+  const shoes = await getData();
 
   return (
     <Suspense>
@@ -104,11 +55,7 @@ export default async function Shoes({
         </div>
 
         <h2 className="text-2xl font-bold mb-8">All items</h2>
-        <ListView
-          listViewItems={shoes.map((shoe) => (
-            <ShoeCard shoe={shoe} key={shoe._id} />
-          ))}
-        />
+        <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
       </main>
     </Suspense>
   );

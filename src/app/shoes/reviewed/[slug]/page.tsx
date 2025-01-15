@@ -1,8 +1,8 @@
-import ListView from "@/_components/ListView";
 import { client } from "@/sanity/client";
 import { Suspense } from "react";
-import { SanityRunningShoe } from "../../page";
-import ShoeCard from "../../_components/ShoeCard";
+import { SanityRunningShoe } from "@/_types/RunningShoe";
+import ShoesTable from "../../_components/ShoesTable";
+import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
 
 type Params = Promise<{ slug: string }>;
 
@@ -36,11 +36,7 @@ const ReviewedInYear = async (props: { params: Params }) => {
         <h2 className="text-2xl font-bold mb-8">
           Shoes of {slug} reviewed by me
         </h2>
-        <ListView
-          listViewItems={shoes.map((shoe) => (
-            <ShoeCard shoe={shoe} key={shoe._id} />
-          ))}
-        />
+        <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
       </main>
     </Suspense>
   );

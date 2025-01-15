@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { SanityBrand } from "../page";
+import Card from "antd/es/card/Card";
+import Title from "antd/es/typography/Title";
 
 interface IProps {
   brand: SanityBrand;
@@ -7,38 +9,22 @@ interface IProps {
 
 export default function BrandCard({ brand }: IProps) {
   return (
-    <div className="flex flex-col items-center text-center gap-4 p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-      {brand.image && (
-        <a href="#">
-          <img className="rounded-t-lg" src={`${brand.image.url}`} alt="" />
-        </a>
-      )}
-      <h5 className="hover:underline">
-        <Link href={`/${brand.slug.current}`}>
-          <h2 className="text-2xl font-bold">{brand.name}</h2>
-        </Link>
-      </h5>
-      <a
-        href={`/brands/${brand.slug.current}`}
-        className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-      >
-        Read more
-        <svg
-          className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 10"
+    <Card
+      cover={<img alt="example" src={brand.image.url} />}
+      actions={[
+        <Link
+          href={`/brands/${brand.slug.current}`}
+          key={`${brand.slug.current}-details`}
         >
-          <path
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M1 5h12m0 0L9 1m4 4L9 9"
-          />
-        </svg>
-      </a>
-    </div>
+          Details
+        </Link>,
+      ]}
+    >
+      <Link href={`/brands/${brand.slug.current}`}>
+        <Title level={2} style={{ textAlign: "center" }}>
+          {brand.name}
+        </Title>
+      </Link>
+    </Card>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
+import { SanityRunningShoe } from "@/_types/RunningShoe";
 import { useState } from "react";
-import { SanityRunningShoe } from "../page";
 
 interface ModalProps {
   shoe: SanityRunningShoe;

@@ -1,6 +1,6 @@
 import React from "react";
-import { SanityRunningShoe } from "../page";
 import Link from "next/link";
+import { SanityRunningShoe } from "@/_types/RunningShoe";
 
 interface ShoeCardProps {
   shoe: SanityRunningShoe;

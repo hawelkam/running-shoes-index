@@ -1,6 +1,8 @@
+"use client";
+
 import BrandCard from "./BrandCard";
 import { SanityBrand } from "../page";
-import GridView from "@/_components/GridView";
+import { List } from "antd";
 
 interface BrandsTableProps {
   brands: SanityBrand[];
@@ -8,12 +10,23 @@ interface BrandsTableProps {
 
 export default function BrandsTable({ brands }: BrandsTableProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <GridView
-        items={brands.map((brand) => (
-          <BrandCard key={brand._id} brand={brand} />
-        ))}
-      />
-    </div>
+    <List
+      grid={{
+        gutter: 16,
+        xs: 1,
+        sm: 2,
+        md: 4,
+        lg: 4,
+        xl: 6,
+        xxl: 3,
+      }}
+      dataSource={brands}
+      renderItem={(item) => (
+        <List.Item>
+          <BrandCard key={item._id} brand={item} />
+        </List.Item>
+      )}
+      style={{ padding: "1rem" }}
+    />
   );
 }

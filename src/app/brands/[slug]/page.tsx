@@ -2,9 +2,9 @@ import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { SanityBrand } from "../page";
-import ListView from "@/_components/ListView";
-import { SanityRunningShoe } from "@/app/shoes/page";
-import ShoeCard from "@/app/shoes/_components/ShoeCard";
+import ShoesTable from "@/app/shoes/_components/ShoesTable";
+import { SanityRunningShoe } from "@/_types/RunningShoe";
+import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
 
 type Params = Promise<{ slug: string }>;
 async function getBrand(slug: string): Promise<SanityBrand | null> {
@@ -120,13 +120,7 @@ const BrandPage = async (props: { params: Params }) => {
             </div>
           </div>
         </div>
-        <div className="p-4">
-          <ListView
-            listViewItems={shoes.map((shoe) => (
-              <ShoeCard shoe={shoe} key={shoe._id} />
-            ))}
-          />
-        </div>
+        <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
       </main>
     </Suspense>
   );

@@ -1,9 +1,9 @@
 import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React from "react";
-import { SanityRunningShoe } from "../page";
 import Link from "next/link";
 import CompareModal from "../_components/CompareModal";
+import { SanityRunningShoe } from "@/_types/RunningShoe";
 
 type Params = Promise<{ slug: string }>;
 
