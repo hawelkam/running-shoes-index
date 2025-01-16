@@ -10,7 +10,7 @@ async function getShoes(slug: string): Promise<SanityRunningShoe[]> {
   try {
     const shoes = await client.fetch<SanityRunningShoe[]>(
       `*[
-  _type == "runningShoe" && defined(slug.current) && defined(review) && releaseInfo.pl.date > "${slug}-01-00" && releaseInfo.pl.date < "${slug}-12-32"
+  _type == "runningShoe" && defined(slug.current) && defined(review) && ((releaseInfo.pl.date > "${slug}-01-00" && releaseInfo.pl.date < "${slug}-12-32") || (releaseInfo.eu.date > "${slug}-01-00" && releaseInfo.eu.date < "${slug}-12-32") || (releaseInfo.us.date > "${slug}-01-00" && releaseInfo.us.date < "${slug}-12-32"))
 ]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`,
       {},
       { next: { revalidate: 60 } }

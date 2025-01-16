@@ -1,6 +1,7 @@
 "use client";
 
 import { RunningShoe } from "@/_types/RunningShoe";
+import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
 import { Table, TableColumnsType } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -101,7 +102,12 @@ const columns: TableColumnsType<RunningShoe> = [
   {
     title: "Reviewed?",
     dataIndex: "reviewed",
-    render: (value) => (value ? "Yes" : "No"),
+    render: (value) =>
+      value ? (
+        <CheckCircleFilled style={{ fontSize: "30px", color: "green" }} />
+      ) : (
+        <CloseCircleFilled style={{ fontSize: "30px", color: "gray" }} />
+      ),
     responsive: ["lg"],
   },
 ];

@@ -10,7 +10,7 @@ async function getShoes(slug: string[]): Promise<SanityRunningShoe[]> {
   try {
     const shoes = await client.fetch<SanityRunningShoe[]>(
       `*[
-  _type == "runningShoe" && defined(slug.current) && releaseInfo.${slug[0] || "eu"}.date > "${slug[1]}-${slug[2] || "01"}-00" && releaseInfo.${slug[0] || "eu"}.date < "${slug[1]}-${slug[2] || "12"}-32"
+  _type == "runningShoe" && defined(slug.current) && ((releaseInfo.pl.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] || "12"}-32") || (releaseInfo.eu.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] || "12"}-32") || (releaseInfo.us.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] || "12"}-32"))
 ]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`,
       {},
       { next: { revalidate: 60 } }
@@ -42,10 +42,7 @@ const ReleasesOfDate = async (props: { params: Params }) => {
 
 export async function generateStaticParams() {
   try {
-    return [
-      ["eu", "2024"],
-      ["eu", "2025"],
-    ].map((year) => ({ slug: year }));
+    return [["2024"], ["2025"]].map((year) => ({ slug: year }));
   } catch (error) {
     console.error("Failed to fetch slugs:", error);
     return [];

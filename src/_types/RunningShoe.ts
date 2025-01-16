@@ -24,16 +24,7 @@ export type SanityRunningShoe = SanityDocument & {
   slug: { current: string };
   notes: string;
   image: { url: string };
-  previousVersion: {
-    name: string;
-    slug: { current: string };
-    releaseInfo: {
-      pl: { date: string; price: number };
-      eu: { date: string; price: number };
-      us: { date: string; price: number };
-    };
-    image: { url: string };
-  };
+  previousVersion: SanityRunningShoe;
   review: {
     shoeInfo: { weight: number; sizeUS: number; sizeEU: number };
     plReview: { youtube: string; instagram: string; tiktok: string };

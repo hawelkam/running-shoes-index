@@ -1,9 +1,15 @@
 import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React from "react";
-import Link from "next/link";
 import CompareModal from "../_components/CompareModal";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
+import { Descriptions, Flex, Image } from "antd";
+import {
+  mapToRunningShoeDescription,
+  mapToRunningShoePrevious,
+  mapToRunningShoeReview,
+  mapToRunningShoeSpecs,
+} from "@/_utils/runningShoeMapper";
 
 type Params = Promise<{ slug: string }>;
 
@@ -32,188 +38,34 @@ const ShoePage = async (props: { params: Params }) => {
     notFound(); // Trigger 404 page if the shoe is not found
   }
   return (
-    <div className="md:flex items-start justify-center py-12 2xl:px-40 md:px-6 px-4">
-      <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
-        {shoe.image && (
-          <img
-            className="w-full"
-            alt="image of running shoe"
-            src={shoe.image.url}
-          />
-        )}
+    <Flex
+      gap={48}
+      justify="center"
+      className="md:flex items-start justify-center py-12 2xl:px-40 md:px-6 px-4"
+    >
+      <Flex vertical gap={16}>
+        {shoe.image && <Image src={shoe.image.url} />}
         {shoe.review && (
-          <div>
-            <div className="border-t border-b py-4 mt-7 border-gray-200">
-              <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                      <th scope="row" className="px-6 py-3">
-                        MY REVIEW
-                      </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {shoe.review.shoeInfo.weight && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          Reviewed shoe weight
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {`${shoe.review.shoeInfo.weight}g | ${Math.round(shoe.review.shoeInfo.weight * 3.5274) / 100}oz.`}
-                        </td>
-                      </tr>
-                    )}
-                    {shoe.review.shoeInfo && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          Reviewed shoe size
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {`${shoe.review.shoeInfo.sizeEU}EU | ${shoe.review.shoeInfo.sizeUS}US`}
-                        </td>
-                      </tr>
-                    )}
-                    {shoe.review.enReview && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          English review
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {shoe.review.enReview.youtube && (
-                            <a href={shoe.review.enReview.youtube}>YouTube</a>
-                          )}
-                          {shoe.review.enReview.instagram && (
-                            <a href={shoe.review.enReview.instagram}>
-                              Instagram
-                            </a>
-                          )}
-                          {shoe.review.enReview.tiktok && (
-                            <a href={shoe.review.enReview.tiktok}>TikTok</a>
-                          )}
-                        </td>
-                      </tr>
-                    )}
-                    {shoe.review.plReview && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          Polish review
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {shoe.review.plReview.youtube && (
-                            <a href={shoe.review.plReview.youtube}>YouTube</a>
-                          )}
-                          {shoe.review.plReview.instagram && (
-                            <a href={shoe.review.plReview.instagram}>
-                              Instagram
-                            </a>
-                          )}
-                          {shoe.review.plReview.tiktok && (
-                            <a href={shoe.review.plReview.tiktok}>TikTok</a>
-                          )}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          <Descriptions
+            title="My review"
+            bordered
+            items={mapToRunningShoeReview(shoe)}
+            column={1}
+          />
         )}
         {shoe.previousVersion && (
-          <div>
-            <div className="border-b py-4 border-gray-200">
-              <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                      <th scope="row" className="px-6 py-3">
-                        PREVIOUS VERSION
-                      </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Name
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        <Link
-                          href={`/shoes/${shoe.previousVersion.slug.current}`}
-                          className="underline"
-                        >
-                          {shoe.previousVersion.name}
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Release date
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        {Intl.DateTimeFormat("en-GB", {
-                          month: "short",
-                          year: "numeric",
-                        }).format(
-                          new Date(shoe.previousVersion.releaseInfo.eu.date)
-                        )}
-                      </td>
-                    </tr>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Image
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        {shoe.image && (
-                          <img
-                            className="rounded-lg max-w-52"
-                            src={`${shoe.previousVersion.image.url}`}
-                            alt=""
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <CompareModal shoe={shoe} />
-            </div>
-          </div>
+          <>
+            <Descriptions
+              title="Previous version"
+              bordered
+              items={mapToRunningShoePrevious(shoe.previousVersion)}
+              column={1}
+            />
+            <CompareModal shoe={shoe} />
+          </>
         )}
-      </div>
-      <div className="md:hidden">
-        {shoe.image && (
-          <img
-            className="w-full"
-            alt="image of running shoe"
-            src={shoe.image.url}
-          />
-        )}
-      </div>
-      <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
+      </Flex>
+      <Flex vertical gap={16}>
         <div className="border-b border-gray-200 pb-6">
           <p className="text-sm leading-none text-gray-600">
             {shoe.shoeType.name} | {shoe.brand.name}
@@ -223,383 +75,21 @@ const ShoePage = async (props: { params: Params }) => {
           </h1>
         </div>
 
-        <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="row" className="px-6 py-3">
-                  General info
-                </th>
-                <th>EU</th>
-                <th>US</th>
-                <th>PL</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Price
-                </th>
-                <td className="py-4">{shoe.releaseInfo.eu?.price}€</td>
-                <td className="py-4">{shoe.releaseInfo.us?.price}$</td>
-                <td className="py-4">{shoe.releaseInfo.pl?.price}zł</td>
-              </tr>
+        <Descriptions
+          title="General info"
+          bordered
+          items={mapToRunningShoeDescription(shoe)}
+          column={1}
+        />
 
-              {shoe.releaseInfo && (
-                <tr className="odd:bg-white even:bg-gray-50 border-b">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    Release date
-                  </th>
-                  <td className="py-4">
-                    {shoe.releaseInfo.eu?.date &&
-                      Intl.DateTimeFormat("en-GB", {
-                        month: "short",
-                        year: "numeric",
-                      }).format(new Date(shoe.releaseInfo.eu.date))}
-                  </td>
-                  <td className="py-4">
-                    {shoe.releaseInfo.us?.date &&
-                      Intl.DateTimeFormat("en-GB", {
-                        month: "short",
-                        year: "numeric",
-                      }).format(new Date(shoe.releaseInfo.us.date))}
-                  </td>
-                  <td className="py-4">
-                    {shoe.releaseInfo.pl?.date &&
-                      Intl.DateTimeFormat("en-GB", {
-                        month: "short",
-                        year: "numeric",
-                      }).format(new Date(shoe.releaseInfo.pl.date))}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="row" className="px-6 py-3">
-                  Specification
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {shoe.category && (
-                <tr className="odd:bg-white even:bg-gray-50 border-b">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                  >
-                    Category
-                  </th>
-                  <td className="px-6 py-4 flex gap-2">
-                    {shoe.category.map((cat, index) => (
-                      <div
-                        className="center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
-                        key={`${shoe.name}-category-${index}`}
-                      >
-                        <div className="mt-px">{cat.name}</div>
-                      </div>
-                    ))}
-                  </td>
-                </tr>
-              )}
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Men&apos;s weight
-                </th>
-                <td className="px-6 py-4">{shoe.specs.m?.weight}g</td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Men&apos;s drop
-                </th>
-                <td className="px-6 py-4">{shoe.specs.m?.drop}mm</td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Men&apos;s stack height
-                </th>
-                <td className="px-6 py-4">
-                  {shoe.specs.m?.heelStack &&
-                    `${shoe.specs.m?.heelStack}mm - ${shoe.specs.m?.heelStack - shoe.specs.m!.drop!}mm`}
-                </td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Women&apos;s weight
-                </th>
-                <td className="px-6 py-4">{shoe.specs.w?.weight}g</td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Women&apos;s drop
-                </th>
-                <td className="px-6 py-4">{shoe.specs.w?.drop}mm</td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Women&apos;s stack height
-                </th>
-                <td className="px-6 py-4">
-                  {shoe.specs.w?.heelStack &&
-                    `${shoe.specs.w?.heelStack}mm - ${shoe.specs.w?.heelStack - shoe.specs.w!.drop!}mm`}
-                </td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Stability
-                </th>
-                <td className="px-6 py-4">{shoe.stability}</td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Upper
-                </th>
-                <td className="px-6 py-4">
-                  {shoe.specs.upper?.map((f) => f.name).join(", ")}
-                </td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Foam
-                </th>
-                <td className="px-6 py-4">
-                  {shoe.specs.foam?.map((f) => f.name).join(", ")}
-                </td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Plate
-                </th>
-                <td className="px-6 py-4">{shoe.specs.plate}</td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Outsole
-                </th>
-                <td className="px-6 py-4">
-                  {shoe.specs.outsole?.map((o) => o.name).join(", ")}
-                </td>
-              </tr>
-              <tr className="odd:bg-white even:bg-gray-50 border-b">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                >
-                  Notes
-                </th>
-                <td className="px-6 py-4">{shoe.notes}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        {shoe.review && (
-          <div className="md:hidden">
-            <div className="border-t border-b py-4 mt-7 border-gray-200">
-              <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                      <th scope="row" className="px-6 py-3">
-                        MY REVIEW
-                      </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {shoe.review.shoeInfo.weight && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          Reviewed shoe weight
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {`${shoe.review.shoeInfo.weight}g | ${Math.round(shoe.review.shoeInfo.weight * 3.5274) / 100}oz.`}
-                        </td>
-                      </tr>
-                    )}
-                    {shoe.review.shoeInfo && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          Reviewed shoe size
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {`${shoe.review.shoeInfo.sizeEU}EU | ${shoe.review.shoeInfo.sizeUS}US`}
-                        </td>
-                      </tr>
-                    )}
-                    {shoe.review.enReview && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          English review
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {shoe.review.enReview.youtube && (
-                            <a href={shoe.review.enReview.youtube}>YouTube</a>
-                          )}
-                          {shoe.review.enReview.instagram && (
-                            <a href={shoe.review.enReview.instagram}>
-                              Instagram
-                            </a>
-                          )}
-                          {shoe.review.enReview.tiktok && (
-                            <a href={shoe.review.enReview.tiktok}>TikTok</a>
-                          )}
-                        </td>
-                      </tr>
-                    )}
-                    {shoe.review.plReview && (
-                      <tr className="odd:bg-white even:bg-gray-50 border-b">
-                        <th
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                        >
-                          Polish review
-                        </th>
-                        <td className="px-6 py-4 flex gap-2">
-                          {shoe.review.plReview.youtube && (
-                            <a href={shoe.review.plReview.youtube}>YouTube</a>
-                          )}
-                          {shoe.review.plReview.instagram && (
-                            <a href={shoe.review.plReview.instagram}>
-                              Instagram
-                            </a>
-                          )}
-                          {shoe.review.plReview.tiktok && (
-                            <a href={shoe.review.plReview.tiktok}>TikTok</a>
-                          )}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-        {shoe.previousVersion && (
-          <div className="md:hidden">
-            <div className="border-b py-4 border-gray-200">
-              <div className="relative overflow-x-auto shadow-md my-4 sm:rounded-lg w-full">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                      <th scope="row" className="px-6 py-3">
-                        PREVIOUS VERSION
-                      </th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Name
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        <Link
-                          href={`/shoes/${shoe.previousVersion.slug.current}`}
-                          className="underline"
-                        >
-                          {shoe.previousVersion.name}
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Release date
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        {Intl.DateTimeFormat("en-GB", {
-                          month: "short",
-                          year: "numeric",
-                        }).format(
-                          new Date(shoe.previousVersion.releaseInfo.eu.date)
-                        )}
-                      </td>
-                    </tr>
-                    <tr className="odd:bg-white even:bg-gray-50 border-b">
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                      >
-                        Image
-                      </th>
-                      <td className="px-6 py-4 flex gap-2">
-                        {shoe.image && (
-                          <img
-                            className="rounded-lg max-w-52"
-                            src={`${shoe.previousVersion.image.url}`}
-                            alt=""
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <CompareModal shoe={shoe} />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+        <Descriptions
+          title="Specification"
+          bordered
+          items={mapToRunningShoeSpecs(shoe)}
+          column={1}
+        />
+      </Flex>
+    </Flex>
   );
 };
 
