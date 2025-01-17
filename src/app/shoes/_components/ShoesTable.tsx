@@ -2,9 +2,10 @@
 
 import { RunningShoe } from "@/_types/RunningShoe";
 import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
-import { Table, TableColumnsType } from "antd";
+import { List, Table, TableColumnsType } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import ShoeCard from "./ShoeCard";
 
 interface ShoesTableProps {
   shoes: RunningShoe[];
@@ -15,7 +16,7 @@ const columns: TableColumnsType<RunningShoe> = [
     title: "Image",
     dataIndex: "image",
     render: (value) => <img src={value} alt="" style={{ height: "100px" }} />,
-    width: "15%",
+    width: "20%",
   },
   {
     title: "Name",
@@ -41,21 +42,21 @@ const columns: TableColumnsType<RunningShoe> = [
     defaultSortOrder: "descend",
     sorter: (a, b) => (a.priceUs || 0) - (b.priceUs || 0),
     render: (value) => <>{value && `$${value}`}</>,
-    responsive: ["lg"],
+    responsive: ["xl"],
   },
   {
     title: "EU Price",
     dataIndex: "priceEu",
     sorter: (a, b) => (a.priceEu || 0) - (b.priceEu || 0),
     render: (value) => <>{value && `€${value}`}</>,
-    responsive: ["lg"],
+    responsive: ["xl"],
   },
   {
     title: "PL Price",
     dataIndex: "pricePl",
     sorter: (a, b) => (a.pricePl || 0) - (b.pricePl || 0),
     render: (value) => <>{value && `${value}zł`}</>,
-    responsive: ["lg"],
+    responsive: ["xl"],
   },
   {
     title: "US Release",
@@ -69,7 +70,7 @@ const columns: TableColumnsType<RunningShoe> = [
           }).format(new Date(value))}
       </>
     ),
-    responsive: ["lg"],
+    responsive: ["xl"],
   },
   {
     title: "EU Release",
@@ -83,7 +84,7 @@ const columns: TableColumnsType<RunningShoe> = [
           }).format(new Date(value))}
       </>
     ),
-    responsive: ["lg"],
+    responsive: ["xl"],
   },
   {
     title: "PL Release",
@@ -97,7 +98,7 @@ const columns: TableColumnsType<RunningShoe> = [
           }).format(new Date(value))}
       </>
     ),
-    responsive: ["lg"],
+    responsive: ["xl"],
   },
   {
     title: "Reviewed?",
@@ -116,18 +117,40 @@ const ShoesTable = ({ shoes }: ShoesTableProps) => {
   const router = useRouter();
 
   return (
-    <Table<RunningShoe>
-      columns={columns}
-      dataSource={shoes}
-      showSorterTooltip={{ target: "sorter-icon" }}
-      onRow={(record) => {
-        return {
-          onClick: () => {
-            router.push(`/shoes/${record.slug}`);
-          },
-        };
-      }}
-    />
+    <>
+      <Table<RunningShoe>
+        columns={columns}
+        dataSource={shoes}
+        showSorterTooltip={{ target: "sorter-icon" }}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              router.push(`/shoes/${record.slug}`);
+            },
+          };
+        }}
+        className="hidden lg:block"
+      />
+      <List
+        grid={{
+          gutter: 16,
+          xs: 1,
+          sm: 2,
+          md: 2,
+          lg: 3,
+          xl: 3,
+          xxl: 3,
+        }}
+        pagination={{ align: "center", position: "bottom" }}
+        dataSource={shoes}
+        renderItem={(item) => (
+          <List.Item>
+            <ShoeCard shoe={item} />
+          </List.Item>
+        )}
+        className="lg:hidden"
+      />
+    </>
   );
 };
 
