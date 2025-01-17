@@ -26,7 +26,12 @@ export type SanityRunningShoe = SanityDocument & {
   image: { url: string };
   previousVersion: SanityRunningShoe;
   review: {
-    shoeInfo: { weight: number; sizeUS: number; sizeEU: number };
+    shoeInfo: {
+      weightL: number;
+      weightR: number;
+      sizeUS: number;
+      sizeEU: number;
+    };
     plReview: { youtube: string; instagram: string; tiktok: string };
     enReview: { youtube: string; instagram: string; tiktok: string };
   };

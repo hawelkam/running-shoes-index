@@ -51,7 +51,7 @@ const BrandPage = async (props: { params: Params }) => {
   }
   return (
     <Suspense>
-      <main className="container mx-auto min-h-screen max-w-5xl p-8">
+      <main>
         <h1 className="text-4xl font-bold mb-8">{brand.name}</h1>
         <div className="flex gap-4 items-center">
           <div className="max-w-sm bg-white">

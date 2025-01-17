@@ -31,7 +31,7 @@ const ReleasesOfDate = async (props: { params: Params }) => {
 
   return (
     <Suspense>
-      <main className="container mx-auto min-h-screen max-w-3xl p-8">
+      <main>
         <h1 className="text-4xl font-bold mb-8">Running Shoes Index</h1>
         <h2 className="text-2xl font-bold mb-8">Shoes of {slug[0]}</h2>
         <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />

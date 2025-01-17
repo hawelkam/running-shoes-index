@@ -1,5 +1,5 @@
 import { RunningShoe, SanityRunningShoe } from "@/_types/RunningShoe";
-import { Flex, Image } from "antd";
+import { Image } from "antd";
 import Link from "next/link";
 
 export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
@@ -148,9 +148,12 @@ export const mapToRunningShoeReview = (shoe: SanityRunningShoe) => [
   {
     key: "1",
     label: "Reviewed shoe weight",
-    children:
-      shoe.review.shoeInfo.weight &&
-      `${shoe.review.shoeInfo.weight}g | ${Math.round(shoe.review.shoeInfo.weight * 3.5274) / 100}oz.`,
+    children: shoe.review.shoeInfo.weightL && shoe.review.shoeInfo.weightR && (
+      <div className="flex flex-col">
+        <div>{`L: ${shoe.review.shoeInfo.weightL}g | ${Math.round(shoe.review.shoeInfo.weightL * 3.5274) / 100}oz.`}</div>
+        <div>{`R: ${shoe.review.shoeInfo.weightR}g | ${Math.round(shoe.review.shoeInfo.weightR * 3.5274) / 100}oz.`}</div>
+      </div>
+    ),
   },
   {
     key: "2",
@@ -163,7 +166,7 @@ export const mapToRunningShoeReview = (shoe: SanityRunningShoe) => [
     key: "3",
     label: "English review",
     children: shoe.review.enReview && (
-      <Flex gap={8}>
+      <div className="flex flex-col sm:flex-row gap-2">
         {shoe.review.enReview.youtube && (
           <a href={shoe.review.enReview.youtube}>YouTube</a>
         )}
@@ -173,14 +176,14 @@ export const mapToRunningShoeReview = (shoe: SanityRunningShoe) => [
         {shoe.review.enReview.tiktok && (
           <a href={shoe.review.enReview.tiktok}>TikTok</a>
         )}
-      </Flex>
+      </div>
     ),
   },
   {
     key: "4",
     label: "Polish review",
     children: shoe.review.plReview && (
-      <Flex gap={8}>
+      <div className="flex flex-col sm:flex-row gap-2">
         {shoe.review.plReview.youtube && (
           <a href={shoe.review.plReview.youtube}>YouTube</a>
         )}
@@ -190,7 +193,7 @@ export const mapToRunningShoeReview = (shoe: SanityRunningShoe) => [
         {shoe.review.plReview.tiktok && (
           <a href={shoe.review.plReview.tiktok}>TikTok</a>
         )}
-      </Flex>
+      </div>
     ),
   },
 ];
