@@ -53,7 +53,7 @@ const BrandPage = async (props: { params: Params }) => {
     <Suspense>
       <main>
         <h1 className="text-4xl font-bold mb-8">{brand.name}</h1>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 md:gap-4 items-center flex-col md:flex-row">
           <div className="max-w-sm bg-white">
             <img
               className="h-auto rounded-lg"

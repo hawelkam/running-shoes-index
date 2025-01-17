@@ -22,6 +22,17 @@ const columns: TableColumnsType<RunningShoe> = [
     title: "Name",
     dataIndex: "name",
     showSorterTooltip: { target: "full-header" },
+    filters: [
+      {
+        text: "adidas",
+        value: "adidas",
+      },
+      {
+        text: "Hoka",
+        value: "Hoka",
+      },
+    ],
+    onFilter: (value, record) => record.name.startsWith(value as string),
     sorter: (a, b) => a.name.length - b.name.length,
     sortDirections: ["descend"],
   },
@@ -33,6 +44,30 @@ const columns: TableColumnsType<RunningShoe> = [
   {
     title: "Category",
     dataIndex: "category",
+    filters: [
+      {
+        text: "Race day",
+        value: "Race day",
+      },
+      {
+        text: "Daily trainer",
+        value: "Daily trainer",
+      },
+      {
+        text: "Long run",
+        value: "Long run",
+      },
+      {
+        text: "Stability trainer",
+        value: "Stability trainer",
+      },
+      {
+        text: "Tempo",
+        value: "Tempo",
+      },
+    ],
+    onFilter: (value, record) =>
+      record.category?.some((cat) => cat === (value as string)) || false,
     render: (value) => <>{value && value.join(", ")}</>,
     responsive: ["lg"],
   },
