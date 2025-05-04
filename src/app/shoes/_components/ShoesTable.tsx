@@ -165,6 +165,11 @@ const ShoesTable = ({ shoes }: ShoesTableProps) => {
           };
         }}
         className="hidden lg:block"
+        pagination={{
+          position: ["bottomCenter"],
+          total: shoes.length,
+          showTotal: (total) => `Total ${total} items`,
+        }}
       />
       <List
         grid={{
@@ -176,7 +181,12 @@ const ShoesTable = ({ shoes }: ShoesTableProps) => {
           xl: 3,
           xxl: 3,
         }}
-        pagination={{ align: "center", position: "bottom" }}
+        pagination={{
+          align: "center",
+          position: "bottom",
+          total: shoes.length,
+          showTotal: (total) => `Total ${total} items`,
+        }}
         dataSource={shoes}
         renderItem={(item) => (
           <List.Item>
