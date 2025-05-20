@@ -5,6 +5,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout, Menu } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Link from "next/link";
+import SearchInput from "@/_components/SearchInput";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -66,6 +67,9 @@ export default function RootLayout({
                 ]}
                 style={{ flex: 1, minWidth: 0 }}
               />
+              <div className="flex items-center">
+                <SearchInput />
+              </div>
             </Header>
             <Content>
               <div
