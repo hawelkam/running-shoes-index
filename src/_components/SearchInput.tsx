@@ -8,7 +8,7 @@ const SearchInput = () => {
 
   const onSearch: SearchProps["onSearch"] = (value, event) => {
     event?.preventDefault();
-    router.push(`/shoes/search?query="${value}"`);
+    router.push(`/shoes/search?query=${value}`);
   };
 
   return (

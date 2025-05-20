@@ -26,7 +26,7 @@ const SearchResults = () => {
       }
     }
     getShoes(query || "");
-  }, [query, shoes]);
+  }, [query]);
   return <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />;
 };
 
