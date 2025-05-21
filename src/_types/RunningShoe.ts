@@ -43,9 +43,19 @@ export type RunningShoe = {
   releaseDatePl?: Date;
   releaseDateEu?: Date;
   releaseDateUs?: Date;
+  releaseDate: {
+    pl?: Date;
+    eu?: Date;
+    us?: Date;
+  };
   pricePl?: number;
   priceEu?: number;
   priceUs?: number;
+  price: {
+    pl?: number;
+    eu?: number;
+    us?: number;
+  };
   category?: string[];
   slug: string;
   image: string;

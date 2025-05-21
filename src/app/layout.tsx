@@ -35,7 +35,13 @@ export default function RootLayout({
       >
         <AntdRegistry>
           <Layout>
-            <Header style={{ display: "flex", alignItems: "center" }}>
+            <Header
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <div className="demo-logo" />
               <div className="flex items-center">
                 <SearchInput />

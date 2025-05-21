@@ -68,70 +68,54 @@ const columns: TableColumnsType<RunningShoe> = [
     ],
     onFilter: (value, record) =>
       record.category?.some((cat) => cat === (value as string)) || false,
-    render: (value) => <>{value && value.join(", ")}</>,
+    render: (value) => <div>{value && value.map((cat) => <p>{cat}</p>)}</div>,
     responsive: ["lg"],
   },
   {
-    title: "US Price",
-    dataIndex: "priceUs",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => (a.priceUs || 0) - (b.priceUs || 0),
-    render: (value) => <>{value && `$${value}`}</>,
-    responsive: ["xl"],
-  },
-  {
-    title: "EU Price",
-    dataIndex: "priceEu",
-    sorter: (a, b) => (a.priceEu || 0) - (b.priceEu || 0),
-    render: (value) => <>{value && `€${value}`}</>,
-    responsive: ["xl"],
-  },
-  {
-    title: "PL Price",
-    dataIndex: "pricePl",
-    sorter: (a, b) => (a.pricePl || 0) - (b.pricePl || 0),
-    render: (value) => <>{value && `${value}zł`}</>,
-    responsive: ["xl"],
-  },
-  {
-    title: "US Release",
-    dataIndex: "releaseDateUs",
+    title: "Price",
+    dataIndex: "price",
     render: (value) => (
-      <>
-        {value &&
-          Intl.DateTimeFormat("en-GB", {
-            month: "short",
-            year: "numeric",
-          }).format(new Date(value))}
-      </>
+      <div>
+        {value.pl && <p>{`${value.pl}zł`}</p>}
+        {value.eu && <p>{`€${value.eu}`}</p>}
+        {value.us && <p>{`$${value.us}`}</p>}
+      </div>
     ),
     responsive: ["xl"],
   },
   {
-    title: "EU Release",
-    dataIndex: "releaseDateEu",
+    title: "Release Date",
+    dataIndex: "releaseDate",
     render: (value) => (
-      <>
-        {value &&
-          Intl.DateTimeFormat("en-GB", {
-            month: "short",
-            year: "numeric",
-          }).format(new Date(value))}
-      </>
-    ),
-    responsive: ["xl"],
-  },
-  {
-    title: "PL Release",
-    dataIndex: "releaseDatePl",
-    render: (value) => (
-      <>
-        {value &&
-          Intl.DateTimeFormat("en-GB", {
-            month: "short",
-            year: "numeric",
-          }).format(new Date(value))}
-      </>
+      <div>
+        {value.pl && (
+          <p>
+            PL:
+            {Intl.DateTimeFormat("en-GB", {
+              month: "short",
+              year: "numeric",
+            }).format(new Date(value.pl))}
+          </p>
+        )}
+        {value.eu && (
+          <p>
+            EU:
+            {Intl.DateTimeFormat("en-GB", {
+              month: "short",
+              year: "numeric",
+            }).format(new Date(value.eu))}
+          </p>
+        )}
+        {value.us && (
+          <p>
+            US:
+            {Intl.DateTimeFormat("en-GB", {
+              month: "short",
+              year: "numeric",
+            }).format(new Date(value.us))}
+          </p>
+        )}
+      </div>
     ),
     responsive: ["xl"],
   },
