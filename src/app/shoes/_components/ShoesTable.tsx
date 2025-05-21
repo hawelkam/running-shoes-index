@@ -68,7 +68,9 @@ const columns: TableColumnsType<RunningShoe> = [
     ],
     onFilter: (value, record) =>
       record.category?.some((cat) => cat === (value as string)) || false,
-    render: (value) => <div>{value && value.map((cat) => <p>{cat}</p>)}</div>,
+    render: (value: string[]) => (
+      <div>{value && value.map((cat) => <p key={cat}>{cat}</p>)}</div>
+    ),
     responsive: ["lg"],
   },
   {
