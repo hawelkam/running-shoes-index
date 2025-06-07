@@ -1,14 +1,16 @@
 import { SanityDocument } from "next-sanity";
 
+export type ReleaseInfo = {
+  pl?: { date: string; price: number };
+  eu?: { date: string; price: number };
+  us?: { date: string; price: number };
+};
+
 export type SanityRunningShoe = SanityDocument & {
   name: string;
   brand: { name: string };
   shoeType: { name: string };
-  releaseInfo: {
-    pl: { date: string; price: number };
-    eu: { date: string; price: number };
-    us: { date: string; price: number };
-  };
+  releaseInfo: ReleaseInfo;
   stability: string;
   category?: { name: string }[];
   wideAvailable: boolean;
@@ -59,6 +61,6 @@ export type RunningShoe = {
   category?: string[];
   slug: string;
   image: string;
-  reviewed: boolean;
+  reviewed: "Yes" | "In progress" | "No";
   key: string;
 };

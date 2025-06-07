@@ -25,6 +25,10 @@ export default async function IndexPage() {
       <Title level={1}>Running Shoes Index</Title>
       <Title level={3}>You directory of all running shoes.</Title>
       <Title level={4}>Latest shoes in the catalog:</Title>
+      {/* <form action={create}>
+        <input type="text" placeholder="write a comment" name="comment" />
+        <button type="submit">Submit</button>
+      </form> */}
       <ShoesGrid shoes={shoes} />
     </main>
   );

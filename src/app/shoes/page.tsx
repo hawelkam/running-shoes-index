@@ -22,7 +22,6 @@ export default async function Shoes() {
   return (
     <Suspense>
       <main>
-        <h1 className="text-4xl font-bold mb-8">Running Shoes Index</h1>
         <div className="flex gap-2">
           <button
             type="button"

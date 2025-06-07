@@ -37,8 +37,20 @@ export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
   slug: shoe.slug.current,
   key: shoe.slug.current,
   image: shoe.image.url,
-  reviewed: shoe.review !== null,
+  reviewed: mapToShoeReview(shoe),
 });
+
+const mapToShoeReview = (
+  shoe: SanityRunningShoe
+): "Yes" | "In progress" | "No" => {
+  if (shoe.review) {
+    if (shoe.review.plReview) {
+      return "Yes";
+    }
+    return "In progress";
+  }
+  return "No";
+};
 
 export const mapToRunningShoeDescription = (shoe: SanityRunningShoe) => [
   {

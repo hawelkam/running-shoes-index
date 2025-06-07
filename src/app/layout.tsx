@@ -6,6 +6,7 @@ import { Layout } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import SearchInput from "@/_components/SearchInput";
 import Sidebar from "@/_components/Sidebar";
+import Title from "antd/es/typography/Title";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -42,7 +43,9 @@ export default function RootLayout({
                 justifyContent: "space-between",
               }}
             >
-              <div className="demo-logo" />
+              <Title style={{ color: "#FFF", margin: 0 }}>
+                Running Shoes Index
+              </Title>
               <div className="flex items-center">
                 <SearchInput />
               </div>

@@ -1,7 +1,13 @@
 "use client";
 
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { Button, Col, Flex, Image, Modal, Row } from "antd";
+import {
+  prepareHeightInMM,
+  prepareListDividedByComma,
+  preparePriceInfo,
+  prepareWeight,
+} from "@/_utils/helpers";
+import { Button } from "antd";
 import { useState } from "react";
 
 interface ModalProps {
@@ -11,223 +17,157 @@ interface ModalProps {
 const CompareModal = ({ shoe }: ModalProps) => {
   const [isOpened, setIsOpened] = useState(false);
   return (
-    <>
-      <Button type="primary" onClick={() => setIsOpened(true)}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="#e8eaed"
+    shoe.previousVersion && (
+      <>
+        <Button type="primary" onClick={() => setIsOpened(true)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#e8eaed"
+          >
+            <path d="m320-160-56-57 103-103H80v-80h287L264-503l56-57 200 200-200 200Zm320-240L440-600l200-200 56 57-103 103h287v80H593l103 103-56 57Z" />
+          </svg>
+          Compare Models
+        </Button>
+        <div
+          id="comparisonModal"
+          className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isOpened ? "flex" : "hidden"} items-center justify-center p-4`}
         >
-          <path d="m320-160-56-57 103-103H80v-80h287L264-503l56-57 200 200-200 200Zm320-240L440-600l200-200 56 57-103 103h287v80H593l103 103-56 57Z" />
-        </svg>
-        Compare with previous version
-      </Button>
-      <Modal
-        title="Compare"
-        open={isOpened}
-        onOk={() => setIsOpened(false)}
-        width="80%"
-      >
-        <Flex style={{ width: "100%" }} vertical>
-          <Row justify="center">
-            <Col span={8}></Col>
-            <Col span={8}>
-              <h3 className="tracking-widest">{shoe.previousVersion.name}</h3>
-            </Col>
-            <Col span={8}>
-              <h3 className="tracking-widest">{shoe.name}</h3>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}></Col>
-            <Col span={8}>
-              <Image
-                width={300}
-                src={shoe.previousVersion.image.url}
-                alt="tailwind logo"
-                className="rounded-xl"
-              />
-            </Col>
-            <Col span={8}>
-              <Image
-                width={300}
-                src={shoe.image.url}
-                alt="tailwind logo"
-                className="rounded-xl"
-              />
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Category</Col>
-            <Col span={8}>
-              {shoe.previousVersion.category?.map((cat) => cat.name).join(", ")}
-            </Col>
-            <Col span={8}>
-              {shoe.category?.map((cat) => cat.name).join(", ")}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Price</Col>
-            <Col span={8}>
-              {shoe.previousVersion.releaseInfo.eu?.price && (
-                <div>{`🇪🇺 €${shoe.previousVersion.releaseInfo.eu?.price}`}</div>
-              )}
-              {shoe.previousVersion.releaseInfo.us?.price && (
-                <div>{`🇺🇸 $${shoe.previousVersion.releaseInfo.us?.price}`}</div>
-              )}
-              {shoe.previousVersion.releaseInfo.pl?.price && (
-                <div>{`🇵🇱 ${shoe.previousVersion.releaseInfo.pl?.price}zł`}</div>
-              )}
-            </Col>
-            <Col span={8}>
-              {shoe.releaseInfo.eu?.price && (
-                <div>{`🇪🇺 €${shoe.releaseInfo.eu?.price}`}</div>
-              )}
-              {shoe.releaseInfo.us?.price && (
-                <div>{`🇺🇸 $${shoe.releaseInfo.us?.price}`}</div>
-              )}
-              {shoe.releaseInfo.pl?.price && (
-                <div>{`🇵🇱 ${shoe.releaseInfo.pl?.price}zł`}</div>
-              )}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Release date</Col>
-            <Col span={8}>
-              {shoe.previousVersion.releaseInfo.eu?.date && (
-                <div>{`🇪🇺 ${Intl.DateTimeFormat("en-GB", {
-                  month: "short",
-                  year: "numeric",
-                }).format(
-                  new Date(shoe.previousVersion.releaseInfo.eu.date)
-                )}`}</div>
-              )}
-              {shoe.previousVersion.releaseInfo.us?.date && (
-                <div>{`🇺🇸 ${Intl.DateTimeFormat("en-GB", {
-                  month: "short",
-                  year: "numeric",
-                }).format(
-                  new Date(shoe.previousVersion.releaseInfo.us.date)
-                )}`}</div>
-              )}
-              {shoe.previousVersion.releaseInfo.pl?.date && (
-                <div>{`🇵🇱 ${Intl.DateTimeFormat("en-GB", {
-                  month: "short",
-                  year: "numeric",
-                }).format(
-                  new Date(shoe.previousVersion.releaseInfo.pl.date)
-                )}`}</div>
-              )}
-            </Col>
-            <Col span={8}>
-              {shoe.releaseInfo.eu?.date && (
-                <div>{`🇪🇺 ${Intl.DateTimeFormat("en-GB", {
-                  month: "short",
-                  year: "numeric",
-                }).format(new Date(shoe.releaseInfo.eu.date))}`}</div>
-              )}
-              {shoe.releaseInfo.us?.date && (
-                <div>{`🇺🇸 ${Intl.DateTimeFormat("en-GB", {
-                  month: "short",
-                  year: "numeric",
-                }).format(new Date(shoe.releaseInfo.us.date))}`}</div>
-              )}
-              {shoe.releaseInfo.pl?.date && (
-                <div>{`🇵🇱 ${Intl.DateTimeFormat("en-GB", {
-                  month: "short",
-                  year: "numeric",
-                }).format(new Date(shoe.releaseInfo.pl.date))}`}</div>
-              )}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Weight</Col>
-            <Col span={8}>
-              {shoe.previousVersion.specs.m?.weight &&
-                `M: ${shoe.previousVersion.specs.m?.weight}g`}
-              {shoe.previousVersion.specs.w?.weight &&
-                ` | W: ${shoe.previousVersion.specs.w?.weight}g`}
-            </Col>
-            <Col span={8}>
-              {shoe.specs.m?.weight && `M: ${shoe.specs.m?.weight}g`}
-              {shoe.specs.w?.weight && ` | W: ${shoe.specs.w?.weight}g`}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Drop</Col>
-            <Col span={8}>
-              {shoe.previousVersion.specs.m?.drop && `${shoe.specs.m?.drop}mm`}
-            </Col>
-            <Col span={8}>
-              {shoe.specs.m?.drop && `${shoe.specs.m?.drop}mm`}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Heel stack</Col>
-            <Col span={8}>
-              {shoe.previousVersion.specs.m?.heelStack &&
-                `M: ${shoe.previousVersion.specs.m?.heelStack}mm`}
-              {shoe.previousVersion.specs.w?.heelStack &&
-                ` | W: ${shoe.previousVersion.specs.w?.heelStack}mm`}
-            </Col>
-            <Col span={8}>
-              {shoe.specs.m?.heelStack && `M: ${shoe.specs.m?.heelStack}mm`}
-              {shoe.specs.w?.heelStack && ` | W: ${shoe.specs.w?.heelStack}mm`}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Stability</Col>
-            <Col span={8}>{shoe.previousVersion.stability}</Col>
-            <Col span={8}>{shoe.stability}</Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Upper</Col>
-            <Col span={8}>
-              {shoe.previousVersion.specs.upper
-                ?.map((cat) => cat.name)
-                .join(", ")}
-            </Col>
-            <Col span={8}>
-              {shoe.specs.upper?.map((cat) => cat.name).join(", ")}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Foam</Col>
-            <Col span={8}>
-              {shoe.previousVersion.specs.foam
-                ?.map((cat) => cat.name)
-                .join(", ")}
-            </Col>
-            <Col span={8}>
-              {shoe.specs.foam?.map((cat) => cat.name).join(", ")}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Plate</Col>
-            <Col span={8}>{shoe.previousVersion.specs.plate}</Col>
-            <Col span={8}>{shoe.specs.plate}</Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Outsole</Col>
-            <Col span={8}>
-              {shoe.previousVersion.specs.outsole
-                ?.map((cat) => cat.name)
-                .join(", ")}
-            </Col>
-            <Col span={8}>
-              {shoe.specs.outsole?.map((cat) => cat.name).join(", ")}
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={8}>Notes</Col>
-            <Col span={8}>{shoe.previousVersion.notes}</Col>
-            <Col span={8}>{shoe.notes}</Col>
-          </Row>
-        </Flex>
-      </Modal>
-    </>
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-xl font-bold">Model Comparison</h3>
+              <button
+                id="closeModal"
+                className="text-gray-400 hover:text-gray-500"
+                onClick={() => setIsOpened(false)}
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-1"></div>
+                <div className="font-medium text-center">
+                  {shoe.previousVersion.name}
+                </div>
+                <div className="font-medium text-center">{shoe.name}</div>
+              </div>
+
+              <div className="mt-4 space-y-4">
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Men&apos;s Weight</div>
+                  <div className="text-center">
+                    {prepareWeight(shoe.previousVersion.specs.m?.weight)}
+                  </div>
+                  <div className="text-center font-medium text-blue-600">
+                    {prepareWeight(shoe.specs.m?.weight)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Stack Height</div>
+                  <div className="text-center">
+                    {prepareHeightInMM(shoe.previousVersion.specs.m?.heelStack)}
+                  </div>
+                  <div className="text-center">
+                    {prepareHeightInMM(shoe.specs.m?.heelStack)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Drop</div>
+                  <div className="text-center">
+                    {prepareHeightInMM(shoe.previousVersion.specs.m?.drop)}
+                  </div>
+                  <div className="text-center">
+                    {prepareHeightInMM(shoe.specs.m?.drop)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Upper</div>
+                  <div className="text-center">
+                    {prepareListDividedByComma(
+                      shoe.previousVersion.specs.upper
+                    )}
+                  </div>
+                  <div className="text-center font-medium text-blue-600">
+                    {prepareListDividedByComma(shoe.specs.upper)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Foam</div>
+                  <div className="text-center">
+                    {prepareListDividedByComma(shoe.previousVersion.specs.foam)}
+                  </div>
+                  <div className="text-center font-medium text-blue-600">
+                    {prepareListDividedByComma(shoe.specs.foam)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Plate</div>
+                  <div className="text-center">
+                    {shoe.previousVersion.specs.plate}
+                  </div>
+                  <div className="text-center font-medium text-blue-600">
+                    {shoe.specs.plate}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Outsole</div>
+                  <div className="text-center">
+                    {prepareListDividedByComma(
+                      shoe.previousVersion.specs.outsole
+                    )}
+                  </div>
+                  <div className="text-center font-medium text-blue-600">
+                    {prepareListDividedByComma(shoe.specs.outsole)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 py-3 border-b border-gray-100">
+                  <div className="font-medium">Price</div>
+                  <div className="text-center">
+                    {preparePriceInfo(shoe.previousVersion.releaseInfo)}
+                  </div>
+                  <div className="text-center">
+                    {preparePriceInfo(shoe.releaseInfo)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-medium mb-2">Key Improvements</h4>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  {shoe.improvements?.map(
+                    (improvement: string, idx: number) => (
+                      <li key={idx}>{improvement}</li>
+                    )
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
   );
 };
 
