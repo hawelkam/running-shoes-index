@@ -50,7 +50,7 @@ export default function RootLayout({
                 <SearchInput />
               </div>
             </Header>
-            <Layout style={{ display: "flex", flexDirection: "row" }}>
+            <Layout>
               <Sidebar />
               <Content>
                 <div

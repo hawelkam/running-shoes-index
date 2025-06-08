@@ -5,6 +5,7 @@ import CompareModal from "../_components/CompareModal";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
 import { Image, Tabs } from "antd";
 import {
+  isCurrentYearRelease,
   prepareHeightInMM,
   preparePriceInEUR,
   preparePriceInPLN,
@@ -62,9 +63,9 @@ const ShoePage = async (props: { params: Params }) => {
                     stroke="currentColor"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                     ></path>
                   </svg>
@@ -100,9 +101,9 @@ const ShoePage = async (props: { params: Params }) => {
                     stroke="currentColor"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                     ></path>
                   </svg>
@@ -256,6 +257,11 @@ const ShoePage = async (props: { params: Params }) => {
                   </div>
                 </div>
               </div>
+              <Image
+                src={shoe.previousVersion.image?.url || ""}
+                alt={shoe.previousVersion.name}
+                className="w-full md:w-64 h-auto rounded-lg mb-4 md:mb-0"
+              />
               {shoe && <CompareModal shoe={shoe} />}
             </div>
           </div>
@@ -315,9 +321,9 @@ const ShoePage = async (props: { params: Params }) => {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
                       ></path>
                     </svg>
@@ -363,9 +369,9 @@ const ShoePage = async (props: { params: Params }) => {
                       stroke="currentColor"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
                       ></path>
                     </svg>
@@ -414,9 +420,12 @@ const ShoePage = async (props: { params: Params }) => {
       <nav className="flex mb-6" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">
           <li className="inline-flex items-center">
-            <a href="#" className="text-gray-700 hover:text-blue-600">
-              {shoe.shoeType?.name || "Running Shoes"}
-            </a>
+            <Link
+              href={`/shoes/${shoe.shoeType.slug.current}`}
+              className="text-gray-700 hover:text-blue-600"
+            >
+              {shoe.shoeType.name || "Running Shoes"}
+            </Link>
           </li>
           {shoe.brand && (
             <li>
@@ -436,12 +445,12 @@ const ShoePage = async (props: { params: Params }) => {
                     d="m1 9 4-4-4-4"
                   ></path>
                 </svg>
-                <a
-                  href="#"
+                <Link
+                  href={`/brands/${shoe.brand.slug.current}`}
                   className="text-gray-700 hover:text-blue-600 ml-1 md:ml-2"
                 >
                   {shoe.brand.name}
-                </a>
+                </Link>
               </div>
             </li>
           )}
@@ -457,9 +466,9 @@ const ShoePage = async (props: { params: Params }) => {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m1 9 4-4-4-4"
                   ></path>
                 </svg>
@@ -475,9 +484,11 @@ const ShoePage = async (props: { params: Params }) => {
 
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">{shoe.name}</h1>
-          <div className="bg-blue-600 text-white inline-block px-4 py-1 rounded-full text-sm font-medium mb-6">
-            New Release
-          </div>
+          {isCurrentYearRelease(shoe.releaseInfo.eu?.date) && (
+            <div className="bg-blue-600 text-white inline-block px-4 py-1 rounded-full text-sm font-medium mb-6">
+              New Release
+            </div>
+          )}
 
           <div className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">

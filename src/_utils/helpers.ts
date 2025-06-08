@@ -146,3 +146,9 @@ export function prepareMissingDataList(shoe: SanityRunningShoe): string {
 
   return missingData.join(", ") || "No missing data";
 }
+export function isCurrentYearRelease(releaseDate: string | undefined): boolean {
+  if (!releaseDate) return false;
+  const currentYear = new Date().getFullYear();
+  const releaseYear = new Date(releaseDate).getFullYear();
+  return releaseYear === currentYear;
+}

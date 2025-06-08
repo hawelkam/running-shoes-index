@@ -8,8 +8,8 @@ export type ReleaseInfo = {
 
 export type SanityRunningShoe = SanityDocument & {
   name: string;
-  brand: { name: string };
-  shoeType: { name: string };
+  brand: { name: string; slug: { current: string } };
+  shoeType: { name: string; slug: { current: string } };
   releaseInfo: ReleaseInfo;
   stability: string;
   category?: { name: string }[];
