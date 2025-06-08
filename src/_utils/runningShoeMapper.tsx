@@ -5,34 +5,26 @@ import Link from "next/link";
 export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
   name: shoe.name,
   shoeTypeName: shoe.shoeType.name,
-  releaseDatePl: shoe.releaseInfo.pl?.date
-    ? new Date(shoe.releaseInfo.pl.date)
-    : undefined,
-  releaseDateEu: shoe.releaseInfo.eu?.date
-    ? new Date(shoe.releaseInfo.eu.date)
-    : undefined,
-  releaseDateUs: shoe.releaseInfo.us?.date
-    ? new Date(shoe.releaseInfo.us.date)
-    : undefined,
-  releaseDate: {
-    pl: shoe.releaseInfo.pl?.date
-      ? new Date(shoe.releaseInfo.pl.date)
-      : undefined,
-    eu: shoe.releaseInfo.eu?.date
-      ? new Date(shoe.releaseInfo.eu.date)
-      : undefined,
-    us: shoe.releaseInfo.us?.date
-      ? new Date(shoe.releaseInfo.us.date)
-      : undefined,
-  },
-  pricePl: shoe.releaseInfo.pl?.price,
-  priceEu: shoe.releaseInfo.eu?.price,
-  priceUs: shoe.releaseInfo.us?.price,
-  price: {
-    pl: shoe.releaseInfo.pl?.price,
-    eu: shoe.releaseInfo.eu?.price,
-    us: shoe.releaseInfo.us?.price,
-  },
+  releaseDate: shoe.releaseInfo
+    ? {
+        pl: shoe.releaseInfo.pl?.date
+          ? new Date(shoe.releaseInfo.pl.date)
+          : undefined,
+        eu: shoe.releaseInfo.eu?.date
+          ? new Date(shoe.releaseInfo.eu.date)
+          : undefined,
+        us: shoe.releaseInfo.us?.date
+          ? new Date(shoe.releaseInfo.us.date)
+          : undefined,
+      }
+    : { pl: undefined, eu: undefined, us: undefined },
+  price: shoe.releaseInfo
+    ? {
+        pl: shoe.releaseInfo.pl?.price,
+        eu: shoe.releaseInfo.eu?.price,
+        us: shoe.releaseInfo.us?.price,
+      }
+    : { pl: undefined, eu: undefined, us: undefined },
   category: shoe.category?.map((cat) => cat.name),
   slug: shoe.slug.current,
   key: shoe.slug.current,

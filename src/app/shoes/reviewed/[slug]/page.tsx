@@ -7,11 +7,15 @@ import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
 type Params = Promise<{ slug: string }>;
 
 async function getShoes(slug: string): Promise<SanityRunningShoe[]> {
+  let query = `*[
+  _type == "runningShoe" && defined(slug.current) && defined(review) && ((releaseInfo.pl.date > "${slug}-01-00" && releaseInfo.pl.date < "${slug}-12-32") || (releaseInfo.eu.date > "${slug}-01-00" && releaseInfo.eu.date < "${slug}-12-32") || (releaseInfo.us.date > "${slug}-01-00" && releaseInfo.us.date < "${slug}-12-32"))
+]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`;
+  if (slug === "all") {
+    query = `*[_type == "runningShoe" && defined(slug.current) && defined(review)]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`;
+  }
   try {
     const shoes = await client.fetch<SanityRunningShoe[]>(
-      `*[
-  _type == "runningShoe" && defined(slug.current) && defined(review) && ((releaseInfo.pl.date > "${slug}-01-00" && releaseInfo.pl.date < "${slug}-12-32") || (releaseInfo.eu.date > "${slug}-01-00" && releaseInfo.eu.date < "${slug}-12-32") || (releaseInfo.us.date > "${slug}-01-00" && releaseInfo.us.date < "${slug}-12-32"))
-]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`,
+      query,
       {},
       { next: { revalidate: 60 } }
     );
