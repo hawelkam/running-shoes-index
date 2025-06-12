@@ -5,20 +5,48 @@ import Filters from "./_components/Filters";
 import ResultsCount from "./_components/ResultsCount";
 import ShoeTableElement from "./_components/ShoeTableElement";
 import ShoeTableCard from "./_components/ShoeTableCard";
+import GenericPagination from "@/_components/GenericPagination";
 
-async function getData() {
-  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, specs, image, review}`;
+interface ShoesPageProps {
+  searchParams: {
+    page?: string;
+  };
+}
+
+const ITEMS_PER_PAGE = 20;
+
+async function getData(page: number = 1) {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE - 1;
+
+  // Get total count
+  const countQuery = `count(*[_type == "runningShoe" && defined(slug.current)])`;
+  const totalCount = await client.fetch<number>(
+    countQuery,
+    {},
+    { next: { revalidate: 30 } }
+  );
+
+  // Get paginated data
+  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, shoeType->, category[]->, releaseInfo, specs, image, review}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
     {},
     { next: { revalidate: 30 } }
   );
-  return data;
+
+  return {
+    shoes: data,
+    totalCount,
+    totalPages: Math.ceil(totalCount / ITEMS_PER_PAGE),
+  };
 }
 
-export default async function Shoes() {
-  const shoes = await getData();
+export default async function Shoes(props: ShoesPageProps) {
+  const searchParams = await props.searchParams;
+  const currentPage = parseInt(searchParams.page || "1", 10);
+  const { shoes, totalCount, totalPages } = await getData(currentPage);
 
   return (
     <Suspense>
@@ -60,57 +88,13 @@ export default async function Shoes() {
           ))}
         </div>
 
-        <div className="mt-8 flex justify-center">
-          <nav className="flex items-center space-x-1">
-            <a
-              href="#"
-              className="px-3 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </a>
-            <a href="#" className="px-3 py-2 rounded-md bg-blue-600 text-white">
-              1
-            </a>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100">
-              2
-            </a>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100">
-              3
-            </a>
-            <span className="px-3 py-2">...</span>
-            <a href="#" className="px-3 py-2 rounded-md hover:bg-gray-100">
-              8
-            </a>
-            <a
-              href="#"
-              className="px-3 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </a>
-          </nav>
-        </div>
+        <GenericPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalCount}
+          itemsPerPage={ITEMS_PER_PAGE}
+          basePath="/shoes"
+        />
       </div>
     </Suspense>
   );
