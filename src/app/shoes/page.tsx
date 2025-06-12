@@ -8,9 +8,9 @@ import ShoeTableCard from "./_components/ShoeTableCard";
 import GenericPagination from "@/_components/GenericPagination";
 
 interface ShoesPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 const ITEMS_PER_PAGE = 20;

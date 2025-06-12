@@ -5,9 +5,9 @@ import BrandsWithSearch from "./_components/BrandsWithSearch";
 import GenericPagination from "@/_components/GenericPagination";
 
 interface BrandsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 const ITEMS_PER_PAGE = 12;
@@ -47,7 +47,8 @@ async function getData(page: number = 1) {
 }
 
 export default async function BrandsPage({ searchParams }: BrandsPageProps) {
-  const currentPage = parseInt(searchParams.page || "1", 10);
+  const resolvedSearchParams = await searchParams;
+  const currentPage = parseInt(resolvedSearchParams.page || "1", 10);
   const { brands, totalCount, totalPages } = await getData(currentPage);
 
   return (
