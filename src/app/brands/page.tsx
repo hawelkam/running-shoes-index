@@ -1,7 +1,7 @@
 import { type SanityDocument } from "next-sanity";
 
 import { client } from "@/sanity/client";
-import BrandsTable from "./_components/BrandsTable";
+import BrandsWithSearch from "./_components/BrandsWithSearch";
 
 const BRANDS_QUERY = `*[
   _type == "brand" && defined(slug.current)
@@ -26,9 +26,17 @@ export default async function BrandsPage() {
   const brands = await client.fetch<SanityBrand[]>(BRANDS_QUERY, {}, options);
 
   return (
-    <main className="p-8">
-      <h1 className="text-4xl font-bold mb-8">Running Shoe Brands</h1>
-      <BrandsTable brands={brands} />
-    </main>
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          Running Shoe Brands
+        </h1>
+        <p className="text-gray-600">
+          Discover the world&apos;s leading running shoe manufacturers
+        </p>
+      </header>
+
+      <BrandsWithSearch brands={brands} />
+    </div>
   );
 }

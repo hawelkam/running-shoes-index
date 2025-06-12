@@ -12,13 +12,13 @@ export default function BrandsTable({ brands }: BrandsTableProps) {
   return (
     <List
       grid={{
-        gutter: 16,
+        gutter: 24,
         xs: 1,
         sm: 2,
-        md: 4,
+        md: 3,
         lg: 4,
         xl: 4,
-        xxl: 3,
+        xxl: 5,
       }}
       dataSource={brands}
       renderItem={(item) => (
@@ -26,7 +26,6 @@ export default function BrandsTable({ brands }: BrandsTableProps) {
           <BrandCard key={item._id} brand={item} />
         </List.Item>
       )}
-      style={{ padding: "1rem" }}
     />
   );
 }

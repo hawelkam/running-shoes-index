@@ -1,30 +1,64 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import { SanityBrand } from "../page";
-import Card from "antd/es/card/Card";
-import Title from "antd/es/typography/Title";
+import { Card } from "antd";
+import { useState } from "react";
 
 interface IProps {
   brand: SanityBrand;
 }
 
 export default function BrandCard({ brand }: IProps) {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <Card
-      cover={<img alt="example" src={brand.image.url} />}
+      hoverable
+      cover={
+        <div className="h-48 overflow-hidden bg-white flex items-center justify-center relative">
+          {brand.image?.url && !imageError ? (
+            <Image
+              alt={brand.name}
+              src={brand.image.url}
+              fill
+              className="object-contain hover:scale-105 transition-transform duration-300"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-gradient-to-br from-gray-100 to-gray-200">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-gray-400 mb-2">
+                  {brand.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="text-xs text-gray-500">{brand.name}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      }
       actions={[
         <Link
           href={`/brands/${brand.slug.current}`}
           key={`${brand.slug.current}-details`}
+          className="text-blue-600 hover:text-blue-800 font-medium"
         >
-          Details
+          View Details
         </Link>,
       ]}
+      className="h-full shadow-sm hover:shadow-md transition-shadow bg-white"
     >
-      <Link href={`/brands/${brand.slug.current}`}>
-        <Title level={2} style={{ textAlign: "center" }}>
-          {brand.name}
-        </Title>
-      </Link>
+      <Card.Meta
+        title={
+          <Link
+            href={`/brands/${brand.slug.current}`}
+            className="text-gray-800 hover:text-blue-600 transition-colors text-center block font-semibold"
+          >
+            {brand.name}
+          </Link>
+        }
+      />
     </Card>
   );
 }

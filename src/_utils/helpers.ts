@@ -50,9 +50,21 @@ export function prepareHeightInMM(height: number | undefined): string {
   }
   return "-";
 }
+export function prepareWeightInGrams(weight: number | undefined): string {
+  if (weight) {
+    return `${weight}g`;
+  }
+  return "-";
+}
+export function prepareWeightInOunces(weight: number | undefined): string {
+  if (weight) {
+    return `${(weight * 0.03527396).toFixed(1)} oz`;
+  }
+  return "-";
+}
 export function prepareWeight(weight: number | undefined): string {
   if (weight) {
-    return `${weight}g (${(weight * 0.03527396).toFixed(1)} oz)`;
+    return `${prepareWeightInGrams(weight)} ($${prepareWeightInOunces(weight)})`;
   }
   return "-";
 }

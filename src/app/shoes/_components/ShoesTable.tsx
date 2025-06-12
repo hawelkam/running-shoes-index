@@ -6,9 +6,9 @@ import {
   ClockCircleFilled,
   CloseCircleFilled,
 } from "@ant-design/icons";
-import { List, Table, TableColumnsType } from "antd";
+import { List, Table, TableColumnsType, Input, Image } from "antd";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import ShoeCard from "./ShoeCard";
 
 interface ShoesTableProps {
@@ -19,7 +19,16 @@ const columns: TableColumnsType<RunningShoe> = [
   {
     title: "Image",
     dataIndex: "image",
-    render: (value) => <img src={value} alt="" style={{ height: "100px" }} />,
+    render: (value) =>
+      value ? (
+        <Image
+          src={value}
+          alt=""
+          height={100}
+          width={200}
+          style={{ objectFit: "contain" }}
+        />
+      ) : null,
     width: "20%",
   },
   {
@@ -149,12 +158,33 @@ const columns: TableColumnsType<RunningShoe> = [
 
 const ShoesTable = ({ shoes }: ShoesTableProps) => {
   const router = useRouter();
+  const [filter, setFilter] = useState("");
+
+  // Filter shoes by phrase (case-insensitive, checks name, shoeTypeName, and categories)
+  const filteredShoes = useMemo(() => {
+    if (!filter.trim()) return shoes;
+    const phrase = filter.toLowerCase();
+    return shoes.filter((shoe) =>
+      [shoe.name, shoe.shoeTypeName, ...(shoe.category || [])]
+        .filter(Boolean)
+        .some((field) => field.toLowerCase().includes(phrase))
+    );
+  }, [filter, shoes]);
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <Input
+          placeholder="Filter shoes..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          style={{ maxWidth: 300 }}
+          allowClear
+        />
+      </div>
       <Table<RunningShoe>
         columns={columns}
-        dataSource={shoes}
+        dataSource={filteredShoes}
         showSorterTooltip={{ target: "sorter-icon" }}
         onRow={(record) => {
           return {
@@ -166,7 +196,7 @@ const ShoesTable = ({ shoes }: ShoesTableProps) => {
         className="hidden lg:block"
         pagination={{
           position: ["bottomCenter"],
-          total: shoes.length,
+          total: filteredShoes.length,
           showTotal: (total) => `Total ${total} items`,
         }}
       />
@@ -183,10 +213,10 @@ const ShoesTable = ({ shoes }: ShoesTableProps) => {
         pagination={{
           align: "center",
           position: "bottom",
-          total: shoes.length,
+          total: filteredShoes.length,
           showTotal: (total) => `Total ${total} items`,
         }}
-        dataSource={shoes}
+        dataSource={filteredShoes}
         renderItem={(item) => (
           <List.Item>
             <ShoeCard shoe={item} />
