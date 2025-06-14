@@ -3,21 +3,29 @@
 import Search, { SearchProps } from "antd/es/input/Search";
 import { useRouter } from "next/navigation";
 
-const SearchInput = () => {
+interface SearchInputProps {
+  onSearchComplete?: () => void;
+}
+
+const SearchInput = ({ onSearchComplete }: SearchInputProps = {}) => {
   const router = useRouter();
 
   const onSearch: SearchProps["onSearch"] = (value, event) => {
     event?.preventDefault();
-    router.push(`/shoes/search?query=${value}`);
+    if (value.trim()) {
+      router.push(`/shoes/search?query=${encodeURIComponent(value.trim())}`);
+      onSearchComplete?.();
+    }
   };
 
   return (
     <Search
-      placeholder="input search text"
+      placeholder="Search shoes..."
       allowClear
       enterButton="Search"
       size="large"
       onSearch={onSearch}
+      style={{ width: "100%" }}
     />
   );
 };

@@ -3,10 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout } from "antd";
-import { Content, Footer, Header } from "antd/es/layout/layout";
-import SearchInput from "@/_components/SearchInput";
+import { Content, Footer } from "antd/es/layout/layout";
 import Sidebar from "@/_components/Sidebar";
-import Title from "antd/es/typography/Title";
+import ResponsiveHeader from "@/_components/ResponsiveHeader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,20 +35,7 @@ export default function RootLayout({
       >
         <AntdRegistry>
           <Layout>
-            <Header
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Title style={{ color: "#FFF", margin: 0 }}>
-                Running Shoes Index
-              </Title>
-              <div className="flex items-center">
-                <SearchInput />
-              </div>
-            </Header>
+            <ResponsiveHeader />
             <Layout>
               <Sidebar />
               <Content>

@@ -1,7 +1,16 @@
 import SearchResults from "@/_components/SearchResults";
 import React, { Suspense } from "react";
 
-const SearchResultsPage = () => {
+interface SearchPageProps {
+  searchParams: Promise<{
+    query?: string;
+  }>;
+}
+
+const SearchResultsPage = async ({ searchParams }: SearchPageProps) => {
+  const resolvedSearchParams = await searchParams;
+  console.log("Search Params:", resolvedSearchParams);
+
   return (
     <Suspense>
       <SearchResults />
