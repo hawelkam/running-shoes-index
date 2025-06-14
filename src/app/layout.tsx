@@ -4,7 +4,6 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout } from "antd";
 import { Content, Footer } from "antd/es/layout/layout";
-import Sidebar from "@/_components/Sidebar";
 import ResponsiveHeader from "@/_components/ResponsiveHeader";
 
 const geistSans = localFont({
@@ -36,21 +35,18 @@ export default function RootLayout({
         <AntdRegistry>
           <Layout>
             <ResponsiveHeader />
-            <Layout>
-              <Sidebar />
-              <Content>
-                <div
-                  style={{
-                    background: "#f9f9f9",
-                    minHeight: 280,
-                    padding: 24,
-                    borderRadius: "5px",
-                  }}
-                >
-                  {children}
-                </div>
-              </Content>
-            </Layout>
+            <Content>
+              <div
+                style={{
+                  background: "#f9f9f9",
+                  minHeight: 280,
+                  padding: 24,
+                  borderRadius: "5px",
+                }}
+              >
+                {children}
+              </div>
+            </Content>
 
             <Footer style={{ textAlign: "center" }}>
               Michał Hawełka ©{new Date().getFullYear()}

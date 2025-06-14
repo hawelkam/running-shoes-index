@@ -10,6 +10,9 @@ export default function ResponsiveHeader() {
   const [searchVisible, setSearchVisible] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
 
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
   return (
     <header className="bg-gray-900 px-4 py-3">
       <div className="flex items-center justify-between">
@@ -22,8 +25,44 @@ export default function ResponsiveHeader() {
           <span className="sm:hidden">RSI</span>
         </Link>
 
-        {/* Desktop Search and Menu */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* Desktop Navigation and Search */}
+        <div className="hidden lg:flex items-center space-x-6">
+          {/* Quick Navigation Links */}
+          <nav className="flex items-center space-x-4">
+            <Link
+              href="/brands"
+              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+            >
+              Brands
+            </Link>
+            <Link
+              href="/shoes/reviewed/2025"
+              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+            >
+              Reviews
+            </Link>
+            <Link
+              href={`/shoes/released/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}
+              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+            >
+              This Month
+            </Link>
+            <Link
+              href={`/shoes/released/${currentYear}`}
+              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+            >
+              This Year
+            </Link>
+          </nav>
+
+          {/* Search */}
+          <div className="w-80">
+            <SearchInput />
+          </div>
+        </div>
+
+        {/* Tablet Search (between lg and md) */}
+        <div className="hidden md:flex lg:hidden items-center space-x-4">
           <div className="w-80">
             <SearchInput />
           </div>
@@ -33,15 +72,17 @@ export default function ResponsiveHeader() {
         <div className="flex items-center space-x-2 md:hidden">
           <Button
             type="text"
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined style={{ color: "white" }} />}
             onClick={() => setSearchVisible(true)}
-            className="text-white hover:text-gray-200 hover:bg-gray-800"
+            className="hover:bg-gray-800 border-none"
+            style={{ color: "white" }}
           />
           <Button
             type="text"
-            icon={<MenuOutlined />}
+            icon={<MenuOutlined style={{ color: "white" }} />}
             onClick={() => setMobileMenuVisible(true)}
-            className="text-white hover:text-gray-200 hover:bg-gray-800"
+            className="hover:bg-gray-800 border-none"
+            style={{ color: "white" }}
           />
         </div>
       </div>
@@ -62,41 +103,142 @@ export default function ResponsiveHeader() {
 
       {/* Mobile Menu Drawer */}
       <Drawer
-        title="Menu"
+        title="Navigation Menu"
         placement="right"
         onClose={() => setMobileMenuVisible(false)}
         open={mobileMenuVisible}
         className="md:hidden"
+        width={300}
       >
-        <div className="flex flex-col space-y-4 p-4">
-          <Link
-            href="/brands"
-            className="text-gray-800 hover:text-blue-600 py-2"
-            onClick={() => setMobileMenuVisible(false)}
-          >
-            Brands
-          </Link>
-          <Link
-            href="/shoes"
-            className="text-gray-800 hover:text-blue-600 py-2"
-            onClick={() => setMobileMenuVisible(false)}
-          >
-            All Shoes
-          </Link>
-          <Link
-            href={`/shoes/released/${new Date().getFullYear()}/${(new Date().getMonth() + 1).toString().padStart(2, "0")}`}
-            className="text-gray-800 hover:text-blue-600 py-2"
-            onClick={() => setMobileMenuVisible(false)}
-          >
-            This Month&apos;s Releases
-          </Link>
-          <Link
-            href="/shoes/reviewed/2025"
-            className="text-gray-800 hover:text-blue-600 py-2"
-            onClick={() => setMobileMenuVisible(false)}
-          >
-            2025 Reviews
-          </Link>
+        <div className="flex flex-col space-y-1 p-2">
+          {/* Quick Navigation Section */}
+          <div className="mb-6">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Quick Navigation
+            </h3>
+
+            <Link
+              href="/brands"
+              className="flex items-center p-3 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors mb-2"
+              onClick={() => setMobileMenuVisible(false)}
+            >
+              <div className="bg-blue-100 p-2 rounded-full mr-3">
+                <svg
+                  className="w-4 h-4 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div className="font-medium text-gray-800">Browse Brands</div>
+                <div className="text-xs text-gray-600">
+                  Explore all shoe brands
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/shoes/reviewed/2025"
+              className="flex items-center p-3 rounded-lg hover:bg-green-50 hover:text-green-600 transition-colors mb-2"
+              onClick={() => setMobileMenuVisible(false)}
+            >
+              <div className="bg-green-100 p-2 rounded-full mr-3">
+                <svg
+                  className="w-4 h-4 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div className="font-medium text-gray-800">2025 Reviews</div>
+                <div className="text-xs text-gray-600">
+                  Recently reviewed shoes
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href={`/shoes/released/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}
+              className="flex items-center p-3 rounded-lg hover:bg-purple-50 hover:text-purple-600 transition-colors mb-2"
+              onClick={() => setMobileMenuVisible(false)}
+            >
+              <div className="bg-purple-100 p-2 rounded-full mr-3">
+                <svg
+                  className="w-4 h-4 text-purple-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div className="font-medium text-gray-800">This Month</div>
+                <div className="text-xs text-gray-600">June 2025 releases</div>
+              </div>
+            </Link>
+
+            <Link
+              href={`/shoes/released/${currentYear}`}
+              className="flex items-center p-3 rounded-lg hover:bg-orange-50 hover:text-orange-600 transition-colors mb-2"
+              onClick={() => setMobileMenuVisible(false)}
+            >
+              <div className="bg-orange-100 p-2 rounded-full mr-3">
+                <svg
+                  className="w-4 h-4 text-orange-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div className="font-medium text-gray-800">This Year</div>
+                <div className="text-xs text-gray-600">2025 releases</div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Additional Links */}
+          <div className="border-t border-gray-200 pt-4">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Browse
+            </h3>
+            <Link
+              href="/shoes"
+              className="flex items-center p-3 rounded-lg hover:bg-gray-50 text-gray-800 hover:text-gray-900 transition-colors"
+              onClick={() => setMobileMenuVisible(false)}
+            >
+              All Shoes
+            </Link>
+          </div>
         </div>
       </Drawer>
     </header>
