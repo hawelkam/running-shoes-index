@@ -1,8 +1,8 @@
 "use client";
 
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
-import ShoesTable from "@/app/shoes/_components/ShoesTable";
+import ShoeTableElement from "@/app/shoes/_components/ShoeTableElement";
+import ShoeTableCard from "@/app/shoes/_components/ShoeTableCard";
 import { client } from "@/sanity/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -91,7 +91,36 @@ const SearchResults = () => {
       </header>
 
       {shoes.length > 0 ? (
-        <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
+        <>
+          {/* Table view for desktop */}
+          <div className="overflow-x-auto table-view mb-8">
+            <table className="w-full bg-white rounded-lg shadow-md">
+              <thead>
+                <tr className="bg-gray-100 text-left">
+                  <th className="p-4 font-semibold text-gray-700">Image</th>
+                  <th className="p-4 font-semibold text-gray-700">Name</th>
+                  <th className="p-4 font-semibold text-gray-700">Category</th>
+                  <th className="p-4 font-semibold text-gray-700">Price</th>
+                  <th className="p-4 font-semibold text-gray-700">Weight</th>
+                  <th className="p-4 font-semibold text-gray-700">Drop</th>
+                  <th className="p-4 font-semibold text-gray-700">Reviewed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {shoes.map((shoe) => (
+                  <ShoeTableElement key={shoe._id} shoe={shoe} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Card view for mobile */}
+          <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {shoes.map((shoe) => (
+              <ShoeTableCard key={shoe._id} shoe={shoe} />
+            ))}
+          </div>
+        </>
       ) : (
         <Empty
           description={`No shoes found matching "${query}"`}

@@ -2,16 +2,27 @@ import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { SanityBrand } from "../page";
-import ShoesTable from "@/app/shoes/_components/ShoesTable";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
+import ShoeTableElement from "@/app/shoes/_components/ShoeTableElement";
+import ShoeTableCard from "@/app/shoes/_components/ShoeTableCard";
 import Image from "next/image";
 
 type Params = Promise<{ slug: string }>;
 async function getBrand(slug: string): Promise<SanityBrand | null> {
   try {
     const brand = await client.fetch<SanityBrand>(
-      `*[_type == "brand" && slug.current == "${slug}"][0]{_id, name, country, usWebsite, euWebsite, plWebsite, image, mediaContact, mediaContactPl}`,
+      `*[_type == "brand" && slug.current == "${slug}"][0]{
+        _id,
+        name,
+        country,
+        usWebsite,
+        euWebsite,
+        plWebsite,
+        image,
+        usMediaContact,
+        euMediaContact,
+        plMediaContact
+      }`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -28,7 +39,21 @@ async function getShoesByBrand(slug: string): Promise<SanityRunningShoe[]> {
   try {
     const shoes = await client.fetch<SanityRunningShoe[]>(
       `*[
-  _type == "runningShoe" && defined(slug.current) && brand->.slug.current == "${slug}"]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`,
+        _type == "runningShoe" &&
+        defined(slug.current) &&
+        brand->.slug.current == "${slug}"
+      ]|order(lower(name) asc)[0...400]{
+        _id,
+        name,
+        slug,
+        shoeType->,
+        category[]-> {_id, name},
+        releaseInfo,
+        specs,
+        image,
+        review,
+        brand-> {_id, name, slug}
+      }`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -55,14 +80,23 @@ const BrandPage = async (props: { params: Params }) => {
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         <h1 className="text-4xl font-bold mb-8">{brand.name}</h1>
         <div className="flex gap-2 md:gap-4 items-center flex-col md:flex-row">
-          <div className="max-w-sm bg-white">
-            <Image
-              className="h-auto rounded-lg"
-              src={brand.image.url}
-              alt={brand.name}
-              width={400}
-              height={300}
-            />
+          <div className="max-w-sm bg-white rounded-lg shadow-sm">
+            {brand.image?.url ? (
+              <Image
+                className="h-auto rounded-lg"
+                src={brand.image.url}
+                alt={brand.name}
+                width={400}
+                height={300}
+                priority
+              />
+            ) : (
+              <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                <span className="text-gray-500 text-lg font-medium">
+                  {brand.name}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="py-4 w-full">
@@ -84,7 +118,9 @@ const BrandPage = async (props: { params: Params }) => {
                     >
                       Country of Origin
                     </th>
-                    <td className="px-6 py-4 flex gap-2">{brand.country}</td>
+                    <td className="px-6 py-4">
+                      {brand.country || "Not specified"}
+                    </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-gray-50 border-b">
                     <th
@@ -93,10 +129,44 @@ const BrandPage = async (props: { params: Params }) => {
                     >
                       Official website
                     </th>
-                    <td className="px-6 py-4 flex gap-2">
-                      {brand.usWebsite && <a href={brand.usWebsite}>US</a>}
-                      {brand.euWebsite && <a href={brand.euWebsite}>EU</a>}
-                      {brand.plWebsite && <a href={brand.plWebsite}>PL</a>}
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2 flex-wrap">
+                        {brand.usWebsite && (
+                          <a
+                            href={brand.usWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            US
+                          </a>
+                        )}
+                        {brand.euWebsite && (
+                          <a
+                            href={brand.euWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            EU
+                          </a>
+                        )}
+                        {brand.plWebsite && (
+                          <a
+                            href={brand.plWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            PL
+                          </a>
+                        )}
+                        {!brand.usWebsite &&
+                          !brand.euWebsite &&
+                          !brand.plWebsite && (
+                            <span className="text-gray-500">Not available</span>
+                          )}
+                      </div>
                     </td>
                   </tr>
                   <tr className="odd:bg-white even:bg-gray-50 border-b">
@@ -106,16 +176,38 @@ const BrandPage = async (props: { params: Params }) => {
                     >
                       Media contact
                     </th>
-                    <td className="px-6 py-4 flex gap-2">
-                      {brand.usMediaContact && (
-                        <a href={`mailto:"${brand.usMediaContact}"`}>US</a>
-                      )}
-                      {brand.euMediaContact && (
-                        <a href={`mailto:"${brand.euMediaContact}"`}>EU</a>
-                      )}
-                      {brand.plMediaContact && (
-                        <a href={`mailto:"${brand.plMediaContact}"`}>PL</a>
-                      )}
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2 flex-wrap">
+                        {brand.usMediaContact && (
+                          <a
+                            href={`mailto:${brand.usMediaContact}`}
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            US
+                          </a>
+                        )}
+                        {brand.euMediaContact && (
+                          <a
+                            href={`mailto:${brand.euMediaContact}`}
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            EU
+                          </a>
+                        )}
+                        {brand.plMediaContact && (
+                          <a
+                            href={`mailto:${brand.plMediaContact}`}
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            PL
+                          </a>
+                        )}
+                        {!brand.usMediaContact &&
+                          !brand.euMediaContact &&
+                          !brand.plMediaContact && (
+                            <span className="text-gray-500">Not available</span>
+                          )}
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -123,8 +215,60 @@ const BrandPage = async (props: { params: Params }) => {
             </div>
           </div>
         </div>
-        <div className="container mx-auto px-4 max-w-7xl">
-          <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
+
+        {/* Shoes Table Section */}
+        <div className="mb-8">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6">
+            Shoes from {brand.name}
+          </h3>
+
+          {shoes.length > 0 ? (
+            <>
+              {/* Table view for desktop */}
+              <div className="overflow-x-auto table-view">
+                <table className="w-full bg-white rounded-lg shadow-md">
+                  <thead>
+                    <tr className="bg-gray-100 text-left">
+                      <th className="p-4 font-semibold text-gray-700">Image</th>
+                      <th className="p-4 font-semibold text-gray-700">Name</th>
+                      <th className="p-4 font-semibold text-gray-700">
+                        Category
+                      </th>
+                      <th className="p-4 font-semibold text-gray-700">Price</th>
+                      <th className="p-4 font-semibold text-gray-700">
+                        Weight
+                      </th>
+                      <th className="p-4 font-semibold text-gray-700">Drop</th>
+                      <th className="p-4 font-semibold text-gray-700">
+                        Reviewed
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shoes.map((shoe) => (
+                      <ShoeTableElement key={shoe._id} shoe={shoe} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Card view for mobile */}
+              <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {shoes.map((shoe) => (
+                  <ShoeTableCard key={shoe._id} shoe={shoe} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-600 text-lg">
+                No shoes found for {brand.name}
+              </p>
+              <p className="text-gray-500 mt-2">
+                Check back later for new releases!
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </Suspense>
