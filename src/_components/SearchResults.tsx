@@ -3,22 +3,30 @@
 import { SanityRunningShoe } from "@/_types/RunningShoe";
 import ShoeTableElement from "@/app/shoes/_components/ShoeTableElement";
 import ShoeTableCard from "@/app/shoes/_components/ShoeTableCard";
+import GenericPagination from "./GenericPagination";
 import { client } from "@/sanity/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Spin, Empty, Alert } from "antd";
 
+const ITEMS_PER_PAGE = 10;
+
 const SearchResults = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const [shoes, setShoes] = useState<SanityRunningShoe[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
   useEffect(() => {
-    async function getShoes(searchQuery: string) {
+    async function getShoes(searchQuery: string, page: number = 1) {
       if (!searchQuery.trim()) {
         setShoes([]);
+        setTotalCount(0);
         return;
       }
 
@@ -26,6 +34,26 @@ const SearchResults = () => {
       setError(null);
 
       try {
+        const start = (page - 1) * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE - 1;
+
+        // Get total count
+        const countQuery = `count(*[
+            _type == "runningShoe" &&
+            defined(slug.current) &&
+            (name match "*${searchQuery}*" ||
+             shoeType->name match "*${searchQuery}*" ||
+             category[]->name match "*${searchQuery}*")
+          ])`;
+
+        const totalCount = await client.fetch<number>(
+          countQuery,
+          {},
+          { next: { revalidate: 60 } }
+        );
+        setTotalCount(totalCount);
+
+        // Get paginated data
         const data = await client.fetch<SanityRunningShoe[]>(
           `*[
             _type == "runningShoe" &&
@@ -33,7 +61,7 @@ const SearchResults = () => {
             (name match "*${searchQuery}*" ||
              shoeType->name match "*${searchQuery}*" ||
              category[]->name match "*${searchQuery}*")
-          ]|order(lower(name) asc)[0...100]{
+          ]|order(lower(name) asc)[${start}...${end + 1}]{
             _id, name, slug, shoeType->, category[]->, releaseInfo, specs, image, review
           }`,
           {},
@@ -48,8 +76,8 @@ const SearchResults = () => {
       }
     }
 
-    getShoes(query || "");
-  }, [query]);
+    getShoes(query || "", currentPage);
+  }, [query, currentPage]);
 
   if (loading) {
     return (
@@ -84,8 +112,8 @@ const SearchResults = () => {
           Search Results
         </h1>
         <p className="text-gray-600">
-          {shoes.length > 0
-            ? `Found ${shoes.length} shoes matching "${query}"`
+          {totalCount > 0
+            ? `Found ${totalCount} shoes matching "${query}" (showing ${shoes.length} on page ${currentPage})`
             : `No shoes found matching "${query}"`}
         </p>
       </header>
@@ -115,11 +143,22 @@ const SearchResults = () => {
           </div>
 
           {/* Card view for mobile */}
-          <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
             {shoes.map((shoe) => (
               <ShoeTableCard key={shoe._id} shoe={shoe} />
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <GenericPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalCount}
+              itemsPerPage={ITEMS_PER_PAGE}
+              basePath={`/search?query=${encodeURIComponent(query || "")}`}
+            />
+          )}
         </>
       ) : (
         <Empty

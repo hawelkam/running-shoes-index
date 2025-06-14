@@ -5,9 +5,15 @@ import { SanityBrand } from "../page";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
 import ShoeTableElement from "@/app/shoes/_components/ShoeTableElement";
 import ShoeTableCard from "@/app/shoes/_components/ShoeTableCard";
+import GenericPagination from "@/_components/GenericPagination";
 import Image from "next/image";
 
-type Params = Promise<{ slug: string }>;
+const ITEMS_PER_PAGE = 10;
+
+interface BrandPageProps {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
+}
 async function getBrand(slug: string): Promise<SanityBrand | null> {
   try {
     const brand = await client.fetch<SanityBrand>(
@@ -35,14 +41,34 @@ async function getBrand(slug: string): Promise<SanityBrand | null> {
   }
 }
 
-async function getShoesByBrand(slug: string): Promise<SanityRunningShoe[]> {
+async function getShoesByBrand(
+  slug: string,
+  page: number = 1
+): Promise<{ shoes: SanityRunningShoe[]; totalCount: number }> {
   try {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE - 1;
+
+    // Get total count
+    const countQuery = `count(*[
+        _type == "runningShoe" &&
+        defined(slug.current) &&
+        brand->.slug.current == "${slug}"
+      ])`;
+
+    const totalCount = await client.fetch<number>(
+      countQuery,
+      {},
+      { next: { revalidate: 60 } }
+    );
+
+    // Get paginated data
     const shoes = await client.fetch<SanityRunningShoe[]>(
       `*[
         _type == "runningShoe" &&
         defined(slug.current) &&
         brand->.slug.current == "${slug}"
-      ]|order(lower(name) asc)[0...400]{
+      ]|order(lower(name) asc)[${start}...${end + 1}]{
         _id,
         name,
         slug,
@@ -57,23 +83,25 @@ async function getShoesByBrand(slug: string): Promise<SanityRunningShoe[]> {
       {},
       { next: { revalidate: 60 } }
     );
-    if (!shoes) return [];
 
-    return shoes;
+    return { shoes: shoes || [], totalCount };
   } catch (error) {
     console.error("Failed to fetch brand shoes:", error);
-    return [];
+    return { shoes: [], totalCount: 0 };
   }
 }
 
-const BrandPage = async (props: { params: Params }) => {
+const BrandPage = async (props: BrandPageProps) => {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const slug = params.slug;
+  const currentPage = parseInt(searchParams.page || "1", 10);
   const brand = await getBrand(slug);
-  const shoes = await getShoesByBrand(slug);
+  const { shoes, totalCount } = await getShoesByBrand(slug, currentPage);
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   if (!brand) {
-    notFound(); // Trigger 404 page if the shoe is not found
+    notFound(); // Trigger 404 page if the brand is not found
   }
   return (
     <Suspense>
@@ -219,7 +247,7 @@ const BrandPage = async (props: { params: Params }) => {
         {/* Shoes Table Section */}
         <div className="mb-8">
           <h3 className="text-2xl font-bold text-gray-800 mb-6">
-            Shoes from {brand.name}
+            Shoes from {brand.name} ({totalCount} total)
           </h3>
 
           {shoes.length > 0 ? (
@@ -253,11 +281,22 @@ const BrandPage = async (props: { params: Params }) => {
               </div>
 
               {/* Card view for mobile */}
-              <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                 {shoes.map((shoe) => (
                   <ShoeTableCard key={shoe._id} shoe={shoe} />
                 ))}
               </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <GenericPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalCount}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  basePath={`/brands/${slug}`}
+                />
+              )}
             </>
           ) : (
             <div className="text-center py-12 bg-gray-50 rounded-lg">

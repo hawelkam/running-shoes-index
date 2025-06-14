@@ -3,9 +3,21 @@ import { Suspense } from "react";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
 import ShoeTableElement from "../_components/ShoeTableElement";
 import ShoeTableCard from "../_components/ShoeTableCard";
+import GenericPagination from "@/_components/GenericPagination";
 
-async function getData() {
-  const query = `*[_type == "runningShoe"
+const ITEMS_PER_PAGE = 10;
+
+interface IncompletePageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+async function getData(
+  page: number = 1
+): Promise<{ shoes: SanityRunningShoe[]; totalCount: number }> {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE - 1;
+
+  const baseQuery = `*[_type == "runningShoe"
     && (
         !defined(releaseInfo)
         || !defined(releaseInfo.pl)
@@ -32,18 +44,32 @@ async function getData() {
         || !defined(specs.foam)
         || !defined(specs.plate)
         || !defined(specs.outsole))
-        ]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review, specs}`;
+        ]|order(lower(name) asc)`;
 
+  // Get total count
+  const countQuery = `count(${baseQuery})`;
+  const totalCount = await client.fetch<number>(
+    countQuery,
+    {},
+    { next: { revalidate: 30 } }
+  );
+
+  // Get paginated data
+  const query = `${baseQuery}[${start}...${end + 1}]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review, specs}`;
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
     {},
     { next: { revalidate: 30 } }
   );
-  return data;
+
+  return { shoes: data || [], totalCount };
 }
 
-export default async function Shoes() {
-  const shoes = await getData();
+export default async function Shoes(props: IncompletePageProps) {
+  const searchParams = await props.searchParams;
+  const currentPage = parseInt(searchParams.page || "1", 10);
+  const { shoes, totalCount } = await getData(currentPage);
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
     <Suspense>
@@ -54,7 +80,9 @@ export default async function Shoes() {
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               Incomplete Shoes Data
             </h1>
-            <p className="text-gray-600">Shoes missing important information</p>
+            <p className="text-gray-600">
+              Shoes missing important information ({totalCount} total)
+            </p>
           </header>
         </div>
 
@@ -89,6 +117,17 @@ export default async function Shoes() {
               <ShoeTableCard key={shoe._id} shoe={shoe} />
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <GenericPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalCount}
+              itemsPerPage={ITEMS_PER_PAGE}
+              basePath="/shoes/incomplete"
+            />
+          )}
         </div>
       </div>
     </Suspense>

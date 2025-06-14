@@ -3,31 +3,67 @@ import { Suspense } from "react";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
 import ShoeTableElement from "../../_components/ShoeTableElement";
 import ShoeTableCard from "../../_components/ShoeTableCard";
+import GenericPagination from "@/_components/GenericPagination";
 
-type Params = Promise<{ slug: string[] }>;
+const ITEMS_PER_PAGE = 10;
 
-async function getShoes(slug: string[]): Promise<SanityRunningShoe[]> {
+interface ReleasedPageProps {
+  params: Promise<{ slug: string[] }>;
+  searchParams: Promise<{ page?: string }>;
+}
+
+async function getShoes(
+  slug: string[],
+  page: number = 1
+): Promise<{ shoes: SanityRunningShoe[]; totalCount: number }> {
   try {
-    const shoes = await client.fetch<SanityRunningShoe[]>(
-      `*[
-  _type == "runningShoe" && defined(slug.current) && ((releaseInfo.pl.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] || "12"}-32") || (releaseInfo.eu.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] || "12"}-32") || (releaseInfo.us.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] || "12"}-32"))
-]|order(lower(name) asc)[0...400]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review}`,
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE - 1;
+
+    // Get total count
+    const countQuery = `count(*[
+        _type == "runningShoe" &&
+        defined(slug.current) &&
+        ((releaseInfo.pl.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] || "12"}-32") ||
+         (releaseInfo.eu.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] || "12"}-32") ||
+         (releaseInfo.us.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] || "12"}-32"))
+      ])`;
+
+    const totalCount = await client.fetch<number>(
+      countQuery,
       {},
       { next: { revalidate: 60 } }
     );
-    if (!shoes) return [];
 
-    return shoes;
+    // Get paginated data
+    const shoes = await client.fetch<SanityRunningShoe[]>(
+      `*[
+        _type == "runningShoe" &&
+        defined(slug.current) &&
+        ((releaseInfo.pl.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] || "12"}-32") ||
+         (releaseInfo.eu.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] || "12"}-32") ||
+         (releaseInfo.us.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] || "12"}-32"))
+      ]|order(lower(name) asc)[${start}...${end + 1}]{
+        _id, name, slug, shoeType->, category[]->, releaseInfo, specs, image, review
+      }`,
+      {},
+      { next: { revalidate: 60 } }
+    );
+
+    return { shoes: shoes || [], totalCount };
   } catch (error) {
     console.error("Failed to fetch shoe:", error);
-    return [];
+    return { shoes: [], totalCount: 0 };
   }
 }
 
-const ReleasesOfDate = async (props: { params: Params }) => {
+const ReleasesOfDate = async (props: ReleasedPageProps) => {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const slug = params.slug;
-  const shoes = await getShoes(slug);
+  const currentPage = parseInt(searchParams.page || "1", 10);
+  const { shoes, totalCount } = await getShoes(slug, currentPage);
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
     <Suspense>
@@ -38,7 +74,9 @@ const ReleasesOfDate = async (props: { params: Params }) => {
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               Running Shoes Index
             </h1>
-            <h2 className="text-xl text-gray-600">Shoes of {slug[0]}</h2>
+            <h2 className="text-xl text-gray-600">
+              Shoes of {slug[0]} ({totalCount} total)
+            </h2>
           </header>
         </div>
 
@@ -73,6 +111,17 @@ const ReleasesOfDate = async (props: { params: Params }) => {
               <ShoeTableCard key={shoe._id} shoe={shoe} />
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <GenericPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalCount}
+              itemsPerPage={ITEMS_PER_PAGE}
+              basePath={`/shoes/released/${slug.join("/")}`}
+            />
+          )}
         </div>
       </div>
     </Suspense>
