@@ -4,50 +4,79 @@ import { SanityRunningShoe } from "@/_types/RunningShoe";
 import ShoeTableElement from "../_components/ShoeTableElement";
 import ShoeTableCard from "../_components/ShoeTableCard";
 import GenericPagination from "@/_components/GenericPagination";
+import GenericFilters from "../_components/GenericFilters";
+import ResultsCount from "../_components/ResultsCount";
+import {
+  FilterParams,
+  buildFilterConditions,
+  hasActiveFilters,
+} from "@/_utils/filterUtils";
 
 const ITEMS_PER_PAGE = 10;
 
 interface IncompletePageProps {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{
+    page?: string;
+    category?: string;
+    priceMin?: string;
+    priceMax?: string;
+    weightMin?: string;
+    weightMax?: string;
+    dropMin?: string;
+    dropMax?: string;
+    reviewed?: string;
+    search?: string;
+  }>;
 }
 
 async function getData(
-  page: number = 1
+  page: number = 1,
+  filters: FilterParams = {}
 ): Promise<{ shoes: SanityRunningShoe[]; totalCount: number }> {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE - 1;
 
-  const baseQuery = `*[_type == "runningShoe"
-    && (
-        !defined(releaseInfo)
-        || !defined(releaseInfo.pl)
-        || !defined(releaseInfo.eu)
-        || !defined(releaseInfo.us)
-        || !defined(releaseInfo.pl.date)
-        || !defined(releaseInfo.eu.date)
-        || !defined(releaseInfo.us.date)
-        || !defined(releaseInfo.pl.price)
-        || !defined(releaseInfo.eu.price)
-        || !defined(releaseInfo.us.price)
-        || !defined(category)
-        || !defined(image)
-        || !defined(specs)
-        || !defined(specs.m)
-        || !defined(specs.w)
-        || !defined(specs.m.weight)
-        || !defined(specs.w.weight)
-        || !defined(specs.m.drop)
-        || !defined(specs.w.drop)
-        || !defined(specs.m.heelStack)
-        || !defined(specs.w.heelStack)
-        || !defined(specs.upper)
-        || !defined(specs.foam)
-        || !defined(specs.plate)
-        || !defined(specs.outsole))
-        ]|order(lower(name) asc)`;
+  // Base conditions for incomplete shoes
+  const baseIncompleteConditions = [
+    '_type == "runningShoe"',
+    `(
+      !defined(releaseInfo)
+      || !defined(releaseInfo.pl)
+      || !defined(releaseInfo.eu)
+      || !defined(releaseInfo.us)
+      || !defined(releaseInfo.pl.date)
+      || !defined(releaseInfo.eu.date)
+      || !defined(releaseInfo.us.date)
+      || !defined(releaseInfo.pl.price)
+      || !defined(releaseInfo.eu.price)
+      || !defined(releaseInfo.us.price)
+      || !defined(category)
+      || !defined(image)
+      || !defined(specs)
+      || !defined(specs.m)
+      || !defined(specs.w)
+      || !defined(specs.m.weight)
+      || !defined(specs.w.weight)
+      || !defined(specs.m.drop)
+      || !defined(specs.w.drop)
+      || !defined(specs.m.heelStack)
+      || !defined(specs.w.heelStack)
+      || !defined(specs.upper)
+      || !defined(specs.foam)
+      || !defined(specs.plate)
+      || !defined(specs.outsole)
+    )`,
+  ];
+
+  // Build filter conditions
+  const filterConditions = buildFilterConditions(
+    baseIncompleteConditions,
+    filters
+  );
+  const whereClause = filterConditions.join(" && ");
 
   // Get total count
-  const countQuery = `count(${baseQuery})`;
+  const countQuery = `count(*[${whereClause}])`;
   const totalCount = await client.fetch<number>(
     countQuery,
     {},
@@ -55,7 +84,7 @@ async function getData(
   );
 
   // Get paginated data
-  const query = `${baseQuery}[${start}...${end + 1}]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review, specs}`;
+  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, shoeType->, category[]->, releaseInfo, image, review, specs}`;
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
     {},
@@ -68,8 +97,22 @@ async function getData(
 export default async function Shoes(props: IncompletePageProps) {
   const searchParams = await props.searchParams;
   const currentPage = parseInt(searchParams.page || "1", 10);
-  const { shoes, totalCount } = await getData(currentPage);
+
+  const filters: FilterParams = {
+    category: searchParams.category,
+    priceMin: searchParams.priceMin,
+    priceMax: searchParams.priceMax,
+    weightMin: searchParams.weightMin,
+    weightMax: searchParams.weightMax,
+    dropMin: searchParams.dropMin,
+    dropMax: searchParams.dropMax,
+    reviewed: searchParams.reviewed,
+    search: searchParams.search,
+  };
+
+  const { shoes, totalCount } = await getData(currentPage, filters);
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+  const activeFilters = hasActiveFilters(filters);
 
   return (
     <Suspense>
@@ -84,6 +127,19 @@ export default async function Shoes(props: IncompletePageProps) {
               Shoes missing important information ({totalCount} total)
             </p>
           </header>
+
+          <GenericFilters
+            basePath="/shoes/incomplete"
+            title="Filter Incomplete Shoes"
+          />
+
+          <ResultsCount
+            totalCount={totalCount}
+            currentPage={currentPage}
+            itemsPerPage={ITEMS_PER_PAGE}
+            showingCount={shoes.length}
+            hasFilters={activeFilters}
+          />
         </div>
 
         {/* Table with same width as header */}
@@ -112,7 +168,7 @@ export default async function Shoes(props: IncompletePageProps) {
 
         {/* Card view with max width */}
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
             {shoes.map((shoe) => (
               <ShoeTableCard key={shoe._id} shoe={shoe} />
             ))}

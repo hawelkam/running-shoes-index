@@ -281,7 +281,7 @@ const BrandPage = async (props: BrandPageProps) => {
               </div>
 
               {/* Card view for mobile */}
-              <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+              <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
                 {shoes.map((shoe) => (
                   <ShoeTableCard key={shoe._id} shoe={shoe} />
                 ))}
