@@ -50,51 +50,61 @@ export default async function Shoes(props: ShoesPageProps) {
 
   return (
     <Suspense>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Running Shoe Catalog
-          </h1>
-          <p className="text-gray-600">Find your perfect running companion</p>
-        </header>
+      <div className="w-full">
+        {/* Header and controls with max width */}
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
+          <header className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Running Shoe Catalog
+            </h1>
+            <p className="text-gray-600">Find your perfect running companion</p>
+          </header>
 
-        <Filters />
+          <Filters />
 
-        <ResultsCount />
-
-        <div className="overflow-x-auto table-view">
-          <table className="w-full bg-white rounded-lg shadow-md">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-4 font-semibold text-gray-700">Image</th>
-                <th className="p-4 font-semibold text-gray-700">Name</th>
-                <th className="p-4 font-semibold text-gray-700">Category</th>
-                <th className="p-4 font-semibold text-gray-700">Price</th>
-                <th className="p-4 font-semibold text-gray-700">Weight</th>
-                <th className="p-4 font-semibold text-gray-700">Drop</th>
-                <th className="p-4 font-semibold text-gray-700">Reviewed</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shoes.map((shoe) => (
-                <ShoeTableElement key={shoe._id} shoe={shoe} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {shoes.map((shoe) => (
-            <ShoeTableCard key={shoe._id} shoe={shoe} />
-          ))}
+          <ResultsCount />
         </div>
 
-        <GenericPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={totalCount}
-          itemsPerPage={ITEMS_PER_PAGE}
-          basePath="/shoes"
-        />
+        {/* Table with same width as filters */}
+        <div className="container mx-auto px-4 mb-8 max-w-7xl">
+          <div className="overflow-x-auto table-view">
+            <table className="w-full bg-white rounded-lg shadow-md">
+              <thead>
+                <tr className="bg-gray-100 text-left">
+                  <th className="p-4 font-semibold text-gray-700">Image</th>
+                  <th className="p-4 font-semibold text-gray-700">Name</th>
+                  <th className="p-4 font-semibold text-gray-700">Category</th>
+                  <th className="p-4 font-semibold text-gray-700">Price</th>
+                  <th className="p-4 font-semibold text-gray-700">Weight</th>
+                  <th className="p-4 font-semibold text-gray-700">Drop</th>
+                  <th className="p-4 font-semibold text-gray-700">Reviewed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {shoes.map((shoe) => (
+                  <ShoeTableElement key={shoe._id} shoe={shoe} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Card view and pagination with max width */}
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+            {shoes.map((shoe) => (
+              <ShoeTableCard key={shoe._id} shoe={shoe} />
+            ))}
+          </div>
+
+          <GenericPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalCount}
+            itemsPerPage={ITEMS_PER_PAGE}
+            basePath="/shoes"
+          />
+        </div>
       </div>
     </Suspense>
   );

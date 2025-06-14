@@ -42,7 +42,7 @@ body {
 }
 @media (min-width: 769px) {
   .table-view {
-    display: table;
+    display: block;
   }
   .card-view {
     display: none;

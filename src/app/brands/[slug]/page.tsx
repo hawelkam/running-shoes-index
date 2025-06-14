@@ -5,6 +5,7 @@ import { SanityBrand } from "../page";
 import ShoesTable from "@/app/shoes/_components/ShoesTable";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
 import { mapToRunningShoe } from "@/_utils/runningShoeMapper";
+import Image from "next/image";
 
 type Params = Promise<{ slug: string }>;
 async function getBrand(slug: string): Promise<SanityBrand | null> {
@@ -51,14 +52,16 @@ const BrandPage = async (props: { params: Params }) => {
   }
   return (
     <Suspense>
-      <main>
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
         <h1 className="text-4xl font-bold mb-8">{brand.name}</h1>
         <div className="flex gap-2 md:gap-4 items-center flex-col md:flex-row">
           <div className="max-w-sm bg-white">
-            <img
+            <Image
               className="h-auto rounded-lg"
               src={brand.image.url}
               alt={brand.name}
+              width={400}
+              height={300}
             />
           </div>
 
@@ -120,7 +123,9 @@ const BrandPage = async (props: { params: Params }) => {
             </div>
           </div>
         </div>
-        <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
+        <div className="container mx-auto px-4 max-w-7xl">
+          <ShoesTable shoes={shoes.map((shoe) => mapToRunningShoe(shoe))} />
+        </div>
       </main>
     </Suspense>
   );

@@ -194,11 +194,18 @@ const ShoesTable = ({ shoes }: ShoesTableProps) => {
           };
         }}
         className="hidden lg:block"
+        scroll={{ x: true }}
+        size="middle"
         pagination={{
           position: ["bottomCenter"],
           total: filteredShoes.length,
           showTotal: (total) => `Total ${total} items`,
+          showSizeChanger: true,
+          showQuickJumper: true,
+          defaultPageSize: 20,
+          pageSizeOptions: ["10", "20", "50", "100"],
         }}
+        style={{ width: "100%" }}
       />
       <List
         grid={{

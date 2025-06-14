@@ -35,7 +35,7 @@ const ReviewedInYear = async (props: { params: Params }) => {
 
   return (
     <Suspense>
-      <main>
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
         <h1 className="text-4xl font-bold mb-8">Running Shoes Index</h1>
         <h2 className="text-2xl font-bold mb-8">
           Shoes of {slug} reviewed by me

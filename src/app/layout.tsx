@@ -40,8 +40,6 @@ export default function RootLayout({
                 style={{
                   background: "#f9f9f9",
                   minHeight: 280,
-                  padding: 24,
-                  borderRadius: "5px",
                 }}
               >
                 {children}
