@@ -1,0 +1,34 @@
+import { client } from "@/sanity/client";
+import { SanityRunningShoe } from "@/_types/RunningShoe";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  try {
+    const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc){
+      _id,
+      name,
+      slug,
+      brand->{name, slug},
+      shoeType->{name, slug},
+      category[]->{name},
+      image,
+      specs,
+      releaseInfo,
+      review
+    }`;
+
+    const data = await client.fetch<SanityRunningShoe[]>(
+      query,
+      {},
+      { next: { revalidate: 300 } } // Cache for 5 minutes
+    );
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Error fetching shoes:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch shoes" },
+      { status: 500 }
+    );
+  }
+}
