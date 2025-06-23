@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Category } from "../_actions/getCategories";
 
 interface FilterState {
   category: string;
@@ -15,7 +16,11 @@ interface FilterState {
   search: string;
 }
 
-const Filters = () => {
+interface FiltersProps {
+  categories?: Category[];
+}
+
+const Filters = ({ categories = [] }: FiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isVisible, setIsVisible] = useState(true);
@@ -123,10 +128,11 @@ const Filters = () => {
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">All Categories</option>
-              <option value="Road">Road</option>
-              <option value="Trail">Trail</option>
-              <option value="Racing">Racing</option>
-              <option value="Daily Trainer">Daily Trainer</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
 

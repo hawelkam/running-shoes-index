@@ -1,4 +1,5 @@
 import SearchResults from "@/_components/SearchResults";
+import { getCategories } from "../_actions/getCategories";
 import React, { Suspense } from "react";
 
 interface SearchPageProps {
@@ -11,9 +12,12 @@ const SearchResultsPage = async ({ searchParams }: SearchPageProps) => {
   const resolvedSearchParams = await searchParams;
   console.log("Search Params:", resolvedSearchParams);
 
+  // Fetch categories on the server side
+  const categories = await getCategories();
+
   return (
     <Suspense>
-      <SearchResults />
+      <SearchResults categories={categories} />
     </Suspense>
   );
 };

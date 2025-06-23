@@ -11,6 +11,7 @@ import {
   buildFilterConditions,
   hasActiveFilters,
 } from "@/_utils/filterUtils";
+import { getCategories } from "../_actions/getCategories";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -110,7 +111,12 @@ export default async function Shoes(props: IncompletePageProps) {
     search: searchParams.search,
   };
 
-  const { shoes, totalCount } = await getData(currentPage, filters);
+  // Fetch categories and shoes data in parallel
+  const [categories, { shoes, totalCount }] = await Promise.all([
+    getCategories(),
+    getData(currentPage, filters),
+  ]);
+
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
   const activeFilters = hasActiveFilters(filters);
 
@@ -131,6 +137,7 @@ export default async function Shoes(props: IncompletePageProps) {
           <GenericFilters
             basePath="/shoes/incomplete"
             title="Filter Incomplete Shoes"
+            categories={categories}
           />
 
           <ResultsCount

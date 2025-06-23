@@ -9,32 +9,40 @@ import ResultsCount from "@/app/shoes/_components/ResultsCount";
 import { client } from "@/sanity/client";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Spin, Empty, Alert } from "antd";
 import {
   FilterParams,
   buildFilterConditions,
   hasActiveFilters,
 } from "@/_utils/filterUtils";
+import { Category } from "@/app/shoes/_actions/getCategories";
+import { Alert, Empty, Spin } from "antd";
 
 const ITEMS_PER_PAGE = 10;
 
-const SearchResults = () => {
+interface SearchResultsProps {
+  categories?: Category[];
+}
+
+const SearchResults = ({ categories = [] }: SearchResultsProps) => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  // Get filter parameters from URL
-  const filters: FilterParams = {
-    category: searchParams.get("category") || "",
-    priceMin: searchParams.get("priceMin") || "",
-    priceMax: searchParams.get("priceMax") || "",
-    weightMin: searchParams.get("weightMin") || "",
-    weightMax: searchParams.get("weightMax") || "",
-    dropMin: searchParams.get("dropMin") || "",
-    dropMax: searchParams.get("dropMax") || "",
-    reviewed: searchParams.get("reviewed") || "",
-    search: query, // Use the main query as search filter
-  };
+  // Get filter parameters from URL, memoized to avoid unnecessary re-renders
+  const filters: FilterParams = React.useMemo(
+    () => ({
+      category: searchParams.get("category") || "",
+      priceMin: searchParams.get("priceMin") || "",
+      priceMax: searchParams.get("priceMax") || "",
+      weightMin: searchParams.get("weightMin") || "",
+      weightMax: searchParams.get("weightMax") || "",
+      dropMin: searchParams.get("dropMin") || "",
+      dropMax: searchParams.get("dropMax") || "",
+      reviewed: searchParams.get("reviewed") || "",
+      search: query, // Use the main query as search filter
+    }),
+    [searchParams, query]
+  );
 
   const [shoes, setShoes] = useState<SanityRunningShoe[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -152,6 +160,7 @@ const SearchResults = () => {
         basePath="/shoes/search"
         title="Filter Search Results"
         hideFilters={["search"]} // Hide search filter since it's handled by the main search
+        categories={categories}
       />
 
       <ResultsCount

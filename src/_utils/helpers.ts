@@ -64,7 +64,7 @@ export function prepareWeightInOunces(weight: number | undefined): string {
 }
 export function prepareWeight(weight: number | undefined): string {
   if (weight) {
-    return `${prepareWeightInGrams(weight)} ($${prepareWeightInOunces(weight)})`;
+    return `${prepareWeightInGrams(weight)} (${prepareWeightInOunces(weight)})`;
   }
   return "-";
 }

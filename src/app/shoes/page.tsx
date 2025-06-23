@@ -7,6 +7,7 @@ import ShoeTableElement from "./_components/ShoeTableElement";
 import ShoeTableCard from "./_components/ShoeTableCard";
 import GenericPagination from "@/_components/GenericPagination";
 import Link from "next/link";
+import { getCategories } from "./_actions/getCategories";
 
 interface ShoesPageProps {
   searchParams: Promise<{
@@ -150,7 +151,11 @@ export default async function Shoes(props: ShoesPageProps) {
     search: searchParams.search,
   };
 
-  const { shoes, totalCount, totalPages } = await getData(currentPage, filters);
+  // Fetch categories and shoes data in parallel
+  const [categories, { shoes, totalCount, totalPages }] = await Promise.all([
+    getCategories(),
+    getData(currentPage, filters),
+  ]);
 
   // Check if any filters are active
   const hasFilters = Object.values(filters).some(
@@ -194,7 +199,7 @@ export default async function Shoes(props: ShoesPageProps) {
             </div>
           </header>
 
-          <Filters />
+          <Filters categories={categories} />
 
           <ResultsCount
             totalCount={totalCount}

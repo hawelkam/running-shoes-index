@@ -11,6 +11,7 @@ import {
   buildFilterConditions,
   hasActiveFilters,
 } from "@/_utils/filterUtils";
+import { getCategories } from "../_actions/getCategories";
 
 interface ShoeTypePageProps {
   searchParams: Promise<{
@@ -101,11 +102,11 @@ export default async function ShoeTypePageLayout(props: ShoeTypePageProps) {
     search: searchParams.search,
   };
 
-  const { shoes, totalCount, totalPages } = await getData(
-    currentPage,
-    filters,
-    config.shoeType
-  );
+  // Fetch categories and shoes data in parallel
+  const [categories, { shoes, totalCount, totalPages }] = await Promise.all([
+    getCategories(),
+    getData(currentPage, filters, config.shoeType),
+  ]);
 
   // Check if any filters are active
   const activeFilters = hasActiveFilters(filters);
@@ -125,6 +126,7 @@ export default async function ShoeTypePageLayout(props: ShoeTypePageProps) {
           <GenericFilters
             basePath={config.basePath}
             title={`Filter ${config.title}`}
+            categories={categories}
           />
 
           <ResultsCount

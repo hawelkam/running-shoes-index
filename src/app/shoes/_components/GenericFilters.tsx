@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Category } from "../_actions/getCategories";
 
 interface FilterState {
   category: string;
@@ -19,12 +20,14 @@ interface GenericFiltersProps {
   basePath: string;
   title?: string;
   hideFilters?: string[]; // Array of filter names to hide
+  categories?: Category[]; // Categories from server
 }
 
 const GenericFilters = ({
   basePath,
   title = "Filters",
   hideFilters = [],
+  categories = [],
 }: GenericFiltersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -160,10 +163,11 @@ const GenericFilters = ({
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Categories</option>
-                <option value="Road">Road</option>
-                <option value="Trail">Trail</option>
-                <option value="Racing">Racing</option>
-                <option value="Daily Trainer">Daily Trainer</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
           )}
