@@ -1,4 +1,5 @@
 import { client } from "@/sanity/client";
+import { CACHE_OPTIONS } from "@/_utils/cache";
 
 export interface Category {
   name: string;
@@ -15,7 +16,7 @@ export async function getCategories(): Promise<Category[]> {
     const categories = await client.fetch<Category[]>(
       query,
       {},
-      { next: { revalidate: 3600 } } // Cache for 1 hour
+      CACHE_OPTIONS.VERY_LONG // Categories change infrequently
     );
 
     return categories || [];

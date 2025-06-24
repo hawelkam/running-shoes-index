@@ -8,6 +8,12 @@ import ShoeTableCard from "./_components/ShoeTableCard";
 import GenericPagination from "@/_components/GenericPagination";
 import Link from "next/link";
 import { getCategories } from "./_actions/getCategories";
+import {
+  FilterParams,
+  buildFilterConditions,
+  hasActiveFilters,
+} from "@/_utils/filterUtils";
+import { CACHE_OPTIONS } from "@/_utils/cache";
 
 interface ShoesPageProps {
   searchParams: Promise<{
@@ -26,89 +32,13 @@ interface ShoesPageProps {
 
 const ITEMS_PER_PAGE = 20;
 
-interface FilterParams {
-  category?: string;
-  priceMin?: string;
-  priceMax?: string;
-  weightMin?: string;
-  weightMax?: string;
-  dropMin?: string;
-  dropMax?: string;
-  reviewed?: string;
-  search?: string;
-}
-
 async function getData(page: number = 1, filters: FilterParams = {}) {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE - 1;
 
-  // Build filter conditions
-  const filterConditions = ['_type == "runningShoe"', "defined(slug.current)"];
-
-  // Category filter
-  if (filters.category) {
-    filterConditions.push(`category[]->name match "*${filters.category}*"`);
-  }
-
-  // Price filter (PLN)
-  if (filters.priceMin || filters.priceMax) {
-    let priceCondition = "";
-    if (filters.priceMin && filters.priceMax) {
-      priceCondition = `(releaseInfo.pl.price >= ${filters.priceMin} && releaseInfo.pl.price <= ${filters.priceMax})`;
-    } else if (filters.priceMin) {
-      priceCondition = `releaseInfo.pl.price >= ${filters.priceMin}`;
-    } else if (filters.priceMax) {
-      priceCondition = `releaseInfo.pl.price <= ${filters.priceMax}`;
-    }
-    if (priceCondition) {
-      filterConditions.push(priceCondition);
-    }
-  }
-
-  // Weight filter (g) - men's weight
-  if (filters.weightMin || filters.weightMax) {
-    let weightCondition = "";
-    if (filters.weightMin && filters.weightMax) {
-      weightCondition = `(specs.m.weight >= ${filters.weightMin} && specs.m.weight <= ${filters.weightMax})`;
-    } else if (filters.weightMin) {
-      weightCondition = `specs.m.weight >= ${filters.weightMin}`;
-    } else if (filters.weightMax) {
-      weightCondition = `specs.m.weight <= ${filters.weightMax}`;
-    }
-    if (weightCondition) {
-      filterConditions.push(weightCondition);
-    }
-  }
-
-  // Drop filter (mm)
-  if (filters.dropMin || filters.dropMax) {
-    let dropCondition = "";
-    if (filters.dropMin && filters.dropMax) {
-      dropCondition = `(specs.m.drop >= ${filters.dropMin} && specs.m.drop <= ${filters.dropMax})`;
-    } else if (filters.dropMin) {
-      dropCondition = `specs.m.drop >= ${filters.dropMin}`;
-    } else if (filters.dropMax) {
-      dropCondition = `specs.m.drop <= ${filters.dropMax}`;
-    }
-    if (dropCondition) {
-      filterConditions.push(dropCondition);
-    }
-  }
-
-  // Reviewed filter
-  if (filters.reviewed) {
-    if (filters.reviewed === "yes") {
-      filterConditions.push("defined(review)");
-    } else if (filters.reviewed === "no") {
-      filterConditions.push("!defined(review)");
-    }
-  }
-
-  // Search filter
-  if (filters.search) {
-    filterConditions.push(`name match "*${filters.search}*"`);
-  }
-
+  // Build filter conditions using the utility function
+  const baseConditions = ['_type == "runningShoe"', "defined(slug.current)"];
+  const filterConditions = buildFilterConditions(baseConditions, filters);
   const whereClause = filterConditions.join(" && ");
 
   // Get total count
@@ -116,7 +46,7 @@ async function getData(page: number = 1, filters: FilterParams = {}) {
   const totalCount = await client.fetch<number>(
     countQuery,
     {},
-    { next: { revalidate: 30 } }
+    CACHE_OPTIONS.SHORT // Frequently changing data
   );
 
   // Get paginated data
@@ -125,7 +55,7 @@ async function getData(page: number = 1, filters: FilterParams = {}) {
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
     {},
-    { next: { revalidate: 30 } }
+    CACHE_OPTIONS.SHORT // Frequently changing data
   );
 
   return {
@@ -158,9 +88,7 @@ export default async function Shoes(props: ShoesPageProps) {
   ]);
 
   // Check if any filters are active
-  const hasFilters = Object.values(filters).some(
-    (value) => value && value.trim() !== ""
-  );
+  const activeFilters = hasActiveFilters(filters);
 
   return (
     <Suspense>
@@ -206,7 +134,7 @@ export default async function Shoes(props: ShoesPageProps) {
             currentPage={currentPage}
             itemsPerPage={ITEMS_PER_PAGE}
             showingCount={shoes.length}
-            hasFilters={hasFilters}
+            hasFilters={activeFilters}
           />
         </div>
 
