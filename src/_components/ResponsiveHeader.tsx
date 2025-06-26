@@ -1,17 +1,97 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Drawer } from "antd";
-import { SearchOutlined, MenuOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
+import { Button, Drawer, Dropdown, Avatar, message } from "antd";
+import {
+  SearchOutlined,
+  MenuOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
+import { getStravaAuthUrl } from "@/utils/auth/getStravaAuthUrl";
+import {
+  getStravaUserInfo,
+  clearStravaAuth,
+  type StravaUserInfo,
+} from "@/utils/auth/stravaAuth";
 
 export default function ResponsiveHeader() {
   const [searchVisible, setSearchVisible] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
+  const [stravaUser, setStravaUser] = useState<StravaUserInfo | null>(null);
+  const [authUrl, setAuthUrl] = useState<string>("#");
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
+
+  useEffect(() => {
+    // Check for authentication on component mount
+    const user = getStravaUserInfo();
+    setStravaUser(user);
+
+    // Get the auth URL on the client side
+    const url = getStravaAuthUrl();
+    setAuthUrl(url);
+
+    // Check for auth success/error in URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const authStatus = urlParams.get("auth");
+    const errorStatus = urlParams.get("error");
+
+    if (authStatus === "success") {
+      message.success("Successfully signed in with Strava!");
+      // Remove the query param from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      // Recheck user info after successful auth
+      const updatedUser = getStravaUserInfo();
+      setStravaUser(updatedUser);
+    } else if (errorStatus) {
+      let errorMessage = "Authentication failed. Please try again.";
+      switch (errorStatus) {
+        case "strava_auth_denied":
+          errorMessage = "Strava authentication was denied.";
+          break;
+        case "no_auth_code":
+          errorMessage = "No authorization code received from Strava.";
+          break;
+        case "invalid_token":
+          errorMessage = "Invalid token received from Strava.";
+          break;
+        case "auth_failed":
+          errorMessage = "Authentication failed. Please try again.";
+          break;
+      }
+      message.error(errorMessage);
+      // Remove the query param from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    clearStravaAuth();
+    setStravaUser(null);
+    message.success("Successfully signed out!");
+  };
+
+  const userMenuItems = [
+    {
+      key: "profile",
+      icon: <UserOutlined />,
+      label: `${stravaUser?.firstName} ${stravaUser?.lastName}`,
+      disabled: true,
+    },
+    {
+      type: "divider" as const,
+    },
+    {
+      key: "logout",
+      icon: <LogoutOutlined />,
+      label: "Sign out",
+      onClick: handleLogout,
+    },
+  ];
 
   return (
     <header className="bg-gray-900 px-4 py-3">
@@ -59,6 +139,31 @@ export default function ResponsiveHeader() {
           <div className="w-80">
             <SearchInput />
           </div>
+
+          {/* Authentication */}
+          <div className="flex items-center">
+            {!stravaUser ? (
+              <Link href={authUrl}>
+                <Button type="primary" disabled={authUrl === "#"}>
+                  Sign in with Strava
+                </Button>
+              </Link>
+            ) : (
+              <Dropdown
+                menu={{ items: userMenuItems }}
+                placement="bottomRight"
+                trigger={["click"]}
+              >
+                <Button
+                  type="text"
+                  className="flex items-center space-x-2 text-white hover:bg-gray-800"
+                >
+                  <Avatar size="small" icon={<UserOutlined />} />
+                  <span>{stravaUser.firstName}</span>
+                </Button>
+              </Dropdown>
+            )}
+          </div>
         </div>
 
         {/* Tablet Search (between lg and md) */}
@@ -66,6 +171,28 @@ export default function ResponsiveHeader() {
           <div className="w-80">
             <SearchInput />
           </div>
+          {/* Authentication for tablet */}
+          {!stravaUser ? (
+            <Link href={authUrl}>
+              <Button type="primary" size="small" disabled={authUrl === "#"}>
+                Sign in
+              </Button>
+            </Link>
+          ) : (
+            <Dropdown
+              menu={{ items: userMenuItems }}
+              placement="bottomRight"
+              trigger={["click"]}
+            >
+              <Button
+                type="text"
+                size="small"
+                className="text-white hover:bg-gray-800"
+              >
+                <Avatar size="small" icon={<UserOutlined />} />
+              </Button>
+            </Dropdown>
+          )}
         </div>
 
         {/* Mobile Controls */}
@@ -238,6 +365,46 @@ export default function ResponsiveHeader() {
             >
               All Shoes
             </Link>
+          </div>
+
+          {/* Authentication Section */}
+          <div className="border-t border-gray-200 pt-4 mt-4">
+            {!stravaUser ? (
+              <Link href={authUrl}>
+                <Button
+                  type="primary"
+                  block
+                  disabled={authUrl === "#"}
+                  onClick={() => setMobileMenuVisible(false)}
+                >
+                  Sign in with Strava
+                </Button>
+              </Link>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                  <Avatar icon={<UserOutlined />} className="mr-3" />
+                  <div>
+                    <div className="font-medium">
+                      {stravaUser.firstName} {stravaUser.lastName}
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      Signed in with Strava
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  icon={<LogoutOutlined />}
+                  block
+                  onClick={() => {
+                    handleLogout();
+                    setMobileMenuVisible(false);
+                  }}
+                >
+                  Sign out
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </Drawer>
