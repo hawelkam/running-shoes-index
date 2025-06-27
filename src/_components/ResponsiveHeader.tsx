@@ -9,6 +9,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
+import Image from "next/image";
 import SearchInput from "./SearchInput";
 import { getStravaAuthUrl } from "@/utils/auth/getStravaAuthUrl";
 import {
@@ -99,10 +100,24 @@ export default function ResponsiveHeader() {
         {/* Logo/Title */}
         <Link
           href="/"
-          className="text-white font-bold text-lg hover:text-gray-200"
+          className="text-white font-bold text-lg hover:text-gray-200 flex items-center"
         >
-          <span className="hidden sm:inline">Running Shoes Index</span>
-          <span className="sm:hidden">RSI</span>
+          {/* Desktop Logo */}
+          <Image
+            src="/logo.png"
+            alt="Stride Lab"
+            width={120}
+            height={32}
+            className="hidden sm:block h-8 w-auto"
+          />
+          {/* Mobile Logo */}
+          <Image
+            src="/favicon.png"
+            alt="Stride Lab"
+            width={32}
+            height={32}
+            className="sm:hidden h-8 w-8"
+          />
         </Link>
 
         {/* Desktop Navigation and Search */}

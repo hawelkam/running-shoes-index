@@ -22,9 +22,7 @@ export default async function IndexPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">
-          Running Shoes Index
-        </h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">Stride Lab</h1>
         <p className="text-xl text-gray-600 mb-8">
           Your complete directory of running shoes
         </p>

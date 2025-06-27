@@ -1,3 +1,11 @@
+# Stride Lab
+
+A comprehensive directory of running shoes built with Next.js.
+
+## About
+
+Stride Lab is your complete directory of running shoes, featuring detailed specifications, reviews, and comparisons to help you find the perfect footwear for your running needs.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

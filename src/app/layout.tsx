@@ -18,8 +18,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Running Shoes Index",
+  title: "Stride Lab",
   description: "Your complete directory of running shoes",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

@@ -106,7 +106,7 @@ const ReleasesOfDate = async (props: ReleasedPageProps) => {
         <div className="container mx-auto px-4 py-8 max-w-7xl">
           <header className="mb-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Running Shoes Index
+              Stride Lab
             </h1>
             <h2 className="text-xl text-gray-600">
               Shoes of {slug[0]} ({totalCount} total)
