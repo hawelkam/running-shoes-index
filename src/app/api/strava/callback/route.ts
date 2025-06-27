@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { UserRepository } from "@/lib/database";
 
 export async function GET(request: NextRequest) {
   try {
@@ -59,6 +60,26 @@ export async function GET(request: NextRequest) {
       "Successfully received token for athlete:",
       stravaToken.athlete.id
     );
+
+    // Save user to database
+    try {
+      const username =
+        `${stravaToken.athlete.firstname?.toLowerCase() || ""}_${stravaToken.athlete.lastname?.toLowerCase() || ""}_${stravaToken.athlete.id}`.replace(
+          /\s+/g,
+          ""
+        );
+
+      await UserRepository.upsertUser({
+        username: username,
+        accesstoken: stravaToken.access_token,
+        role: "user",
+      });
+
+      console.log(`User saved to database: ${username}`);
+    } catch (dbError) {
+      console.error("Error saving user to database:", dbError);
+      // Continue with authentication even if database save fails
+    }
 
     // Create a JWT token for our application
     const jwtSecret = process.env.JWT_SECRET || "your-jwt-secret-key";

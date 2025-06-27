@@ -49,8 +49,19 @@ export default function RootLayout({
               </div>
             </Content>
 
-            <Footer style={{ textAlign: "center" }}>
-              Michał Hawełka ©{new Date().getFullYear()}
+            <Footer className="flex justify-between items-center border-t border-gray-300 px-6 py-8 text-sm">
+              <div className="font-extrabold text-lg">SL_</div>
+              <div className="space-x-6">
+                <a href="#" className="hover:underline">
+                  Instagram
+                </a>
+                <a href="#" className="hover:underline">
+                  Kontakt
+                </a>
+                <a href="#" className="hover:underline">
+                  Regulamin
+                </a>
+              </div>
             </Footer>
           </Layout>
         </AntdRegistry>
