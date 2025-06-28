@@ -4,7 +4,7 @@
 
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { UserRepository, type User } from "@/lib/database";
+import { UserRepository, type User } from "@/_utils/database";
 
 export interface StravaUser {
   id: number;

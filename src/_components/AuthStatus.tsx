@@ -8,8 +8,8 @@ import {
   getStravaUserInfo,
   clearStravaAuth,
   type StravaUserInfo,
-} from "@/utils/auth/stravaAuth";
-import { getStravaAuthUrl } from "@/utils/auth/getStravaAuthUrl";
+} from "@/_utils/auth/stravaAuth";
+import { getStravaAuthUrl } from "@/_utils/auth/getStravaAuthUrl";
 
 interface AuthStatusProps {
   size?: "small" | "large";

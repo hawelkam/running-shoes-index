@@ -10,12 +10,12 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
-import { getStravaAuthUrl } from "@/utils/auth/getStravaAuthUrl";
+import { getStravaAuthUrl } from "@/_utils/auth/getStravaAuthUrl";
 import {
   getStravaUserInfo,
   clearStravaAuth,
   type StravaUserInfo,
-} from "@/utils/auth/stravaAuth";
+} from "@/_utils/auth/stravaAuth";
 
 export default function ResponsiveHeader() {
   const [searchVisible, setSearchVisible] = useState(false);

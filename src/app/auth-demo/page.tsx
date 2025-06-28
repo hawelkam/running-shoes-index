@@ -1,7 +1,7 @@
 import {
   getStravaUser,
   getUserFromDatabase,
-} from "@/utils/auth/stravaAuthServer";
+} from "@/_utils/auth/stravaAuthServer";
 import AuthDemoClient from "./_components/AuthDemoClient";
 
 export default async function AuthDemo() {

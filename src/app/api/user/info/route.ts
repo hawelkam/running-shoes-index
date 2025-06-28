@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getStravaUser,
   getUserFromDatabase,
-} from "@/utils/auth/stravaAuthServer";
+} from "@/_utils/auth/stravaAuthServer";
 
 export async function GET() {
   try {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { UserRepository } from "@/lib/database";
+import { UserRepository } from "@/_utils/database";
 
 export async function POST() {
   try {

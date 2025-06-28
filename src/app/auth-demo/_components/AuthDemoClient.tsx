@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import AuthStatus from "@/components/AuthStatus";
-import type { User } from "@/lib/database";
+import AuthStatus from "@/_components/AuthStatus";
+import type { User } from "@/_utils/database";
 
 interface StravaUser {
   id: number;
