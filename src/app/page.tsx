@@ -2,6 +2,7 @@ import { SanityRunningShoe } from "@/_types/RunningShoe";
 import { client } from "@/sanity/client";
 import Link from "next/link";
 import LatestReleases from "./_components/LatestReleases";
+import QuickNavigationLink from "@/_components/QuickNavigationLink";
 
 async function getData() {
   const query = `*[_type == "runningShoe" && defined(slug.current)]|order(_createdAt desc)[0...3]{_id, name, slug, purpose, categories[], image, releaseInfo}`;
@@ -29,149 +30,111 @@ export default async function IndexPage() {
       </header>
 
       {/* Quick Navigation Links */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
-        <Link href="/brands" className="group">
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-blue-500">
-            <div className="flex items-center">
-              <div className="bg-blue-100 p-3 rounded-full mr-4">
-                <svg
-                  className="w-6 h-6 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 group-hover:text-blue-600">
-                  Browse Brands
-                </h3>
-                <p className="text-sm text-gray-600">Explore all shoe brands</p>
-              </div>
-            </div>
-          </div>
-        </Link>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <QuickNavigationLink
+          href="/brands"
+          title="Browse Brands"
+          description="Explore all shoe brands"
+          icon={
+            <svg
+              className="w-6 h-6 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              />
+            </svg>
+          }
+        />
 
-        <Link href="/shoes/reviewed/2025" className="group">
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-green-500">
-            <div className="flex items-center">
-              <div className="bg-green-100 p-3 rounded-full mr-4">
-                <svg
-                  className="w-6 h-6 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 group-hover:text-green-600">
-                  2025 Reviews
-                </h3>
-                <p className="text-sm text-gray-600">Recently reviewed shoes</p>
-              </div>
-            </div>
-          </div>
-        </Link>
+        <QuickNavigationLink
+          href="/shoes/reviewed/2025"
+          title="2025 Reviews"
+          description="Recently reviewed shoes"
+          icon={
+            <svg
+              className="w-6 h-6 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          }
+        />
 
-        <Link
+        <QuickNavigationLink
           href={`/shoes/released/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}
-          className="group"
-        >
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-purple-500">
-            <div className="flex items-center">
-              <div className="bg-purple-100 p-3 rounded-full mr-4">
-                <svg
-                  className="w-6 h-6 text-purple-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 group-hover:text-purple-600">
-                  This Month
-                </h3>
-                <p className="text-sm text-gray-600">June 2025 releases</p>
-              </div>
-            </div>
-          </div>
-        </Link>
+          title="This Month"
+          description={`${new Date().toLocaleString("default", { month: "long" })} ${currentYear} releases`}
+          icon={
+            <svg
+              className="w-6 h-6 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          }
+        />
 
-        <Link href={`/shoes/released/${currentYear}`} className="group">
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-orange-500">
-            <div className="flex items-center">
-              <div className="bg-orange-100 p-3 rounded-full mr-4">
-                <svg
-                  className="w-6 h-6 text-orange-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 group-hover:text-orange-600">
-                  This Year
-                </h3>
-                <p className="text-sm text-gray-600">2025 releases</p>
-              </div>
-            </div>
-          </div>
-        </Link>
+        <QuickNavigationLink
+          href={`/shoes/released/${currentYear}`}
+          title="This Year"
+          description={`${currentYear} releases`}
+          icon={
+            <svg
+              className="w-6 h-6 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          }
+        />
 
-        <Link href="/shoes/compare" className="group">
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-teal-500">
-            <div className="flex items-center">
-              <div className="bg-teal-100 p-3 rounded-full mr-4">
-                <svg
-                  className="w-6 h-6 text-teal-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 group-hover:text-teal-600">
-                  Compare Shoes
-                </h3>
-                <p className="text-sm text-gray-600">Side-by-side comparison</p>
-              </div>
-            </div>
-          </div>
-        </Link>
+        <QuickNavigationLink
+          href="/shoes/compare"
+          title="Compare Shoes"
+          description="Side-by-side comparison"
+          icon={
+            <svg
+              className="w-6 h-6 text-black"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          }
+        />
       </div>
 
       {/* Latest Releases Section */}
