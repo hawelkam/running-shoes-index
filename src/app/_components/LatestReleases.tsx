@@ -1,7 +1,7 @@
 "use client";
 
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { Card, List } from "antd";
+import { List } from "antd";
 import Link from "next/link";
 
 interface LatestReleasesProps {
@@ -34,62 +34,47 @@ export default function LatestReleases({ shoes }: LatestReleasesProps) {
         dataSource={shoes}
         renderItem={(shoe) => (
           <List.Item>
-            <Card
-              hoverable
-              cover={
-                <div className="h-64 overflow-hidden">
-                  <img
-                    alt={shoe.name}
-                    src={shoe.image?.url}
-                    className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              }
-              actions={[
+            <div className="border border-gray-300 rounded-lg overflow-hidden shadow-sm bg-white">
+              <div className="h-64 overflow-hidden">
+                <img
+                  alt={shoe.name}
+                  src={shoe.image?.url}
+                  className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+
+              <div className="p-6">
+                <Link
+                  href={`/shoes/${shoe.slug.current}`}
+                  className="text-black"
+                >
+                  <h3 className="text-xl font-semibold mb-2">{shoe.name}</h3>
+                </Link>
+                {shoe.shoeType?.name && (
+                  <div className="text-xs uppercase text-gray-500 mb-1">
+                    {shoe.shoeType.name}
+                  </div>
+                )}
+                {shoe.category && shoe.category.length > 0 && (
+                  <div className="flex flex-wrap gap-2 text-sm text-white mb-4">
+                    {shoe.category
+                      .slice(0, 2)
+                      .map((cat: { name: string }, idx: number) => (
+                        <span key={idx} className="bg-black px-2 py-1 rounded">
+                          {cat.name}
+                        </span>
+                      ))}
+                  </div>
+                )}
                 <Link
                   href={`/shoes/${shoe.slug.current}`}
                   key={`${shoe.slug.current}-details`}
-                  className="text-blue-600 hover:text-blue-800 font-medium"
+                  className="inline-block mt-2 px-4 py-2 bg-black text-white rounded hover:bg-white hover:text-black border border-black transition"
                 >
                   View Details
-                </Link>,
-              ]}
-              className="h-full"
-            >
-              <Card.Meta
-                title={
-                  <Link
-                    href={`/shoes/${shoe.slug.current}`}
-                    className="text-gray-800 hover:text-blue-600 transition-colors"
-                  >
-                    {shoe.name}
-                  </Link>
-                }
-                description={
-                  <div className="space-y-2">
-                    {shoe.shoeType?.name && (
-                      <span className="inline-block bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
-                        {shoe.shoeType.name}
-                      </span>
-                    )}
-                    {shoe.category && shoe.category.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {shoe.category
-                          .slice(0, 2)
-                          .map((cat: { name: string }, idx: number) => (
-                            <span
-                              key={idx}
-                              className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
-                            >
-                              {cat.name}
-                            </span>
-                          ))}
-                      </div>
-                    )}
-                  </div>
-                }
-              />
-            </Card>
+                </Link>
+              </div>
+            </div>
           </List.Item>
         )}
       />

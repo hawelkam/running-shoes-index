@@ -76,6 +76,41 @@ export default function AuthDemoClient({
     }
   };
 
+  const promoteToAdmin = async () => {
+    if (!user?.stravaAccessToken) {
+      setMessage("❌ No access token available");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/user/role", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role: "admin" }),
+      });
+
+      if (response.ok) {
+        setMessage("✅ Successfully promoted to admin!");
+        // Refresh user data
+        await refreshDbUser();
+      } else {
+        const error = await response.json();
+        setMessage(`❌ Error: ${error.error}`);
+      }
+    } catch (error) {
+      setMessage(
+        `❌ Error: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Strava Authentication Demo</h1>
@@ -164,6 +199,16 @@ export default function AuthDemoClient({
           >
             {loading ? "Loading..." : "Initialize Database Tables"}
           </button>
+
+          {dbUser && dbUser.role !== "admin" && (
+            <button
+              onClick={promoteToAdmin}
+              disabled={loading}
+              className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 disabled:bg-gray-400 disabled:cursor-not-allowed ml-2"
+            >
+              {loading ? "Loading..." : "Promote to Admin (Testing)"}
+            </button>
+          )}
         </div>
 
         {message && (

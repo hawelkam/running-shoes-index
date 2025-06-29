@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Avatar, Button, Dropdown, Space } from "antd";
-import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
 import {
   getStravaUserInfo,
@@ -16,11 +20,26 @@ interface AuthStatusProps {
   showAvatar?: boolean;
 }
 
+interface DatabaseUser {
+  id: number;
+  username: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
+  stravaInfo: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    profilePicture?: string;
+  };
+}
+
 export default function AuthStatus({
   size,
   showAvatar = true,
 }: AuthStatusProps) {
   const [stravaUser, setStravaUser] = useState<StravaUserInfo | null>(null);
+  const [dbUser, setDbUser] = useState<DatabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [authUrl, setAuthUrl] = useState<string>("#");
 
@@ -33,8 +52,25 @@ export default function AuthStatus({
     const url = getStravaAuthUrl();
     setAuthUrl(url);
 
+    // Fetch database user info if authenticated
+    if (user) {
+      fetchDatabaseUser();
+    }
+
     setLoading(false);
   }, []);
+
+  const fetchDatabaseUser = async () => {
+    try {
+      const response = await fetch("/api/user/info");
+      if (response.ok) {
+        const data = await response.json();
+        setDbUser(data.user);
+      }
+    } catch (error) {
+      console.error("Error fetching database user info:", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -44,11 +80,13 @@ export default function AuthStatus({
       // Clear client-side cookies as well
       clearStravaAuth();
       setStravaUser(null);
+      setDbUser(null);
     } catch (error) {
       console.error("Logout error:", error);
       // Fallback to client-side only logout
       clearStravaAuth();
       setStravaUser(null);
+      setDbUser(null);
     }
   };
 
@@ -59,6 +97,18 @@ export default function AuthStatus({
       label: `${stravaUser?.firstName} ${stravaUser?.lastName}`,
       disabled: true,
     },
+    ...(dbUser?.role === "admin"
+      ? [
+          {
+            type: "divider" as const,
+          },
+          {
+            key: "admin",
+            icon: <SettingOutlined />,
+            label: <Link href="/admin">Admin Panel</Link>,
+          },
+        ]
+      : []),
     {
       type: "divider" as const,
     },

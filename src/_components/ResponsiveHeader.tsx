@@ -94,61 +94,44 @@ export default function ResponsiveHeader() {
   ];
 
   return (
-    <header className="bg-gray-900 px-4 py-3">
-      <div className="flex items-center justify-between">
+    <header className="flex justify-between items-center border-b border-gray-300 px-6 py-4 text-black">
+      <div className="flex items-center justify-between w-full">
         {/* Logo/Title */}
         <Link
           href="/"
           className="text-white font-bold text-lg hover:text-gray-200 flex items-center"
         >
-          <div className="text-2xl font-extrabold leading-tight">
+          <div className="text-2xl font-extrabold leading-tight text-black">
             STRIDE
             <br />
             <span className="tracking-wide">LAB_</span>
           </div>
-          {/* Desktop Logo */}
-          {/* <Image
-            src="/logo.png"
-            alt="Stride Lab"
-            width={120}
-            height={48}
-            className="hidden sm:block h-12 w-auto"
-          /> */}
-          {/* Mobile Logo */}
-          {/* <Image
-            src="/favicon.png"
-            alt="Stride Lab"
-            width={48}
-            height={48}
-            className="sm:hidden h-12 w-12"
-          /> */}
         </Link>
-
         {/* Desktop Navigation and Search */}
         <div className="hidden lg:flex items-center space-x-6">
           {/* Quick Navigation Links */}
-          <nav className="flex items-center space-x-4">
+          <nav className="flex items-center space-x-6">
             <Link
               href="/brands"
-              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+              className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
             >
               Brands
             </Link>
             <Link
               href="/shoes/reviewed/2025"
-              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+              className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
             >
               Reviews
             </Link>
             <Link
               href={`/shoes/released/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}
-              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+              className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
             >
               This Month
             </Link>
             <Link
               href={`/shoes/released/${currentYear}`}
-              className="text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-800"
+              className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
             >
               This Year
             </Link>
@@ -186,7 +169,7 @@ export default function ResponsiveHeader() {
         </div>
 
         {/* Tablet Search (between lg and md) */}
-        <div className="hidden md:flex lg:hidden items-center space-x-4">
+        <div className="hidden md:flex lg:hidden items-center space-x-6">
           <div className="w-80">
             <SearchInput />
           </div>
@@ -218,17 +201,15 @@ export default function ResponsiveHeader() {
         <div className="flex items-center space-x-2 md:hidden">
           <Button
             type="text"
-            icon={<SearchOutlined style={{ color: "white" }} />}
+            icon={<SearchOutlined className="text-black" />}
             onClick={() => setSearchVisible(true)}
-            className="hover:bg-gray-800 border-none"
-            style={{ color: "white" }}
+            className="hover:bg-gray-800 border-none text-black"
           />
           <Button
             type="text"
-            icon={<MenuOutlined style={{ color: "white" }} />}
+            icon={<MenuOutlined className="text-black" />}
             onClick={() => setMobileMenuVisible(true)}
-            className="hover:bg-gray-800 border-none"
-            style={{ color: "white" }}
+            className="hover:bg-gray-800 border-none text-black"
           />
         </div>
       </div>

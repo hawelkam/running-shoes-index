@@ -73,6 +73,17 @@ export class UserRepository {
     return result[0] as User;
   }
 
+  // Update user role
+  static async updateUserRole(username: string, role: string) {
+    const result = await sql`
+      UPDATE users
+      SET role = ${role}, updated_at = CURRENT_TIMESTAMP
+      WHERE username = ${username}
+      RETURNING *
+    `;
+    return result[0] as User;
+  }
+
   // Delete user
   static async deleteUser(username: string) {
     await sql`

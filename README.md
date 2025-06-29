@@ -42,3 +42,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Admin Panel
+
+The application includes an admin panel that's only accessible to users with admin role.
+
+### Accessing the Admin Panel
+
+1. First, sign in with Strava
+2. Visit `/auth-demo` and use the "Promote to Admin (Testing)" button to upgrade your role
+3. The admin panel link will then appear in your user dropdown menu
+4. Navigate to `/admin` to access the admin panel
+
+The admin panel includes three main sections:
+
+- **Manage Users**: User management, roles, and permissions
+- **Manage Shoes**: Shoe database and product information
+- **Manage Reviews**: Review moderation and management
+
+> **Note**: In production, admin role assignment should be done through a secure process, not self-promotion.
