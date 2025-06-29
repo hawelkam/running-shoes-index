@@ -1,6 +1,6 @@
-import ShoeTypePageLayout, {
-  ShoeTypePageProps,
-} from "../../_components/ShoeTypePageLayout";
+import ShoePurposePageLayout, {
+  ShoePurposePageProps,
+} from "../../_components/ShoePurposePageLayout";
 
 interface GymTreadmillShoesPageProps {
   searchParams: Promise<{
@@ -20,10 +20,10 @@ interface GymTreadmillShoesPageProps {
 export default async function GymTreadmillShoesPage(
   props: GymTreadmillShoesPageProps
 ) {
-  const shoeTypeProps: ShoeTypePageProps = {
+  const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {
-      shoeType: "Gym / Treadmill",
+      purpose: "Gym / Treadmill",
       title: "Gym & Treadmill Running Shoes",
       description:
         "Optimize your indoor training with specialized gym and treadmill shoes",
@@ -31,5 +31,5 @@ export default async function GymTreadmillShoesPage(
     },
   };
 
-  return <ShoeTypePageLayout {...shoeTypeProps} />;
+  return <ShoePurposePageLayout {...shoePurposeProps} />;
 }

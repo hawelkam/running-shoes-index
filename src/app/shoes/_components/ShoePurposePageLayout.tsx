@@ -1,10 +1,10 @@
 import { client } from "@/sanity/client";
 import { Suspense } from "react";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import GenericFilters from "../_components/GenericFilters";
-import ResultsCount from "../_components/ResultsCount";
-import ShoeTableElement from "../_components/ShoeTableElement";
-import ShoeTableCard from "../_components/ShoeTableCard";
+import GenericFilters from "./GenericFilters";
+import ResultsCount from "./ResultsCount";
+import ShoeTableElement from "./ShoeTableElement";
+import ShoeTableCard from "./ShoeTableCard";
 import GenericPagination from "@/_components/GenericPagination";
 import {
   FilterParams,
@@ -13,7 +13,7 @@ import {
 } from "@/_utils/filterUtils";
 import { getCategories } from "../_actions/getCategories";
 
-interface ShoeTypePageProps {
+interface ShoePurposePageProps {
   searchParams: Promise<{
     page?: string;
     category?: string;
@@ -26,16 +26,11 @@ interface ShoeTypePageProps {
     reviewed?: string;
     search?: string;
   }>;
-  config: {
-    shoeType: string;
-    title: string;
-    description: string;
-    basePath: string;
-  };
+  config: ShoePurposeConfig;
 }
 
-interface ShoeTypeConfig {
-  shoeType: string;
+interface ShoePurposeConfig {
+  purpose: string;
   title: string;
   description: string;
   basePath: string;
@@ -46,7 +41,7 @@ const ITEMS_PER_PAGE = 20;
 async function getData(
   page: number = 1,
   filters: FilterParams = {},
-  shoeType: string
+  purpose: string
 ) {
   const start = (page - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE - 1;
@@ -55,7 +50,7 @@ async function getData(
   const baseConditions = [
     '_type == "runningShoe"',
     "defined(slug.current)",
-    `shoeType->name == "${shoeType}"`,
+    `purpose == "${purpose}"`,
   ];
 
   const filterConditions = buildFilterConditions(baseConditions, filters);
@@ -70,7 +65,7 @@ async function getData(
   );
 
   // Get paginated data
-  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, shoeType->, category[]->, releaseInfo, specs, image, review}`;
+  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, purpose, category[]->, releaseInfo, specs, image, review}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
@@ -85,7 +80,7 @@ async function getData(
   };
 }
 
-export default async function ShoeTypePageLayout(props: ShoeTypePageProps) {
+export default async function ShoeTypePageLayout(props: ShoePurposePageProps) {
   const { config } = props;
   const searchParams = await props.searchParams;
   const currentPage = parseInt(searchParams.page || "1", 10);
@@ -105,7 +100,7 @@ export default async function ShoeTypePageLayout(props: ShoeTypePageProps) {
   // Fetch categories and shoes data in parallel
   const [categories, { shoes, totalCount, totalPages }] = await Promise.all([
     getCategories(),
-    getData(currentPage, filters, config.shoeType),
+    getData(currentPage, filters, config.purpose),
   ]);
 
   // Check if any filters are active
@@ -183,4 +178,4 @@ export default async function ShoeTypePageLayout(props: ShoeTypePageProps) {
   );
 }
 
-export type { ShoeTypePageProps, ShoeTypeConfig };
+export type { ShoePurposePageProps, ShoePurposeConfig };

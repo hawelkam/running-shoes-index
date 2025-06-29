@@ -4,7 +4,7 @@ import Link from "next/link";
 import LatestReleases from "./_components/LatestReleases";
 
 async function getData() {
-  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(_createdAt desc)[0...3]{_id, name, slug, shoeType->, category[]->, image, releaseInfo}`;
+  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(_createdAt desc)[0...3]{_id, name, slug, purpose, category[]->, image, releaseInfo}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,

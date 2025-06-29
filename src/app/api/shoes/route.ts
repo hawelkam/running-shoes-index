@@ -9,7 +9,7 @@ export async function GET() {
       name,
       slug,
       brand->{name, slug},
-      shoeType->{name, slug},
+      purpose,
       category[]->{name},
       image,
       specs,

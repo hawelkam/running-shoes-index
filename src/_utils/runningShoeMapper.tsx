@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
   name: shoe.name,
-  shoeTypeName: shoe.shoeType.name,
+  purpose: shoe.purpose,
   releaseDate: shoe.releaseInfo
     ? {
         pl: shoe.releaseInfo.pl?.date

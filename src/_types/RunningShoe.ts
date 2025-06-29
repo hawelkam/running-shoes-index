@@ -9,7 +9,7 @@ export type ReleaseInfo = {
 export type SanityRunningShoe = SanityDocument & {
   name: string;
   brand: { name: string; slug: { current: string } };
-  shoeType: { name: string; slug: { current: string } };
+  purpose: string;
   releaseInfo: ReleaseInfo;
   stability: string;
   category?: { name: string }[];
@@ -41,7 +41,7 @@ export type SanityRunningShoe = SanityDocument & {
 
 export type RunningShoe = {
   name: string;
-  shoeTypeName: string;
+  purpose: string;
   releaseDate: {
     pl?: Date;
     eu?: Date;

@@ -72,7 +72,7 @@ async function getShoesByBrand(
         _id,
         name,
         slug,
-        shoeType->,
+        purpose,
         category[]-> {_id, name},
         releaseInfo,
         specs,

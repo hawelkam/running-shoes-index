@@ -1,7 +1,6 @@
 "use client";
 
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { List } from "antd";
 import Link from "next/link";
 
 interface LatestReleasesProps {
@@ -21,20 +20,17 @@ export default function LatestReleases({ shoes }: LatestReleasesProps) {
         </Link>
       </div>
 
-      <List
-        grid={{
-          gutter: 24,
-          xs: 1,
-          sm: 1,
-          md: 2,
-          lg: 3,
-          xl: 3,
-          xxl: 3,
-        }}
-        dataSource={shoes}
-        renderItem={(shoe) => (
-          <List.Item>
-            <div className="border border-gray-300 rounded-lg overflow-hidden shadow-sm bg-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {shoes.length === 0 ? (
+          <div className="col-span-3 text-center text-gray-500">
+            No latest releases available at the moment.
+          </div>
+        ) : (
+          shoes.slice(0, 3).map((shoe) => (
+            <div
+              className="border border-gray-300 rounded-lg overflow-hidden shadow-sm bg-white"
+              key={shoe._id}
+            >
               <div className="h-64 overflow-hidden">
                 <img
                   alt={shoe.name}
@@ -50,9 +46,9 @@ export default function LatestReleases({ shoes }: LatestReleasesProps) {
                 >
                   <h3 className="text-xl font-semibold mb-2">{shoe.name}</h3>
                 </Link>
-                {shoe.shoeType?.name && (
+                {shoe.purpose && (
                   <div className="text-xs uppercase text-gray-500 mb-1">
-                    {shoe.shoeType.name}
+                    {shoe.purpose}
                   </div>
                 )}
                 {shoe.category && shoe.category.length > 0 && (
@@ -75,9 +71,9 @@ export default function LatestReleases({ shoes }: LatestReleasesProps) {
                 </Link>
               </div>
             </div>
-          </List.Item>
+          ))
         )}
-      />
+      </div>
     </section>
   );
 }

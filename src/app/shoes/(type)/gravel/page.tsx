@@ -1,6 +1,6 @@
-import ShoeTypePageLayout, {
-  ShoeTypePageProps,
-} from "../../_components/ShoeTypePageLayout";
+import ShoePurposePageLayout, {
+  ShoePurposePageProps,
+} from "../../_components/ShoePurposePageLayout";
 
 interface GravelShoesPageProps {
   searchParams: Promise<{
@@ -18,15 +18,15 @@ interface GravelShoesPageProps {
 }
 
 export default async function GravelShoesPage(props: GravelShoesPageProps) {
-  const shoeTypeProps: ShoeTypePageProps = {
+  const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {
-      shoeType: "Gravel",
+      purpose: "Gravel",
       title: "Gravel Running Shoes",
       description: "Tackle mixed terrain with versatile gravel running shoes",
       basePath: "/shoes/gravel",
     },
   };
 
-  return <ShoeTypePageLayout {...shoeTypeProps} />;
+  return <ShoePurposePageLayout {...shoePurposeProps} />;
 }

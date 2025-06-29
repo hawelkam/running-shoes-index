@@ -1,6 +1,6 @@
-import ShoeTypePageLayout, {
-  ShoeTypePageProps,
-} from "../../_components/ShoeTypePageLayout";
+import ShoePurposePageLayout, {
+  ShoePurposePageProps,
+} from "../../_components/ShoePurposePageLayout";
 
 interface TrackShoesPageProps {
   searchParams: Promise<{
@@ -18,15 +18,15 @@ interface TrackShoesPageProps {
 }
 
 export default async function TrackShoesPage(props: TrackShoesPageProps) {
-  const shoeTypeProps: ShoeTypePageProps = {
+  const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {
-      shoeType: "Track",
+      purpose: "Track",
       title: "Track Running Shoes",
       description: "Achieve your best times with precision track running shoes",
       basePath: "/shoes/track",
     },
   };
 
-  return <ShoeTypePageLayout {...shoeTypeProps} />;
+  return <ShoePurposePageLayout {...shoePurposeProps} />;
 }

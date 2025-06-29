@@ -10,6 +10,7 @@ import {
   preparePriceInEUR,
   preparePriceInPLN,
   preparePriceInUSD,
+  preparePurposeSlug,
   prepareReleaseDate,
   prepareWeight,
 } from "@/_utils/helpers";
@@ -20,7 +21,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, shoeType->, releaseInfo, category[]->, stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, category[]->, slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, review}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, category[]->, stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, category[]->, slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, review}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -421,10 +422,10 @@ const ShoePage = async (props: { params: Params }) => {
         <ol className="inline-flex items-center space-x-1 md:space-x-3">
           <li className="inline-flex items-center">
             <Link
-              href={`/shoes/${shoe.shoeType.slug.current}`}
+              href={`/shoes/${preparePurposeSlug(shoe.purpose)}`}
               className="text-gray-700 hover:text-blue-600"
             >
-              {shoe.shoeType.name || "Running Shoes"}
+              {shoe.purpose || "Running Shoes"}
             </Link>
           </li>
           {shoe.brand && (

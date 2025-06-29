@@ -164,3 +164,15 @@ export function isCurrentYearRelease(releaseDate: string | undefined): boolean {
   const releaseYear = new Date(releaseDate).getFullYear();
   return releaseYear === currentYear;
 }
+
+export function preparePurposeSlug(purpose: string): string {
+  return purpose
+    .split(" / ")
+    .map((part) =>
+      part
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+    )
+    .join("-");
+}

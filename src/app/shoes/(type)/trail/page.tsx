@@ -1,6 +1,6 @@
-import ShoeTypePageLayout, {
-  ShoeTypePageProps,
-} from "../../_components/ShoeTypePageLayout";
+import ShoePurposePageLayout, {
+  ShoePurposePageProps,
+} from "../../_components/ShoePurposePageLayout";
 
 interface TrailShoesPageProps {
   searchParams: Promise<{
@@ -18,15 +18,15 @@ interface TrailShoesPageProps {
 }
 
 export default async function TrailShoesPage(props: TrailShoesPageProps) {
-  const shoeTypeProps: ShoeTypePageProps = {
+  const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {
-      shoeType: "Trail",
+      purpose: "Trail",
       title: "Trail Running Shoes",
       description: "Conquer any terrain with trail running shoes",
       basePath: "/shoes/trail",
     },
   };
 
-  return <ShoeTypePageLayout {...shoeTypeProps} />;
+  return <ShoePurposePageLayout {...shoePurposeProps} />;
 }

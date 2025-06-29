@@ -1,6 +1,6 @@
-import ShoeTypePageLayout, {
-  ShoeTypePageProps,
-} from "../../_components/ShoeTypePageLayout";
+import ShoePurposePageLayout, {
+  ShoePurposePageProps,
+} from "../../_components/ShoePurposePageLayout";
 
 interface RoadShoesPageProps {
   searchParams: Promise<{
@@ -18,15 +18,15 @@ interface RoadShoesPageProps {
 }
 
 export default async function RoadShoesPage(props: RoadShoesPageProps) {
-  const shoeTypeProps: ShoeTypePageProps = {
+  const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {
-      shoeType: "Road",
+      purpose: "Road",
       title: "Road Running Shoes",
       description: "Find your perfect road running companion",
       basePath: "/shoes/road",
     },
   };
 
-  return <ShoeTypePageLayout {...shoeTypeProps} />;
+  return <ShoePurposePageLayout {...shoePurposeProps} />;
 }

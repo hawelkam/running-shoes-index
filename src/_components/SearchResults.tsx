@@ -76,7 +76,7 @@ const SearchResults = ({ categories = [] }: SearchResultsProps) => {
           '_type == "runningShoe"',
           "defined(slug.current)",
           `(name match "*${searchQuery}*" ||
-           shoeType->name match "*${searchQuery}*" ||
+           purpose match "*${searchQuery}*" ||
            category[]->name match "*${searchQuery}*")`,
         ];
 
@@ -98,7 +98,7 @@ const SearchResults = ({ categories = [] }: SearchResultsProps) => {
 
         // Get paginated data
         const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{
-          _id, name, slug, shoeType->, category[]->, releaseInfo, specs, image, review
+          _id, name, slug, purpose, category[]->, releaseInfo, specs, image, review
         }`;
         const data = await client.fetch<SanityRunningShoe[]>(
           query,
