@@ -21,7 +21,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, category[]->, stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, category[]->, slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, review}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, review}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -499,7 +499,7 @@ const ShoePage = async (props: { params: Params }) => {
               <div className="flex flex-col">
                 <span className="text-gray-500 text-sm">Category</span>
                 <span className="font-medium">
-                  {shoe.category?.map((cat) => cat.name).join(", ")}
+                  {shoe.categories?.join(", ")}
                 </span>
               </div>
               <div className="flex flex-col">

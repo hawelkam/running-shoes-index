@@ -108,8 +108,8 @@ export default function ShoeComparisonDisplay({
             </Link>
           </h3>
           <p className="text-gray-600">{shoe1.purpose}</p>
-          {shoe1.category && shoe1.category.length > 0 && (
-            <p className="text-sm text-gray-500">{shoe1.category[0]?.name}</p>
+          {shoe1.categories && shoe1.categories.length > 0 && (
+            <p className="text-sm text-gray-500">{shoe1.categories[0]}</p>
           )}
         </div>
 
@@ -138,8 +138,8 @@ export default function ShoeComparisonDisplay({
             </Link>
           </h3>
           <p className="text-gray-600">{shoe2.purpose}</p>
-          {shoe2.category && shoe2.category.length > 0 && (
-            <p className="text-sm text-gray-500">{shoe2.category[0]?.name}</p>
+          {shoe2.categories && shoe2.categories.length > 0 && (
+            <p className="text-sm text-gray-500">{shoe2.categories[0]}</p>
           )}
         </div>
       </div>

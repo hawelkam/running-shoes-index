@@ -51,7 +51,7 @@ async function getData(
       || !defined(releaseInfo.pl.price)
       || !defined(releaseInfo.eu.price)
       || !defined(releaseInfo.us.price)
-      || !defined(category)
+      || !defined(categories)
       || !defined(image)
       || !defined(specs)
       || !defined(specs.m)
@@ -85,7 +85,7 @@ async function getData(
   );
 
   // Get paginated data
-  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, purpose, category[]->, releaseInfo, image, review, specs}`;
+  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, purpose, categories[], releaseInfo, image, review, specs}`;
   const data = await client.fetch<SanityRunningShoe[]>(
     query,
     {},

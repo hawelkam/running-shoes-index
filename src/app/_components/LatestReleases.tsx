@@ -51,15 +51,13 @@ export default function LatestReleases({ shoes }: LatestReleasesProps) {
                     {shoe.purpose}
                   </div>
                 )}
-                {shoe.category && shoe.category.length > 0 && (
+                {shoe.categories && shoe.categories.length > 0 && (
                   <div className="flex flex-wrap gap-2 text-sm text-white mb-4">
-                    {shoe.category
-                      .slice(0, 2)
-                      .map((cat: { name: string }, idx: number) => (
-                        <span key={idx} className="bg-black px-2 py-1 rounded">
-                          {cat.name}
-                        </span>
-                      ))}
+                    {shoe.categories.slice(0, 2).map((cat, idx: number) => (
+                      <span key={idx} className="bg-black px-2 py-1 rounded">
+                        {cat}
+                      </span>
+                    ))}
                   </div>
                 )}
                 <Link

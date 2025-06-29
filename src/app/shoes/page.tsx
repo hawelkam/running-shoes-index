@@ -50,7 +50,7 @@ async function getData(page: number = 1, filters: FilterParams = {}) {
   );
 
   // Get paginated data
-  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, purpose, category[]->, releaseInfo, specs, image, review}`;
+  const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{_id, name, slug, purpose, categories[], releaseInfo, specs, image, review}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,

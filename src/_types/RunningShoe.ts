@@ -12,7 +12,7 @@ export type SanityRunningShoe = SanityDocument & {
   purpose: string;
   releaseInfo: ReleaseInfo;
   stability: string;
-  category?: { name: string }[];
+  categories?: string[];
   wideAvailable: boolean;
   waterproofAvailable: boolean;
   specs: {
@@ -52,7 +52,7 @@ export type RunningShoe = {
     eu?: number;
     us?: number;
   };
-  category?: string[];
+  categories?: string[];
   slug: string;
   image: string;
   reviewed: "Yes" | "In progress" | "No";

@@ -25,7 +25,7 @@ export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
         us: shoe.releaseInfo.us?.price,
       }
     : { pl: undefined, eu: undefined, us: undefined },
-  category: shoe.category?.map((cat) => cat.name),
+  categories: shoe.categories,
   slug: shoe.slug.current,
   key: shoe.slug.current,
   image: shoe.image.url,
@@ -96,7 +96,7 @@ export const mapToRunningShoeSpecs = (shoe: SanityRunningShoe) => [
   {
     key: "1",
     label: "Category",
-    children: shoe.category?.map((o) => o.name).join(", "),
+    children: shoe.categories?.join(", "),
   },
   {
     key: "2",

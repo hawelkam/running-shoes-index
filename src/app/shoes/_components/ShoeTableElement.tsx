@@ -1,11 +1,7 @@
 import React from "react";
 import { Image } from "antd";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import {
-  prepareListDividedByComma,
-  prepareWeightInGrams,
-  prepareWeightInOunces,
-} from "@/_utils/helpers";
+import { prepareWeightInGrams, prepareWeightInOunces } from "@/_utils/helpers";
 import Link from "next/link";
 
 interface ShoeTableElementProps {
@@ -85,7 +81,7 @@ const ShoeTableElement = ({ shoe }: ShoeTableElementProps) => {
           {shoe.name}
         </Link>
       </td>
-      <td className="p-4">{prepareListDividedByComma(shoe.category)}</td>
+      <td className="p-4">{shoe.categories?.join(", ")}</td>
       <td className="p-4">
         <div className="flex flex-col">
           <span>{shoe.releaseInfo.pl?.price}zł</span>

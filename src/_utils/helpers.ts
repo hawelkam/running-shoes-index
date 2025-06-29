@@ -109,7 +109,7 @@ export function prepareMissingDataList(shoe: SanityRunningShoe): string {
       missingData.push("US price");
     }
   }
-  if (!shoe.category) {
+  if (!shoe.categories) {
     missingData.push("Category");
   }
   if (!shoe.image) {

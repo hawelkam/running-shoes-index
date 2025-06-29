@@ -1,11 +1,7 @@
 import React from "react";
 import { Image } from "antd";
 import { SanityRunningShoe } from "@/_types/RunningShoe";
-import {
-  prepareListDividedByComma,
-  prepareWeightInGrams,
-  prepareWeightInOunces,
-} from "@/_utils/helpers";
+import { prepareWeightInGrams, prepareWeightInOunces } from "@/_utils/helpers";
 import Link from "next/link";
 
 interface ShoeTableCardProps {
@@ -92,7 +88,7 @@ const ShoeTableCard = ({ shoe }: ShoeTableCardProps) => {
             <h3 className="font-semibold text-lg">{shoe.name}</h3>
             <div className="flex items-center mt-1">
               <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                {prepareListDividedByComma(shoe.category)}
+                {shoe.categories?.join(", ") || "No Category"}
               </span>
             </div>
           </div>

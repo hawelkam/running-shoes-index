@@ -62,7 +62,7 @@ async function getShoes(
 
     // Get paginated data
     const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{
-      _id, name, slug, purpose, category[]->, releaseInfo, specs, image, review
+      _id, name, slug, purpose, categories[], releaseInfo, specs, image, review
     }`;
     const shoes = await client.fetch<SanityRunningShoe[]>(
       query,

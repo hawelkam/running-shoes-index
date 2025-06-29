@@ -27,8 +27,8 @@ export default function ShoeSelector({
     (shoe) =>
       shoe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       shoe.purpose.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      shoe.category?.some((cat) =>
-        cat.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      shoe.categories?.some((cat) =>
+        cat.toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
 
@@ -134,8 +134,8 @@ export default function ShoeSelector({
                   </p>
                   <p className="text-sm text-gray-500 truncate">
                     {shoe.purpose}
-                    {shoe.category && shoe.category.length > 0 && (
-                      <span className="ml-2">• {shoe.category[0]?.name}</span>
+                    {shoe.categories && shoe.categories.length > 0 && (
+                      <span className="ml-2">• {shoe.categories[0]}</span>
                     )}
                   </p>
                 </div>
@@ -168,11 +168,10 @@ export default function ShoeSelector({
               <p className="font-medium text-gray-900">{selectedShoe.name}</p>
               <p className="text-sm text-gray-500">
                 {selectedShoe.purpose}
-                {selectedShoe.category && selectedShoe.category.length > 0 && (
-                  <span className="ml-2">
-                    • {selectedShoe.category[0]?.name}
-                  </span>
-                )}
+                {selectedShoe.categories &&
+                  selectedShoe.categories.length > 0 && (
+                    <span className="ml-2">• {selectedShoe.categories[0]}</span>
+                  )}
               </p>
             </div>
           </div>

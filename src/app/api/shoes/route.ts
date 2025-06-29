@@ -10,7 +10,7 @@ export async function GET() {
       slug,
       brand->{name, slug},
       purpose,
-      category[]->{name},
+      categories[],
       image,
       specs,
       releaseInfo,
