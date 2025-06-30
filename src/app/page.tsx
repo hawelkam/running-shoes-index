@@ -2,7 +2,14 @@ import { SanityRunningShoe } from "@/_types/RunningShoe";
 import { client } from "@/sanity/client";
 import Link from "next/link";
 import LatestReleases from "./_components/LatestReleases";
+import LatestReviews from "./_components/LatestReviews";
 import QuickNavigationLink from "@/_components/QuickNavigationLink";
+
+interface ReviewWithShoe {
+  _id: string;
+  reviewDate: string;
+  shoe: SanityRunningShoe;
+}
 
 async function getData() {
   const query = `*[_type == "runningShoe" && defined(slug.current)]|order(_createdAt desc)[0...3]{_id, name, slug, purpose, categories[], image, releaseInfo}`;
@@ -15,8 +22,32 @@ async function getData() {
   return data;
 }
 
+async function getLatestReviews() {
+  const query = `*[_type == "runningShoeReview"]|order(reviewDate asc)[0...3]{
+    _id,
+    reviewDate,
+    shoe->{
+      _id,
+      name,
+      slug,
+      purpose,
+      categories[],
+      image,
+      releaseInfo
+    }
+  }`;
+
+  const data = await client.fetch<ReviewWithShoe[]>(
+    query,
+    {},
+    { next: { revalidate: 30 } }
+  );
+  return data.reverse();
+}
+
 export default async function IndexPage() {
   const shoes = await getData();
+  const reviews = await getLatestReviews();
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
@@ -139,6 +170,9 @@ export default async function IndexPage() {
 
       {/* Latest Releases Section */}
       <LatestReleases shoes={shoes} />
+
+      {/* Latest Reviews Section */}
+      <LatestReviews reviews={reviews} />
 
       {/* Shop by Type Section */}
       <section className="mb-12">

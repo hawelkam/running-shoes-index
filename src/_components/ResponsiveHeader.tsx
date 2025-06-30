@@ -118,7 +118,7 @@ export default function ResponsiveHeader() {
               Brands
             </Link>
             <Link
-              href="/shoes/reviewed/2025"
+              href="/reviews"
               className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
             >
               Reviews
@@ -273,7 +273,7 @@ export default function ResponsiveHeader() {
             </Link>
 
             <Link
-              href="/shoes/reviewed/2025"
+              href="/reviews"
               className="flex items-center p-3 rounded-lg hover:bg-green-50 hover:text-green-600 transition-colors mb-2"
               onClick={() => setMobileMenuVisible(false)}
             >
