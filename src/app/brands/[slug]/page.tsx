@@ -77,7 +77,6 @@ async function getShoesByBrand(
         releaseInfo,
         specs,
         image,
-        review,
         brand-> {_id, name, slug}
       }`,
       {},
@@ -267,9 +266,6 @@ const BrandPage = async (props: BrandPageProps) => {
                         Weight
                       </th>
                       <th className="p-4 font-semibold text-gray-700">Drop</th>
-                      <th className="p-4 font-semibold text-gray-700">
-                        Reviewed
-                      </th>
                     </tr>
                   </thead>
                   <tbody>

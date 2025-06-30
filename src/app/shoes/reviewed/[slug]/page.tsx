@@ -30,36 +30,94 @@ interface ReviewedPageProps {
   }>;
 }
 
-async function getShoes(
+interface Review {
+  _id: string;
+  reviewDate: string;
+  shoe: {
+    _id: string;
+    name: string;
+    slug: { current: string };
+    image?: { url: string };
+  };
+}
+
+async function getReviews(slug: string): Promise<Review[]> {
+  // If slug is "all", get all reviews
+  if (slug === "all") {
+    const query = `*[
+      _type == "runningShoeReview"
+    ]{
+      _id,
+      reviewDate,
+      shoe->{_id, name, slug, image}
+    }`;
+
+    try {
+      const reviews = await client.fetch<Review[]>(
+        query,
+        {},
+        { next: { revalidate: 60 } }
+      );
+      return reviews || [];
+    } catch (error) {
+      console.error("Failed to fetch all reviews:", error);
+      return [];
+    }
+  }
+
+  // If slug is not a 4-digit year, return empty array
+  if (!/^\d{4}$/.test(slug)) return [];
+
+  const startDate = `${slug}-01-01`;
+  const endDate = `${slug}-12-31`;
+
+  const query = `*[
+    _type == "runningShoeReview" &&
+    reviewDate >= "${startDate}" &&
+    reviewDate <= "${endDate}"
+  ]{
+    _id,
+    reviewDate,
+    shoe->{_id, name, slug, image}
+  }`;
+
+  try {
+    const reviews = await client.fetch<Review[]>(
+      query,
+      {},
+      { next: { revalidate: 60 } }
+    );
+    return reviews || [];
+  } catch (error) {
+    console.error("Failed to fetch reviews:", error);
+    return [];
+  }
+}
+
+async function getShoesFromReviews(
   slug: string,
   page: number = 1,
   filters: FilterParams = {}
 ): Promise<{ shoes: SanityRunningShoe[]; totalCount: number }> {
-  // Base conditions for reviewed shoes
-  let baseReviewedConditions: string[];
+  // Get reviews first
+  const reviews = await getReviews(slug);
 
-  if (slug === "all") {
-    baseReviewedConditions = [
-      '_type == "runningShoe"',
-      "defined(slug.current)",
-      "defined(review)",
-    ];
-  } else {
-    baseReviewedConditions = [
-      '_type == "runningShoe"',
-      "defined(slug.current)",
-      "defined(review)",
-      `((releaseInfo.pl.date > "${slug}-01-00" && releaseInfo.pl.date < "${slug}-12-32") ||
-       (releaseInfo.eu.date > "${slug}-01-00" && releaseInfo.eu.date < "${slug}-12-32") ||
-       (releaseInfo.us.date > "${slug}-01-00" && releaseInfo.us.date < "${slug}-12-32"))`,
-    ];
+  if (reviews.length === 0) {
+    return { shoes: [], totalCount: 0 };
   }
 
+  // Extract shoe IDs from reviews
+  const shoeIds = reviews.map((review: Review) => review.shoe._id);
+
+  // Build base conditions for shoes that have reviews
+  const baseConditions = [
+    '_type == "runningShoe"',
+    "defined(slug.current)",
+    `_id in [${shoeIds.map((id: string) => `"${id}"`).join(", ")}]`,
+  ];
+
   // Build filter conditions
-  const filterConditions = buildFilterConditions(
-    baseReviewedConditions,
-    filters
-  );
+  const filterConditions = buildFilterConditions(baseConditions, filters);
   const whereClause = filterConditions.join(" && ");
 
   try {
@@ -76,7 +134,7 @@ async function getShoes(
 
     // Get paginated data
     const dataQuery = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{
-      _id, name, slug, purpose, categories[], releaseInfo, specs, image, review
+      _id, name, slug, purpose, categories[], releaseInfo, specs, image
     }`;
     const shoes = await client.fetch<SanityRunningShoe[]>(
       dataQuery,
@@ -86,7 +144,7 @@ async function getShoes(
 
     return { shoes: shoes || [], totalCount };
   } catch (error) {
-    console.error("Failed to fetch shoe:", error);
+    console.error("Failed to fetch shoes:", error);
     return { shoes: [], totalCount: 0 };
   }
 }
@@ -109,7 +167,11 @@ const ReviewedInYear = async (props: ReviewedPageProps) => {
     search: searchParams.search,
   };
 
-  const { shoes, totalCount } = await getShoes(slug, currentPage, filters);
+  const { shoes, totalCount } = await getShoesFromReviews(
+    slug,
+    currentPage,
+    filters
+  );
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
   const activeFilters = hasActiveFilters(filters);
 
@@ -154,11 +216,10 @@ const ReviewedInYear = async (props: ReviewedPageProps) => {
                   <th className="p-4 font-semibold text-gray-700">Price</th>
                   <th className="p-4 font-semibold text-gray-700">Weight</th>
                   <th className="p-4 font-semibold text-gray-700">Drop</th>
-                  <th className="p-4 font-semibold text-gray-700">Reviewed</th>
                 </tr>
               </thead>
               <tbody>
-                {shoes.map((shoe) => (
+                {shoes.map((shoe: SanityRunningShoe) => (
                   <ShoeTableElement key={shoe._id} shoe={shoe} />
                 ))}
               </tbody>
@@ -169,7 +230,7 @@ const ReviewedInYear = async (props: ReviewedPageProps) => {
         {/* Card view with max width */}
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="card-view grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-            {shoes.map((shoe) => (
+            {shoes.map((shoe: SanityRunningShoe) => (
               <ShoeTableCard key={shoe._id} shoe={shoe} />
             ))}
           </div>

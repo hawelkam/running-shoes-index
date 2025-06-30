@@ -9,70 +9,6 @@ interface ShoeTableCardProps {
 }
 
 const ShoeTableCard = ({ shoe }: ShoeTableCardProps) => {
-  const prepareProperReviewedStatus = (shoe: SanityRunningShoe) => {
-    if (shoe.review) {
-      if (shoe.review.plReview || shoe.review.enReview) {
-        return (
-          <span className="text-green-600 flex items-center text-sm">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-green-600 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-            Reviewed
-          </span>
-        );
-      }
-      return (
-        <span className="text-orange-600 flex items-center text-sm">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 text-orange-600 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 13l4 4L19 7"
-            ></path>
-          </svg>
-          In Review
-        </span>
-      );
-    } else {
-      return (
-        <span className="text-gray-500 flex items-center text-sm">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 text-gray-500 mr-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
-          </svg>
-          Not Reviewed
-        </span>
-      );
-    }
-  };
   return (
     <Link href={`/shoes/${shoe.slug.current}`} className="block no-underline">
       <div className="shoe-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer">
@@ -114,12 +50,6 @@ const ShoeTableCard = ({ shoe }: ShoeTableCardProps) => {
             <div>
               <p className="text-sm text-gray-500">Drop</p>
               <p className="font-medium">{shoe.specs.m?.drop}mm</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Status</p>
-              <div className="font-medium">
-                {prepareProperReviewedStatus(shoe)}
-              </div>
             </div>
           </div>
         </div>

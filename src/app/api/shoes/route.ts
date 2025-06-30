@@ -13,8 +13,7 @@ export async function GET() {
       categories[],
       image,
       specs,
-      releaseInfo,
-      review
+      releaseInfo
     }`;
 
     const data = await client.fetch<SanityRunningShoe[]>(

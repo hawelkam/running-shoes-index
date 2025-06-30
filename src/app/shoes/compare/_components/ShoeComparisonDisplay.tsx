@@ -187,45 +187,6 @@ export default function ShoeComparisonDisplay({
         </table>
       </div>
 
-      {/* Review Status */}
-      <div className="mt-8 grid grid-cols-2 gap-8">
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-          <h4 className="font-semibold text-gray-700 mb-2">Review Status</h4>
-          <span
-            className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-              shoe1.review
-                ? "bg-green-100 text-green-800"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            {shoe1.review ? "Has Review Data" : "No Review Data"}
-          </span>
-          {shoe1.review && (
-            <p className="text-xs text-gray-500 mt-1">
-              Size: US {shoe1.review.shoeInfo.sizeUS}
-            </p>
-          )}
-        </div>
-
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-          <h4 className="font-semibold text-gray-700 mb-2">Review Status</h4>
-          <span
-            className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-              shoe2.review
-                ? "bg-green-100 text-green-800"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            {shoe2.review ? "Has Review Data" : "No Review Data"}
-          </span>
-          {shoe2.review && (
-            <p className="text-xs text-gray-500 mt-1">
-              Size: US {shoe2.review.shoeInfo.sizeUS}
-            </p>
-          )}
-        </div>
-      </div>
-
       {/* Release Information */}
       <div className="mt-8 grid grid-cols-2 gap-8">
         <div className="text-center p-4 bg-gray-50 rounded-lg">

@@ -144,191 +144,138 @@ export default async function IndexPage() {
       <section className="mb-12">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Shop by Type
+            Browse by Type
           </h2>
           <p className="text-lg text-gray-600">
             Find the perfect running shoes for your specific needs
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link href="/shoes/road" className="group">
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-blue-500">
-              <div className="flex items-center">
-                <div className="bg-blue-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 group-hover:text-blue-600">
-                    Road Running
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Pavement & street running
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <QuickNavigationLink
+            href="/shoes/road"
+            title="Road Running"
+            description="Pavement & street running"
+            icon={
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            }
+          />
 
-          <Link href="/shoes/trail" className="group">
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-green-500">
-              <div className="flex items-center">
-                <div className="bg-green-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 group-hover:text-green-600">
-                    Trail Running
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Off-road & mountain trails
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <QuickNavigationLink
+            href="/shoes/trail"
+            title="Trail Running"
+            description="Off-road & mountain trails"
+            icon={
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                />
+              </svg>
+            }
+          />
 
-          <Link href="/shoes/track" className="group">
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-red-500">
-              <div className="flex items-center">
-                <div className="bg-red-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-red-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 group-hover:text-red-600">
-                    Track & Field
-                  </h3>
-                  <p className="text-sm text-gray-600">Speed & competition</p>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <QuickNavigationLink
+            href="/shoes/track"
+            title="Track & Field"
+            description="Speed & competition"
+            icon={
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            }
+          />
 
-          <Link href="/shoes/gravel" className="group">
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-yellow-500">
-              <div className="flex items-center">
-                <div className="bg-yellow-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-yellow-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 group-hover:text-yellow-600">
-                    Gravel Running
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Mixed terrain versatility
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <QuickNavigationLink
+            href="/shoes/gravel"
+            title="Gravel Running"
+            description="Mixed terrain versatility"
+            icon={
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            }
+          />
 
-          <Link href="/shoes/gym-treadmill" className="group">
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-purple-500">
-              <div className="flex items-center">
-                <div className="bg-purple-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-purple-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 group-hover:text-purple-600">
-                    Gym & Treadmill
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Indoor training & fitness
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <QuickNavigationLink
+            href="/shoes/gym-treadmill"
+            title="Gym & Treadmill"
+            description="Indoor training & fitness"
+            icon={
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                />
+              </svg>
+            }
+          />
 
-          <Link href="/shoes" className="group">
-            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-gray-500">
-              <div className="flex items-center">
-                <div className="bg-gray-100 p-3 rounded-full mr-4">
-                  <svg
-                    className="w-6 h-6 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 group-hover:text-gray-600">
-                    All Shoes
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Browse complete catalog
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
+          <QuickNavigationLink
+            href="/shoes"
+            title="All Shoes"
+            description="Browse complete catalog"
+            icon={
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                />
+              </svg>
+            }
+          />
         </div>
       </section>
 

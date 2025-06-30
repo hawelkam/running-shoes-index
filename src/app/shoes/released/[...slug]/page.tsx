@@ -139,7 +139,6 @@ const ReleasesOfDate = async (props: ReleasedPageProps) => {
                   <th className="p-4 font-semibold text-gray-700">Price</th>
                   <th className="p-4 font-semibold text-gray-700">Weight</th>
                   <th className="p-4 font-semibold text-gray-700">Drop</th>
-                  <th className="p-4 font-semibold text-gray-700">Reviewed</th>
                 </tr>
               </thead>
               <tbody>

@@ -29,20 +29,7 @@ export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
   slug: shoe.slug.current,
   key: shoe.slug.current,
   image: shoe.image.url,
-  reviewed: mapToShoeReview(shoe),
 });
-
-const mapToShoeReview = (
-  shoe: SanityRunningShoe
-): "Yes" | "In progress" | "No" => {
-  if (shoe.review) {
-    if (shoe.review.plReview) {
-      return "Yes";
-    }
-    return "In progress";
-  }
-  return "No";
-};
 
 export const mapToRunningShoeDescription = (shoe: SanityRunningShoe) => [
   {
@@ -161,60 +148,6 @@ export const mapToRunningShoeSpecs = (shoe: SanityRunningShoe) => [
     key: "13",
     label: "Notes",
     children: shoe.notes,
-  },
-];
-
-export const mapToRunningShoeReview = (shoe: SanityRunningShoe) => [
-  {
-    key: "1",
-    label: "Reviewed shoe weight",
-    children: shoe.review.shoeInfo.weightL && shoe.review.shoeInfo.weightR && (
-      <div className="flex flex-col">
-        <div>{`L: ${shoe.review.shoeInfo.weightL}g | ${Math.round(shoe.review.shoeInfo.weightL * 3.5274) / 100}oz.`}</div>
-        <div>{`R: ${shoe.review.shoeInfo.weightR}g | ${Math.round(shoe.review.shoeInfo.weightR * 3.5274) / 100}oz.`}</div>
-      </div>
-    ),
-  },
-  {
-    key: "2",
-    label: "Reviewed shoe size",
-    children:
-      shoe.review.shoeInfo &&
-      `${shoe.review.shoeInfo.sizeEU}EU | ${shoe.review.shoeInfo.sizeUS}US`,
-  },
-  {
-    key: "3",
-    label: "English review",
-    children: shoe.review.enReview && (
-      <div className="flex flex-col sm:flex-row gap-2">
-        {shoe.review.enReview.youtube && (
-          <a href={shoe.review.enReview.youtube}>YouTube</a>
-        )}
-        {shoe.review.enReview.instagram && (
-          <a href={shoe.review.enReview.instagram}>Instagram</a>
-        )}
-        {shoe.review.enReview.tiktok && (
-          <a href={shoe.review.enReview.tiktok}>TikTok</a>
-        )}
-      </div>
-    ),
-  },
-  {
-    key: "4",
-    label: "Polish review",
-    children: shoe.review.plReview && (
-      <div className="flex flex-col sm:flex-row gap-2">
-        {shoe.review.plReview.youtube && (
-          <a href={shoe.review.plReview.youtube}>YouTube</a>
-        )}
-        {shoe.review.plReview.instagram && (
-          <a href={shoe.review.plReview.instagram}>Instagram</a>
-        )}
-        {shoe.review.plReview.tiktok && (
-          <a href={shoe.review.plReview.tiktok}>TikTok</a>
-        )}
-      </div>
-    ),
   },
 ];
 

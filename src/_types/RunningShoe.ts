@@ -27,16 +27,6 @@ export type SanityRunningShoe = SanityDocument & {
   notes: string;
   image: { url: string };
   previousVersion: SanityRunningShoe;
-  review: {
-    shoeInfo: {
-      weightL: number;
-      weightR: number;
-      sizeUS: number;
-      sizeEU: number;
-    };
-    plReview: { youtube: string; instagram: string; tiktok: string };
-    enReview: { youtube: string; instagram: string; tiktok: string };
-  };
 };
 
 export type RunningShoe = {
@@ -55,6 +45,5 @@ export type RunningShoe = {
   categories?: string[];
   slug: string;
   image: string;
-  reviewed: "Yes" | "In progress" | "No";
   key: string;
 };

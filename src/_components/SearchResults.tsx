@@ -98,7 +98,7 @@ const SearchResults = ({ categories = [] }: SearchResultsProps) => {
 
         // Get paginated data
         const query = `*[${whereClause}]|order(lower(name) asc)[${start}...${end + 1}]{
-          _id, name, slug, purpose, category[]->, releaseInfo, specs, image, review
+          _id, name, slug, purpose, category[]->, releaseInfo, specs, image
         }`;
         const data = await client.fetch<SanityRunningShoe[]>(
           query,
@@ -184,7 +184,6 @@ const SearchResults = ({ categories = [] }: SearchResultsProps) => {
                   <th className="p-4 font-semibold text-gray-700">Price</th>
                   <th className="p-4 font-semibold text-gray-700">Weight</th>
                   <th className="p-4 font-semibold text-gray-700">Drop</th>
-                  <th className="p-4 font-semibold text-gray-700">Reviewed</th>
                 </tr>
               </thead>
               <tbody>
