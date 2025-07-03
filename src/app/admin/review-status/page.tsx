@@ -211,7 +211,7 @@ export default async function ReviewStatusPage() {
           Review Status Dashboard
         </h1>
         <p className="text-lg text-gray-600">
-          Overview of review completion and brand coverage for {currentYear}
+          Overview of review for {currentYear}
         </p>
       </header>
 
@@ -488,10 +488,6 @@ export default async function ReviewStatusPage() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {brands.map((brand) => {
-                  const coverage =
-                    brand.totalShoes > 0
-                      ? (brand.reviewedShoes / brand.totalShoes) * 100
-                      : 0;
                   return (
                     <tr key={brand._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
