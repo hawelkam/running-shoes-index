@@ -124,6 +124,12 @@ export default function ResponsiveHeader() {
               Reviews
             </Link>
             <Link
+              href="/stats"
+              className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
+            >
+              Statistics
+            </Link>
+            <Link
               href={`/shoes/released/${currentYear}/${currentMonth.toString().padStart(2, "0")}`}
               className="text-black hover:text-black hover:underline transition-colors px-3 py-2"
             >
@@ -296,6 +302,34 @@ export default function ResponsiveHeader() {
                 <div className="font-medium text-gray-800">2025 Reviews</div>
                 <div className="text-xs text-gray-600">
                   Recently reviewed shoes
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/stats"
+              className="flex items-center p-3 rounded-lg hover:bg-indigo-50 hover:text-indigo-600 transition-colors mb-2"
+              onClick={() => setMobileMenuVisible(false)}
+            >
+              <div className="bg-indigo-100 p-2 rounded-full mr-3">
+                <svg
+                  className="w-4 h-4 text-indigo-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div className="font-medium text-gray-800">Statistics</div>
+                <div className="text-xs text-gray-600">
+                  Data analysis & trends
                 </div>
               </div>
             </Link>
