@@ -107,6 +107,7 @@ export default function AdminClient({ user }: AdminClientProps) {
             <li>Flag inappropriate content</li>
             <li>Manage review categories and tags</li>
             <li>View review analytics and trends</li>
+            <li>Check review status and brand coverage</li>
           </ul>
           <Space style={{ marginTop: 16 }}>
             <Button type="primary" disabled>
@@ -115,6 +116,12 @@ export default function AdminClient({ user }: AdminClientProps) {
             <Button disabled>Pending Reviews</Button>
             <Button disabled>Flagged Content</Button>
             <Button disabled>Review Analytics</Button>
+            <Button 
+              type="default" 
+              onClick={() => window.open('/admin/review-status', '_blank')}
+            >
+              Review Status
+            </Button>
           </Space>
         </Card>
       ),
