@@ -67,6 +67,7 @@ export default function AdminClient({ user }: AdminClientProps) {
             <li>Manage shoe categories and brands</li>
             <li>Upload and manage shoe images</li>
             <li>Set shoe availability and pricing</li>
+            <li>View shoes with incomplete data</li>
           </ul>
           <Space style={{ marginTop: 16 }}>
             <Button type="primary" disabled>
@@ -75,6 +76,12 @@ export default function AdminClient({ user }: AdminClientProps) {
             <Button disabled>Add New Shoe</Button>
             <Button disabled>Import Shoe Data</Button>
             <Button disabled>Manage Categories</Button>
+            <Button 
+              type="default" 
+              onClick={() => window.open('/admin/incomplete-shoes', '_blank')}
+            >
+              View Incomplete Shoes
+            </Button>
           </Space>
         </Card>
       ),
