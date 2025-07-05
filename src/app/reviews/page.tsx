@@ -11,6 +11,7 @@ interface ReviewsPageProps {
   searchParams: Promise<{
     page?: string;
     search?: string;
+    status?: string;
   }>;
 }
 
@@ -23,7 +24,8 @@ interface ReviewWithShoe {
 
 async function getReviews(
   page: number = 1,
-  searchTerm?: string
+  searchTerm?: string,
+  status?: string
 ): Promise<{ reviews: ReviewWithShoe[]; total: number }> {
   const offset = (page - 1) * ITEMS_PER_PAGE;
 
@@ -32,8 +34,15 @@ async function getReviews(
     searchFilter = `&& shoe->name match "*${searchTerm}*"`;
   }
 
+  let statusFilter = "";
+  if (status === "in-progress") {
+    statusFilter = "&& !defined(reviewDate)";
+  } else if (status === "completed") {
+    statusFilter = "&& defined(reviewDate)";
+  }
+
   const query = `{
-    "reviews": *[_type == "runningShoeReview" ${searchFilter}]|order(reviewDate asc)[${offset}...${offset + ITEMS_PER_PAGE}]{
+    "reviews": *[_type == "runningShoeReview" ${searchFilter} ${statusFilter}]|order(reviewDate desc)[${offset}...${offset + ITEMS_PER_PAGE}]{
       _id,
       reviewDate,
       rating,
@@ -47,7 +56,7 @@ async function getReviews(
         releaseInfo
       }
     },
-    "total": count(*[_type == "runningShoeReview" ${searchFilter}])
+    "total": count(*[_type == "runningShoeReview" ${searchFilter} ${statusFilter}])
   }`;
 
   try {
@@ -70,8 +79,9 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
   const resolvedSearchParams = await searchParams;
   const currentPage = parseInt(resolvedSearchParams.page || "1", 10);
   const searchTerm = resolvedSearchParams.search;
+  const status = resolvedSearchParams.status;
 
-  const { reviews, total } = await getReviews(currentPage, searchTerm);
+  const { reviews, total } = await getReviews(currentPage, searchTerm, status);
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
   return (
@@ -104,6 +114,42 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
         </div>
       </header>
 
+      {/* Filter Buttons */}
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/reviews${searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""}`}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              !status
+                ? "bg-black text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            All Reviews
+          </Link>
+          <Link
+            href={`/reviews?status=completed${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""}`}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              status === "completed"
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            Completed Reviews
+          </Link>
+          <Link
+            href={`/reviews?status=in-progress${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""}`}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              status === "in-progress"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            Reviews in Progress
+          </Link>
+        </div>
+      </div>
+
       {/* Search */}
       <div className="mb-8">
         <form method="GET" className="flex gap-4">
@@ -114,6 +160,7 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
             defaultValue={searchTerm}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {status && <input type="hidden" name="status" value={status} />}
           <button
             type="submit"
             className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
@@ -126,7 +173,12 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
       {/* Results Count */}
       <div className="mb-6">
         <p className="text-gray-600">
-          Showing {reviews.length} of {total} reviews
+          Showing {reviews.length} of {total}
+          {status === "in-progress"
+            ? " reviews in progress"
+            : status === "completed"
+              ? " completed reviews"
+              : " reviews"}
           {searchTerm && (
             <>
               {" "}
@@ -160,9 +212,15 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
                   className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-2 right-2">
-                  <span className="bg-green-600 text-white px-2 py-1 rounded text-xs font-medium">
-                    Reviewed
-                  </span>
+                  {review.reviewDate ? (
+                    <span className="bg-green-600 text-white px-2 py-1 rounded text-xs font-medium">
+                      Reviewed
+                    </span>
+                  ) : (
+                    <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
+                      Under review
+                    </span>
+                  )}
                 </div>
                 {review.rating && (
                   <div className="absolute top-2 left-2">
@@ -189,9 +247,15 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
                   </div>
                 )}
 
-                <div className="text-xs text-gray-500 mb-3">
-                  Reviewed: {new Date(review.reviewDate).toLocaleDateString()}
-                </div>
+                {review.reviewDate ? (
+                  <div className="text-xs text-gray-500 mb-3">
+                    Reviewed: {new Date(review.reviewDate).toLocaleDateString()}
+                  </div>
+                ) : (
+                  <div className="text-xs text-gray-500 mb-3">
+                    Review ongoing
+                  </div>
+                )}
 
                 {review.shoe.categories &&
                   review.shoe.categories.length > 0 && (

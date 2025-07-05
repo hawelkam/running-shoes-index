@@ -22,7 +22,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, nextVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -378,6 +378,59 @@ const ShoePage = async (props: { params: Params }) => {
                   className="w-full md:w-64 h-auto rounded-lg mb-4 md:mb-0"
                 />
                 <CompareModal shoe={shoe} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Next Version Section */}
+      {shoe.nextVersion && (
+        <div className="mt-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            Next Version
+          </h2>
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+              <div>
+                <h3 className="text-xl font-semibold">
+                  <Link href={`/shoes/${shoe.nextVersion.slug.current}`}>
+                    {shoe.nextVersion?.name}
+                  </Link>
+                </h3>
+                <div className="mt-3 space-y-1">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <span className="w-32">US Release:</span>
+                    <span>
+                      {prepareReleaseDate(
+                        shoe.nextVersion.releaseInfo.us?.date
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <span className="w-32">EU Release:</span>
+                    <span>
+                      {prepareReleaseDate(
+                        shoe.nextVersion.releaseInfo.eu?.date
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <span className="w-32">PL Release:</span>
+                    <span>
+                      {prepareReleaseDate(
+                        shoe.nextVersion.releaseInfo.pl?.date
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 md:mt-0">
+                <Image
+                  src={shoe.nextVersion.image?.url || ""}
+                  alt={shoe.nextVersion.name}
+                  className="w-full md:w-64 h-auto rounded-lg mb-4 md:mb-0"
+                />
               </div>
             </div>
           </div>

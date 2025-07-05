@@ -76,9 +76,9 @@ export default function AdminClient({ user }: AdminClientProps) {
             <Button disabled>Add New Shoe</Button>
             <Button disabled>Import Shoe Data</Button>
             <Button disabled>Manage Categories</Button>
-            <Button 
-              type="default" 
-              onClick={() => window.open('/admin/incomplete-shoes', '_blank')}
+            <Button
+              type="default"
+              onClick={() => window.open("/admin/incomplete-shoes", "_blank")}
             >
               View Incomplete Shoes
             </Button>
@@ -116,9 +116,9 @@ export default function AdminClient({ user }: AdminClientProps) {
             <Button disabled>Pending Reviews</Button>
             <Button disabled>Flagged Content</Button>
             <Button disabled>Review Analytics</Button>
-            <Button 
-              type="default" 
-              onClick={() => window.open('/admin/review-status', '_blank')}
+            <Button
+              type="default"
+              onClick={() => window.open("/admin/review-status", "_blank")}
             >
               Review Status
             </Button>

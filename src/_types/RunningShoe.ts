@@ -27,6 +27,7 @@ export type SanityRunningShoe = SanityDocument & {
   notes: string;
   image: { url: string };
   previousVersion: SanityRunningShoe;
+  nextVersion: SanityRunningShoe;
 };
 
 export type RunningShoe = {
