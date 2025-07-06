@@ -1,19 +1,19 @@
 import { client } from "@/sanity/client";
 import { Suspense } from "react";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import Filters from "./_components/Filters";
-import ResultsCount from "./_components/ResultsCount";
-import ShoeTableElement from "./_components/ShoeTableElement";
-import ShoeTableCard from "./_components/ShoeTableCard";
-import GenericPagination from "@/_components/GenericPagination";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import Filters from "../../components/features/shoes/Filters";
+import ResultsCount from "../../components/features/shoes/ResultsCount";
+import ShoeTableElement from "../../components/features/shoes/ShoeTableElement";
+import ShoeTableCard from "../../components/features/shoes/ShoeTableCard";
+import GenericPagination from "@/components/common/GenericPagination";
 import Link from "next/link";
-import { getCategories } from "./_actions/getCategories";
+import { getCategories } from "../../actions/getCategories";
 import {
   FilterParams,
   buildFilterConditions,
   hasActiveFilters,
-} from "@/_utils/filterUtils";
-import { CACHE_OPTIONS } from "@/_utils/cache";
+} from "@/utils/filterUtils";
+import { CACHE_OPTIONS } from "@/utils/cache";
 
 interface ShoesPageProps {
   searchParams: Promise<{

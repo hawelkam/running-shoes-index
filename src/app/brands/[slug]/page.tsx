@@ -1,12 +1,12 @@
 import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
-import { SanityBrand } from "../page";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import ShoeTableElement from "@/app/shoes/_components/ShoeTableElement";
-import ShoeTableCard from "@/app/shoes/_components/ShoeTableCard";
-import GenericPagination from "@/_components/GenericPagination";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import ShoeTableElement from "@/components/features/shoes/ShoeTableElement";
+import ShoeTableCard from "@/components/features/shoes/ShoeTableCard";
+import GenericPagination from "@/components/common/GenericPagination";
 import Image from "next/image";
+import { SanityBrand } from "@/types/Brand";
 
 const ITEMS_PER_PAGE = 10;
 

@@ -4,9 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { SanityRunningShoeReview } from "@/_types/RunningShoeReview";
-import { preparePriceInUSD, prepareReleaseDate } from "@/_utils/helpers";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import { SanityRunningShoeReview } from "@/types/RunningShoeReview";
+import { preparePriceInUSD, prepareReleaseDate } from "@/utils/helpers";
 
 interface ReviewPageProps {
   params: Promise<{ slug: string }>;

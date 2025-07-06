@@ -1,6 +1,6 @@
 import { client } from "@/sanity/client";
 import Link from "next/link";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
+import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface ShoeStats {
   count: number;

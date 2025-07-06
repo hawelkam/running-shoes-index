@@ -2,11 +2,11 @@ import { client } from "@/sanity/client";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
+import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   getStravaUser,
   getUserFromDatabase,
-} from "@/_utils/auth/stravaAuthServer";
+} from "@/utils/auth/stravaAuthServer";
 
 interface IncompleteShoe extends SanityRunningShoe {
   missingFields: string[];

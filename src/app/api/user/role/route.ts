@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getStravaUser,
   getUserFromDatabase,
-} from "@/_utils/auth/stravaAuthServer";
-import { UserRepository } from "@/_utils/database";
+} from "@/utils/auth/stravaAuthServer";
+import { UserRepository } from "@/utils/database";
 
 export async function PATCH(request: NextRequest) {
   try {

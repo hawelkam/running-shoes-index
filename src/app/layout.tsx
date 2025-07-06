@@ -4,15 +4,15 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout } from "antd";
 import { Content, Footer } from "antd/es/layout/layout";
-import ResponsiveHeader from "@/_components/ResponsiveHeader";
+import ResponsiveHeader from "@/components/layout/ResponsiveHeader";
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
 });

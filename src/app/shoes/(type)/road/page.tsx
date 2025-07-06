@@ -1,23 +1,9 @@
 import ShoePurposePageLayout, {
   ShoePurposePageProps,
-} from "../../_components/ShoePurposePageLayout";
+} from "@/components/features/shoes/ShoePurposePageLayout";
+import { FilteredShoePageProps } from "@/types/FilteredShoePageProps";
 
-interface RoadShoesPageProps {
-  searchParams: Promise<{
-    page?: string;
-    category?: string;
-    priceMin?: string;
-    priceMax?: string;
-    weightMin?: string;
-    weightMax?: string;
-    dropMin?: string;
-    dropMax?: string;
-    reviewed?: string;
-    search?: string;
-  }>;
-}
-
-export default async function RoadShoesPage(props: RoadShoesPageProps) {
+export default async function RoadShoesPage(props: FilteredShoePageProps) {
   const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {

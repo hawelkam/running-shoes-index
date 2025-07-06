@@ -1,24 +1,10 @@
 import ShoePurposePageLayout, {
   ShoePurposePageProps,
-} from "../../_components/ShoePurposePageLayout";
-
-interface GymTreadmillShoesPageProps {
-  searchParams: Promise<{
-    page?: string;
-    category?: string;
-    priceMin?: string;
-    priceMax?: string;
-    weightMin?: string;
-    weightMax?: string;
-    dropMin?: string;
-    dropMax?: string;
-    reviewed?: string;
-    search?: string;
-  }>;
-}
+} from "@/components/features/shoes/ShoePurposePageLayout";
+import { FilteredShoePageProps } from "@/types/FilteredShoePageProps";
 
 export default async function GymTreadmillShoesPage(
-  props: GymTreadmillShoesPageProps
+  props: FilteredShoePageProps
 ) {
   const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,

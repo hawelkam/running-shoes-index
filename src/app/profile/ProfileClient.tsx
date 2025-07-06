@@ -7,7 +7,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { clearStravaAuth } from "@/_utils/auth/stravaAuth";
+import { clearStravaAuth } from "@/utils/auth/stravaAuth";
 import { useRouter } from "next/navigation";
 
 interface UserInfo {

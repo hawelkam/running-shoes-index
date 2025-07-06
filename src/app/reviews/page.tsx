@@ -2,8 +2,8 @@ import { client } from "@/sanity/client";
 import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import GenericPagination from "@/_components/GenericPagination";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import GenericPagination from "@/components/common/GenericPagination";
 
 const ITEMS_PER_PAGE = 12;
 

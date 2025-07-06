@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { UserRepository } from "@/_utils/database";
+import { UserRepository } from "@/utils/database";
 
 export async function GET(request: NextRequest) {
   try {

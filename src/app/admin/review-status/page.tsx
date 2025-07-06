@@ -1,12 +1,12 @@
 import {
   getStravaUser,
   getUserFromDatabase,
-} from "@/_utils/auth/stravaAuthServer";
+} from "@/utils/auth/stravaAuthServer";
 import { redirect } from "next/navigation";
 import { client } from "@/sanity/client";
-import { SanityRunningShoeReview } from "@/_types/RunningShoeReview";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { CACHE_OPTIONS } from "@/_utils/cache";
+import { SanityRunningShoeReview } from "@/types/RunningShoeReview";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import { CACHE_OPTIONS } from "@/utils/cache";
 import Link from "next/link";
 import Image from "next/image";
 

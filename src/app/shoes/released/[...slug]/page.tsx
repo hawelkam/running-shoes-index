@@ -1,16 +1,16 @@
 import { client } from "@/sanity/client";
 import { Suspense } from "react";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import ShoeTableElement from "../../_components/ShoeTableElement";
-import ShoeTableCard from "../../_components/ShoeTableCard";
-import GenericPagination from "@/_components/GenericPagination";
-import GenericFilters from "../../_components/GenericFilters";
-import ResultsCount from "../../_components/ResultsCount";
+import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   FilterParams,
   buildFilterConditions,
   hasActiveFilters,
-} from "@/_utils/filterUtils";
+} from "@/utils/filterUtils";
+import GenericFilters from "@/components/features/shoes/GenericFilters";
+import ResultsCount from "@/components/features/shoes/ResultsCount";
+import ShoeTableElement from "@/components/features/shoes/ShoeTableElement";
+import ShoeTableCard from "@/components/features/shoes/ShoeTableCard";
+import GenericPagination from "@/components/common/GenericPagination";
 
 const ITEMS_PER_PAGE = 10;
 
