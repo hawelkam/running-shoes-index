@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
 
       await UserRepository.upsertUser({
         username: username,
-        accesstoken: stravaToken.access_token,
+        accesstoken: stravaToken.refresh_token,
         role: "user",
       });
 
