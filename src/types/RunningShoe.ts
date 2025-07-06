@@ -12,16 +12,28 @@ export type SanityRunningShoe = SanityDocument & {
   purpose: string;
   releaseInfo: ReleaseInfo;
   stability: string;
-  categories?: string[];
+  categories?: string[] | undefined;
   wideAvailable: boolean;
   waterproofAvailable: boolean;
   specs: {
-    m?: { weight?: number; drop?: number; heelStack?: number };
-    w?: { weight?: number; drop?: number; heelStack?: number };
-    upper?: { name: string }[];
-    foam?: { name: string }[];
+    m?:
+      | {
+          weight?: number | undefined;
+          drop?: number | undefined;
+          heelStack?: number | undefined;
+        }
+      | undefined;
+    w?:
+      | {
+          weight?: number | undefined;
+          drop?: number | undefined;
+          heelStack?: number | undefined;
+        }
+      | undefined;
+    upper?: { name: string }[] | undefined;
+    foam?: { name: string }[] | undefined;
     plate: string;
-    outsole?: { name: string }[];
+    outsole?: { name: string }[] | undefined;
   };
   slug: { current: string };
   notes: string;
@@ -34,16 +46,16 @@ export type RunningShoe = {
   name: string;
   purpose: string;
   releaseDate: {
-    pl?: Date;
-    eu?: Date;
-    us?: Date;
+    pl?: Date | undefined;
+    eu?: Date | undefined;
+    us?: Date | undefined;
   };
   price: {
-    pl?: number;
-    eu?: number;
-    us?: number;
+    pl?: number | undefined;
+    eu?: number | undefined;
+    us?: number | undefined;
   };
-  categories?: string[];
+  categories?: string[] | undefined;
   slug: string;
   image: string;
   key: string;

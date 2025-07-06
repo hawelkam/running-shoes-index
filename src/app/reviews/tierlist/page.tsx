@@ -48,8 +48,9 @@ async function getReviewsByTier(): Promise<TierListData> {
     };
 
     reviews.forEach((review) => {
-      if (review.rating && tierList[review.rating.toUpperCase()]) {
-        tierList[review.rating.toUpperCase()].push(review);
+      const tierKey = review.rating?.toUpperCase();
+      if (tierKey && Array.isArray(tierList[tierKey])) {
+        tierList[tierKey].push(review);
       }
     });
 

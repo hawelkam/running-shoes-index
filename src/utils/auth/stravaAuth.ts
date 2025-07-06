@@ -29,6 +29,9 @@ export function getStravaUserInfo(): StravaUserInfo | null {
     }
 
     const userValue = userCookie.split("=")[1];
+    if (!userValue) {
+      return null;
+    }
     const decoded = decodeURIComponent(userValue);
 
     return JSON.parse(decoded) as StravaUserInfo;

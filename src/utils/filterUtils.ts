@@ -1,13 +1,13 @@
 export interface FilterParams {
-  category?: string;
-  priceMin?: string;
-  priceMax?: string;
-  weightMin?: string;
-  weightMax?: string;
-  dropMin?: string;
-  dropMax?: string;
-  reviewed?: string;
-  search?: string;
+  category?: string | undefined;
+  priceMin?: string | undefined;
+  priceMax?: string | undefined;
+  weightMin?: string | undefined;
+  weightMax?: string | undefined;
+  dropMin?: string | undefined;
+  dropMax?: string | undefined;
+  reviewed?: string | undefined;
+  search?: string | undefined;
 }
 
 export function buildFilterConditions(

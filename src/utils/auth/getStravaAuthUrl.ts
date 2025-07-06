@@ -4,8 +4,8 @@ export const getStravaAuthUrl = () => {
     return "#"; // Return a placeholder during SSR/build
   }
 
-  const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID;
-  const redirectUri = process.env.NEXT_PUBLIC_STRAVA_REDIRECT_URI;
+  const clientId = process.env["NEXT_PUBLIC_STRAVA_CLIENT_ID"];
+  const redirectUri = process.env["NEXT_PUBLIC_STRAVA_REDIRECT_URI"];
 
   if (!clientId || !redirectUri) {
     console.warn(

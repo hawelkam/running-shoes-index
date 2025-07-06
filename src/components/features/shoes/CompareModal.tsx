@@ -152,17 +152,6 @@ const CompareModal = ({ shoe }: ModalProps) => {
                   </div>
                 </div>
               </div>
-
-              <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Key Improvements</h4>
-                <ul className="list-disc pl-5 space-y-1 text-sm">
-                  {shoe.improvements?.map(
-                    (improvement: string, idx: number) => (
-                      <li key={idx}>{improvement}</li>
-                    )
-                  )}
-                </ul>
-              </div>
             </div>
           </div>
         </div>

@@ -33,8 +33,8 @@ export async function GET(request: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        client_id: process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID,
-        client_secret: process.env.STRAVA_CLIENT_SECRET,
+        client_id: process.env["NEXT_PUBLIC_STRAVA_CLIENT_ID"],
+        client_secret: process.env["STRAVA_CLIENT_SECRET"],
         code: code,
         grant_type: "authorization_code",
       }),
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Create a JWT token for our application
-    const jwtSecret = process.env.JWT_SECRET || "your-jwt-secret-key";
+    const jwtSecret = process.env["JWT_SECRET"] || "your-jwt-secret-key";
     const appToken = jwt.sign(
       {
         id: stravaToken.athlete.id,
