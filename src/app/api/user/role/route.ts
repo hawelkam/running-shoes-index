@@ -15,7 +15,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Get user from database
-    const dbUser = await getUserFromDatabase(stravaUser.stravaAccessToken);
+    const dbUser = await getUserFromDatabase(stravaUser.stravaRefreshToken);
 
     if (!dbUser) {
       return NextResponse.json(

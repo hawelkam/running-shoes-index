@@ -123,7 +123,7 @@ export default async function IncompleteShoesPage() {
   }
 
   // Get user from database to check role
-  const dbUser = await getUserFromDatabase(stravaUser.stravaAccessToken);
+  const dbUser = await getUserFromDatabase(stravaUser.stravaRefreshToken);
 
   if (!dbUser || dbUser.role !== "admin") {
     redirect("/");

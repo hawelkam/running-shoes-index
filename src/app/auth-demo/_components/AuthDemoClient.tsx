@@ -50,7 +50,7 @@ export default function AuthDemoClient({
   };
 
   const refreshDbUser = async () => {
-    if (!user?.stravaAccessToken) {
+    if (!user?.stravaRefreshToken) {
       setMessage("❌ No access token available");
       return;
     }
@@ -77,7 +77,7 @@ export default function AuthDemoClient({
   };
 
   const promoteToAdmin = async () => {
-    if (!user?.stravaAccessToken) {
+    if (!user?.stravaRefreshToken) {
       setMessage("❌ No access token available");
       return;
     }
@@ -132,7 +132,7 @@ export default function AuthDemoClient({
             </p>
             <p>
               <strong>Access Token:</strong>{" "}
-              {user.stravaAccessToken ? "✓ Present" : "✗ Missing"}
+              {user.stravaRefreshToken ? "✓ Present" : "✗ Missing"}
             </p>
             <p>
               <strong>Token Expires:</strong>{" "}
@@ -181,7 +181,7 @@ export default function AuthDemoClient({
         <div className="mt-4">
           <button
             onClick={refreshDbUser}
-            disabled={loading || !user?.stravaAccessToken}
+            disabled={loading || !user?.stravaRefreshToken}
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? "Loading..." : "Refresh Database User"}

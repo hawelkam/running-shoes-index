@@ -9,9 +9,9 @@ export default async function AuthDemo() {
   let dbUser = null;
 
   // Try to get user from database if authenticated
-  if (user?.stravaAccessToken) {
+  if (user?.stravaRefreshToken) {
     try {
-      dbUser = await getUserFromDatabase(user.stravaAccessToken);
+      dbUser = await getUserFromDatabase(user.stravaRefreshToken);
     } catch (error) {
       console.error("Error fetching user from database:", error);
     }
