@@ -42,10 +42,10 @@ export async function getStravaUser(): Promise<StravaUser | null> {
  * Get user from database by access token
  */
 export async function getUserFromDatabase(
-  accessToken: string
+  refreshToken: string
 ): Promise<User | null> {
   try {
-    return await UserRepository.getUserByAccessToken(accessToken);
+    return await UserRepository.getUserByAccessToken(refreshToken);
   } catch (error) {
     console.error("Error getting user from database:", error);
     return null;

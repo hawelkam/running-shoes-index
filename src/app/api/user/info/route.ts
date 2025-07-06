@@ -14,7 +14,7 @@ export async function GET() {
     }
 
     // Get the user from database using their access token
-    const dbUser = await getUserFromDatabase(stravaUser.stravaAccessToken);
+    const dbUser = await getUserFromDatabase(stravaUser.stravaRefreshToken);
 
     if (!dbUser) {
       return NextResponse.json(
