@@ -64,7 +64,8 @@ async function getIncompleteShoesData(): Promise<IncompleteShoe[]> {
           missingFields.push("Men's Specifications");
         } else {
           if (!menSpecs.weight) missingFields.push("Men's Weight");
-          if (!menSpecs.drop) missingFields.push("Men's Drop");
+          if (!menSpecs.drop && menSpecs.drop !== 0)
+            missingFields.push("Men's Drop");
           if (!menSpecs.heelStack) missingFields.push("Men's Heel Stack");
         }
 
@@ -77,7 +78,8 @@ async function getIncompleteShoesData(): Promise<IncompleteShoe[]> {
           missingFields.push("Women's Specifications");
         } else {
           if (!womenSpecs.weight) missingFields.push("Women's Weight");
-          if (!womenSpecs.drop) missingFields.push("Women's Drop");
+          if (!womenSpecs.drop && womenSpecs.drop !== 0)
+            missingFields.push("Women's Drop");
           if (!womenSpecs.heelStack) missingFields.push("Women's Heel Stack");
         }
 

@@ -9,6 +9,16 @@ interface ReviewWithShoe {
   _id: string;
   reviewDate: string;
   shoe: SanityRunningShoe;
+  plReview?: {
+    youtube?: string;
+    instagram?: string;
+    tiktok?: string;
+  };
+  enReview?: {
+    youtube?: string;
+    instagram?: string;
+    tiktok?: string;
+  };
 }
 
 async function getData() {
@@ -23,9 +33,22 @@ async function getData() {
 }
 
 async function getLatestReviews() {
-  const query = `*[_type == "runningShoeReview"]|order(reviewDate asc)[0...3]{
+  const query = `*[
+    _type == "runningShoeReview" &&
+    defined(reviewDate) &&
+    (
+      defined(plReview.youtube) ||
+      defined(plReview.instagram) ||
+      defined(plReview.tiktok) ||
+      defined(enReview.youtube) ||
+      defined(enReview.instagram) ||
+      defined(enReview.tiktok)
+    )
+  ]|order(reviewDate desc)[0...3]{
     _id,
     reviewDate,
+    plReview,
+    enReview,
     shoe->{
       _id,
       name,
@@ -172,7 +195,7 @@ export default async function IndexPage() {
       <LatestReleases shoes={shoes} />
 
       {/* Latest Reviews Section */}
-      <LatestReviews reviews={reviews} />
+      <LatestReviews reviews={reviews.reverse()} />
 
       {/* Shop by Type Section */}
       <section className="mb-12">

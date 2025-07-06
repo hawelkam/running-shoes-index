@@ -77,13 +77,18 @@ export default function ResponsiveHeader() {
 
   const userMenuItems = [
     {
-      key: "profile",
+      key: "user-info",
       icon: <UserOutlined />,
       label: `${stravaUser?.firstName} ${stravaUser?.lastName}`,
       disabled: true,
     },
     {
       type: "divider" as const,
+    },
+    {
+      key: "profile",
+      icon: <UserOutlined />,
+      label: <Link href="/profile">My Profile</Link>,
     },
     {
       key: "logout",
@@ -166,8 +171,11 @@ export default function ResponsiveHeader() {
                   type="text"
                   className="flex items-center space-x-2 text-white hover:bg-gray-800"
                 >
-                  <Avatar size="small" icon={<UserOutlined />} />
-                  <span>{stravaUser.firstName}</span>
+                  <Avatar
+                    size="large"
+                    src={stravaUser.profilePicture}
+                    icon={<UserOutlined />}
+                  />
                 </Button>
               </Dropdown>
             )}
@@ -197,7 +205,11 @@ export default function ResponsiveHeader() {
                 size="small"
                 className="text-white hover:bg-gray-800"
               >
-                <Avatar size="small" icon={<UserOutlined />} />
+                <Avatar
+                  size="small"
+                  src={stravaUser.profilePicture}
+                  icon={<UserOutlined />}
+                />
               </Button>
             </Dropdown>
           )}
@@ -417,7 +429,11 @@ export default function ResponsiveHeader() {
             ) : (
               <div className="space-y-2">
                 <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                  <Avatar icon={<UserOutlined />} className="mr-3" />
+                  <Avatar
+                    src={stravaUser.profilePicture}
+                    icon={<UserOutlined />}
+                    className="mr-3"
+                  />
                   <div>
                     <div className="font-medium">
                       {stravaUser.firstName} {stravaUser.lastName}
