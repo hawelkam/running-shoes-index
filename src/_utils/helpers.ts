@@ -20,10 +20,18 @@ export function prepareReleaseDate(releaseDate: string | undefined): string {
   if (!releaseDate) {
     return "-";
   }
-  return Intl.DateTimeFormat("en-GB", {
-    month: "short",
-    year: "numeric",
-  }).format(new Date(releaseDate));
+  try {
+    const date = new Date(releaseDate);
+    if (isNaN(date.getTime())) {
+      return "-";
+    }
+    return Intl.DateTimeFormat("en-GB", {
+      month: "short",
+      year: "numeric",
+    }).format(date);
+  } catch {
+    return "-";
+  }
 }
 
 export function preparePriceInPLN(releaseInfo: ReleaseInfo): string {
