@@ -1,0 +1,8 @@
+.next
+node_modules
+.env*
+public
+*.md
+dist
+coverage
+.nyc_output
