@@ -1,14 +1,15 @@
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+
 import {
   getStravaUser,
   getUserFromDatabase,
-} from "@/_utils/auth/stravaAuthServer";
-import { redirect } from "next/navigation";
+} from "@/utils/auth/stravaAuthServer";
 import { client } from "@/sanity/client";
-import { SanityRunningShoeReview } from "@/_types/RunningShoeReview";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { CACHE_OPTIONS } from "@/_utils/cache";
-import Link from "next/link";
-import Image from "next/image";
+import { SanityRunningShoeReview } from "@/types/RunningShoeReview";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import { CACHE_OPTIONS } from "@/utils/cache";
 
 type ReviewWithShoe = SanityRunningShoeReview & {
   shoe: SanityRunningShoe;
@@ -434,7 +435,7 @@ export default async function ReviewStatusPage() {
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
                     <Image
-                      src={brand.image?.url || "/placeholder-brand.jpg"}
+                      src={brand.image?.url ?? "/placeholder-brand.jpg"}
                       alt={brand.name}
                       width={60}
                       height={60}
@@ -494,7 +495,7 @@ export default async function ReviewStatusPage() {
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
                             <Image
-                              src={brand.image?.url || "/placeholder-brand.jpg"}
+                              src={brand.image?.url ?? "/placeholder-brand.jpg"}
                               alt={brand.name}
                               width={40}
                               height={40}

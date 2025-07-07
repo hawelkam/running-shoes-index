@@ -1,6 +1,7 @@
-import SearchResults from "@/_components/SearchResults";
-import { getCategories } from "../_actions/getCategories";
 import React, { Suspense } from "react";
+
+import { getCategories } from "@/actions/getCategories";
+import SearchResults from "@/components/layout/SearchResults";
 
 interface SearchPageProps {
   searchParams: Promise<{

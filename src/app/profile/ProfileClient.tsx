@@ -7,8 +7,9 @@ import {
   SettingOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { clearStravaAuth } from "@/_utils/auth/stravaAuth";
 import { useRouter } from "next/navigation";
+
+import { clearStravaAuth } from "@/utils/auth/stravaAuth";
 
 interface UserInfo {
   id: number;
@@ -45,7 +46,7 @@ const ProfileClient: React.FC = () => {
           throw new Error("Failed to fetch user info");
         }
 
-        const data = await response.json();
+        const data = (await response.json()) as { user: UserInfo };
         setUserInfo(data.user);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -54,7 +55,7 @@ const ProfileClient: React.FC = () => {
       }
     };
 
-    fetchUserInfo();
+    void fetchUserInfo();
   }, [router]);
 
   const handleLogout = async () => {
@@ -154,7 +155,9 @@ const ProfileClient: React.FC = () => {
               type="primary"
               danger
               icon={<LogoutOutlined />}
-              onClick={handleLogout}
+              onClick={() => {
+                void handleLogout();
+              }}
               block
             >
               Sign Out

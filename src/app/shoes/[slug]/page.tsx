@@ -1,9 +1,9 @@
-import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React from "react";
-import CompareModal from "../_components/CompareModal";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
 import { Image } from "antd";
+import Link from "next/link";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   isCurrentYearRelease,
   prepareHeightInMM,
@@ -13,9 +13,10 @@ import {
   preparePurposeSlug,
   prepareReleaseDate,
   prepareWeight,
-} from "@/_utils/helpers";
-import Link from "next/link";
-import { SanityRunningShoeReview } from "@/_types/RunningShoeReview";
+} from "@/utils/helpers";
+import { client } from "@/sanity/client";
+import { SanityRunningShoeReview } from "@/types/RunningShoeReview";
+import CompareModal from "@/components/features/shoes/CompareModal";
 
 type Params = Promise<{ slug: string }>;
 

@@ -1,9 +1,10 @@
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import { client } from "@/sanity/client";
 import Link from "next/link";
-import LatestReleases from "./_components/LatestReleases";
-import LatestReviews from "./_components/LatestReviews";
-import QuickNavigationLink from "@/_components/QuickNavigationLink";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import { client } from "@/sanity/client";
+import QuickNavigationLink from "@/components/common/QuickNavigationLink";
+import LatestReleases from "@/components/layout/LatestReleases";
+import LatestReviews from "@/components/layout/LatestReviews";
 
 interface ReviewWithShoe {
   _id: string;

@@ -3,10 +3,10 @@
 
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
 // Mock next/navigation
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),
@@ -16,65 +16,67 @@ jest.mock('next/navigation', () => ({
     prefetch: jest.fn(),
   }),
   useSearchParams: () => new URLSearchParams(),
-  usePathname: () => '/',
-}))
+  usePathname: () => "/",
+}));
 
 // Mock next/image
-jest.mock('next/image', () => ({
+jest.mock("next/image", () => ({
   __esModule: true,
   default: (props) => {
     // eslint-disable-next-line jsx-a11y/alt-text
-    return <img {...props} />
+    return <img {...props} />;
   },
-}))
+}));
 
 // Mock Sanity client
-jest.mock('@/sanity/client', () => ({
+jest.mock("@/sanity/client", () => ({
   client: {
     fetch: jest.fn(),
   },
-}))
+}));
 
 // Mock Ant Design components that might cause issues in tests
-jest.mock('antd', () => ({
-  ...jest.requireActual('antd'),
+jest.mock("antd", () => ({
+  ...jest.requireActual("antd"),
   ConfigProvider: ({ children }) => children,
-}))
+}));
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store = {}
+  let store = {};
   return {
     getItem: jest.fn((key) => store[key] || null),
     setItem: jest.fn((key, value) => {
-      store[key] = value.toString()
+      store[key] = value.toString();
     }),
     removeItem: jest.fn((key) => {
-      delete store[key]
+      delete store[key];
     }),
     clear: jest.fn(() => {
-      store = {}
+      store = {};
     }),
-  }
-})()
+  };
+})();
 
-Object.defineProperty(window, 'localStorage', {
+Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
-})
+});
 
 // Set up globals for testing
-global.matchMedia = global.matchMedia || function (query) {
-  return {
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  }
-}
+global.matchMedia =
+  global.matchMedia ||
+  function (query) {
+    return {
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(), // deprecated
+      removeListener: jest.fn(), // deprecated
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    };
+  };
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -82,7 +84,7 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -90,4 +92,4 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};

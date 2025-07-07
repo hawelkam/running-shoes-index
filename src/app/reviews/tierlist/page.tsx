@@ -1,7 +1,8 @@
-import { client } from "@/sanity/client";
 import Link from "next/link";
 import Image from "next/image";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
+
+import { client } from "@/sanity/client";
+import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface ReviewWithShoe {
   _id: string;
@@ -48,8 +49,9 @@ async function getReviewsByTier(): Promise<TierListData> {
     };
 
     reviews.forEach((review) => {
-      if (review.rating && tierList[review.rating.toUpperCase()]) {
-        tierList[review.rating.toUpperCase()].push(review);
+      const tierKey = review.rating?.toUpperCase();
+      if (tierKey && Array.isArray(tierList[tierKey])) {
+        tierList[tierKey].push(review);
       }
     });
 
@@ -155,7 +157,7 @@ export default async function TierListPage() {
       <div className="space-y-8">
         {tiers.map((tier) => {
           const tierInfo = getTierInfo(tier);
-          const reviews = tierList[tier] || [];
+          const reviews = tierList[tier] ?? [];
 
           return (
             <div

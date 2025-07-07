@@ -1,19 +1,21 @@
-import { client } from "@/sanity/client";
 import { Suspense } from "react";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import Filters from "./_components/Filters";
-import ResultsCount from "./_components/ResultsCount";
-import ShoeTableElement from "./_components/ShoeTableElement";
-import ShoeTableCard from "./_components/ShoeTableCard";
-import GenericPagination from "@/_components/GenericPagination";
 import Link from "next/link";
-import { getCategories } from "./_actions/getCategories";
+
+import { client } from "@/sanity/client";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import GenericPagination from "@/components/common/GenericPagination";
 import {
   FilterParams,
   buildFilterConditions,
   hasActiveFilters,
-} from "@/_utils/filterUtils";
-import { CACHE_OPTIONS } from "@/_utils/cache";
+} from "@/utils/filterUtils";
+import { CACHE_OPTIONS } from "@/utils/cache";
+
+import Filters from "../../components/features/shoes/Filters";
+import ResultsCount from "../../components/features/shoes/ResultsCount";
+import ShoeTableElement from "../../components/features/shoes/ShoeTableElement";
+import ShoeTableCard from "../../components/features/shoes/ShoeTableCard";
+import { getCategories } from "../../actions/getCategories";
 
 interface ShoesPageProps {
   searchParams: Promise<{
@@ -67,7 +69,7 @@ async function getData(page: number = 1, filters: FilterParams = {}) {
 
 export default async function Shoes(props: ShoesPageProps) {
   const searchParams = await props.searchParams;
-  const currentPage = parseInt(searchParams.page || "1", 10);
+  const currentPage = parseInt(searchParams.page ?? "1", 10);
 
   const filters: FilterParams = {
     category: searchParams.category,

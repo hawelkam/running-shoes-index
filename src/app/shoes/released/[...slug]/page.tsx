@@ -1,16 +1,17 @@
-import { client } from "@/sanity/client";
 import { Suspense } from "react";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
-import ShoeTableElement from "../../_components/ShoeTableElement";
-import ShoeTableCard from "../../_components/ShoeTableCard";
-import GenericPagination from "@/_components/GenericPagination";
-import GenericFilters from "../../_components/GenericFilters";
-import ResultsCount from "../../_components/ResultsCount";
+
+import { client } from "@/sanity/client";
+import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   FilterParams,
   buildFilterConditions,
   hasActiveFilters,
-} from "@/_utils/filterUtils";
+} from "@/utils/filterUtils";
+import GenericFilters from "@/components/features/shoes/GenericFilters";
+import ResultsCount from "@/components/features/shoes/ResultsCount";
+import ShoeTableElement from "@/components/features/shoes/ShoeTableElement";
+import ShoeTableCard from "@/components/features/shoes/ShoeTableCard";
+import GenericPagination from "@/components/common/GenericPagination";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -43,9 +44,9 @@ async function getShoes(
     const baseDateConditions = [
       '_type == "runningShoe"',
       "defined(slug.current)",
-      `((releaseInfo.pl.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] || "12"}-32") ||
-         (releaseInfo.eu.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] || "12"}-32") ||
-         (releaseInfo.us.date > "${slug[0]}-${slug[1] || "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] || "12"}-32"))`,
+      `((releaseInfo.pl.date > "${slug[0]}-${slug[1] ?? "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] ?? "12"}-32") ||
+         (releaseInfo.eu.date > "${slug[0]}-${slug[1] ?? "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] ?? "12"}-32") ||
+         (releaseInfo.us.date > "${slug[0]}-${slug[1] ?? "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] ?? "12"}-32"))`,
     ];
 
     // Build filter conditions
@@ -81,7 +82,7 @@ const ReleasesOfDate = async (props: ReleasedPageProps) => {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const slug = params.slug;
-  const currentPage = parseInt(searchParams.page || "1", 10);
+  const currentPage = parseInt(searchParams.page ?? "1", 10);
 
   const filters: FilterParams = {
     category: searchParams.category,
@@ -174,7 +175,7 @@ const ReleasesOfDate = async (props: ReleasedPageProps) => {
   );
 };
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   try {
     return [["2024"], ["2025"]].map((year) => ({ slug: year }));
   } catch (error) {

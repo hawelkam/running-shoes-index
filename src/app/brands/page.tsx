@@ -1,8 +1,7 @@
-import { type SanityDocument } from "next-sanity";
-
 import { client } from "@/sanity/client";
-import BrandsWithSearch from "./_components/BrandsWithSearch";
-import GenericPagination from "@/_components/GenericPagination";
+import GenericPagination from "@/components/common/GenericPagination";
+import BrandsWithSearch from "@/components/features/brands/BrandsWithSearch";
+import { SanityBrand } from "@/types/Brand";
 
 interface BrandsPageProps {
   searchParams: Promise<{
@@ -13,19 +12,6 @@ interface BrandsPageProps {
 const ITEMS_PER_PAGE = 12;
 
 const options = { next: { revalidate: 30 } };
-
-export type SanityBrand = SanityDocument & {
-  name: string;
-  slug: { current: string };
-  image: { url: string };
-  country: string;
-  usWebsite: string;
-  euWebsite: string;
-  plWebsite: string;
-  usMediaContact: string;
-  euMediaContact: string;
-  plMediaContact: string;
-};
 
 async function getData(page: number = 1) {
   const start = (page - 1) * ITEMS_PER_PAGE;
@@ -48,7 +34,7 @@ async function getData(page: number = 1) {
 
 export default async function BrandsPage({ searchParams }: BrandsPageProps) {
   const resolvedSearchParams = await searchParams;
-  const currentPage = parseInt(resolvedSearchParams.page || "1", 10);
+  const currentPage = parseInt(resolvedSearchParams.page ?? "1", 10);
   const { brands, totalCount, totalPages } = await getData(currentPage);
 
   return (

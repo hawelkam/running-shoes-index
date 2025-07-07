@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
 
     try {
       // Verify the JWT token
-      const jwtSecret = process.env.JWT_SECRET || "your-jwt-secret-key";
+      const jwtSecret = process.env["JWT_SECRET"] || "your-jwt-secret-key";
       jwt.verify(authToken, jwtSecret);
       // Token is valid, continue
     } catch {

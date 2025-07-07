@@ -1,6 +1,7 @@
 import { Suspense } from "react";
-import ProfileClient from "./ProfileClient";
 import { Spin } from "antd";
+
+import ProfileClient from "./ProfileClient";
 
 export default function ProfilePage() {
   return (

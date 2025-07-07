@@ -1,9 +1,10 @@
-import { client } from "@/sanity/client";
 import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import GenericPagination from "@/_components/GenericPagination";
-import { SanityRunningShoe } from "@/_types/RunningShoe";
+
+import { client } from "@/sanity/client";
+import { SanityRunningShoe } from "@/types/RunningShoe";
+import GenericPagination from "@/components/common/GenericPagination";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -77,7 +78,7 @@ async function getReviews(
 
 export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
   const resolvedSearchParams = await searchParams;
-  const currentPage = parseInt(resolvedSearchParams.page || "1", 10);
+  const currentPage = parseInt(resolvedSearchParams.page ?? "1", 10);
   const searchTerm = resolvedSearchParams.search;
   const status = resolvedSearchParams.status;
 
