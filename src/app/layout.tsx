@@ -6,6 +6,7 @@ import { Layout } from "antd";
 import { Content, Footer } from "antd/es/layout/layout";
 
 import ResponsiveHeader from "@/components/layout/ResponsiveHeader";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -46,22 +47,31 @@ export default function RootLayout({
                   minHeight: 280,
                 }}
               >
-                {children}
+                <ErrorBoundary>{children}</ErrorBoundary>
               </div>
             </Content>
 
             <Footer className="flex justify-between items-center border-t border-gray-300 px-6 py-8 text-sm">
               <div className="font-extrabold text-lg">SL_</div>
               <div className="space-x-6">
-                <a href="#" className="hover:underline">
+                <button
+                  type="button"
+                  className="hover:underline cursor-pointer border-none bg-transparent text-sm"
+                >
                   Instagram
-                </a>
-                <a href="#" className="hover:underline">
+                </button>
+                <button
+                  type="button"
+                  className="hover:underline cursor-pointer border-none bg-transparent text-sm"
+                >
                   Kontakt
-                </a>
-                <a href="#" className="hover:underline">
+                </button>
+                <button
+                  type="button"
+                  className="hover:underline cursor-pointer border-none bg-transparent text-sm"
+                >
                   Regulamin
-                </a>
+                </button>
               </div>
             </Footer>
           </Layout>
