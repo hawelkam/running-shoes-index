@@ -1,8 +1,9 @@
 import React from "react";
 import { Image } from "antd";
+import Link from "next/link";
+
 import { SanityRunningShoe } from "@/types/RunningShoe";
 import { prepareWeightInGrams, prepareWeightInOunces } from "@/utils/helpers";
-import Link from "next/link";
 
 interface ShoeTableElementProps {
   shoe: SanityRunningShoe;

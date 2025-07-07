@@ -34,7 +34,7 @@ async function getData(page: number = 1) {
 
 export default async function BrandsPage({ searchParams }: BrandsPageProps) {
   const resolvedSearchParams = await searchParams;
-  const currentPage = parseInt(resolvedSearchParams.page || "1", 10);
+  const currentPage = parseInt(resolvedSearchParams.page ?? "1", 10);
   const { brands, totalCount, totalPages } = await getData(currentPage);
 
   return (

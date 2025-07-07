@@ -3,7 +3,7 @@ import ShoePurposePageLayout, {
 } from "@/components/features/shoes/ShoePurposePageLayout";
 import { FilteredShoePageProps } from "@/types/FilteredShoePageProps";
 
-export default async function TrailShoesPage(props: FilteredShoePageProps) {
+export default function TrailShoesPage(props: FilteredShoePageProps) {
   const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {

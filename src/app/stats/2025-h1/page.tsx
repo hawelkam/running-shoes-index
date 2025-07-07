@@ -1,5 +1,6 @@
-import { client } from "@/sanity/client";
 import Link from "next/link";
+
+import { client } from "@/sanity/client";
 import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface ShoeStats {
@@ -162,7 +163,7 @@ function formatCurrency(amount: number, currency: string): string {
 
   return new Intl.NumberFormat("pl-PL", {
     style: "currency",
-    currency: currency,
+    currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(amount);

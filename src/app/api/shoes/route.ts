@@ -1,6 +1,7 @@
+import { NextResponse } from "next/server";
+
 import { client } from "@/sanity/client";
 import { SanityRunningShoe } from "@/types/RunningShoe";
-import { NextResponse } from "next/server";
 
 export async function GET() {
   try {

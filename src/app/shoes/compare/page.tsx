@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+
 import ShoeCompareClient from "../../../components/features/shoes/ShoeCompareClient";
 
 export default function CompareShoesPage() {

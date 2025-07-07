@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+
 import { UserRepository } from "@/utils/database";
+import { StravaToken } from "@/types/api";
 
 export async function GET(request: NextRequest) {
   try {
@@ -35,7 +37,7 @@ export async function GET(request: NextRequest) {
       body: JSON.stringify({
         client_id: process.env["NEXT_PUBLIC_STRAVA_CLIENT_ID"],
         client_secret: process.env["STRAVA_CLIENT_SECRET"],
-        code: code,
+        code,
         grant_type: "authorization_code",
       }),
     });
@@ -47,7 +49,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const stravaToken = await tokenResponse.json();
+    const stravaToken = (await tokenResponse.json()) as StravaToken;
 
     if (!stravaToken?.athlete?.id) {
       console.error("Invalid token response from Strava");
@@ -70,7 +72,7 @@ export async function GET(request: NextRequest) {
         );
 
       await UserRepository.upsertUser({
-        username: username,
+        username,
         accesstoken: stravaToken.refresh_token,
         role: "user",
       });
@@ -82,7 +84,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Create a JWT token for our application
-    const jwtSecret = process.env["JWT_SECRET"] || "your-jwt-secret-key";
+    const jwtSecret = process.env["JWT_SECRET"] ?? "your-jwt-secret-key";
     const appToken = jwt.sign(
       {
         id: stravaToken.athlete.id,

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card } from "antd";
 import { useState } from "react";
+
 import { SanityBrand } from "@/types/Brand";
 
 interface IProps {

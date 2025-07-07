@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+
 import { Category } from "../../../actions/getCategories";
 
 interface FilterState {
@@ -39,15 +40,15 @@ const Filters = ({ categories = [] }: FiltersProps) => {
   // Initialize filters from URL parameters
   useEffect(() => {
     setFilters({
-      category: searchParams.get("category") || "",
-      priceMin: searchParams.get("priceMin") || "",
-      priceMax: searchParams.get("priceMax") || "",
-      weightMin: searchParams.get("weightMin") || "",
-      weightMax: searchParams.get("weightMax") || "",
-      dropMin: searchParams.get("dropMin") || "",
-      dropMax: searchParams.get("dropMax") || "",
-      reviewed: searchParams.get("reviewed") || "",
-      search: searchParams.get("search") || "",
+      category: searchParams.get("category") ?? "",
+      priceMin: searchParams.get("priceMin") ?? "",
+      priceMax: searchParams.get("priceMax") ?? "",
+      weightMin: searchParams.get("weightMin") ?? "",
+      weightMax: searchParams.get("weightMax") ?? "",
+      dropMin: searchParams.get("dropMin") ?? "",
+      dropMax: searchParams.get("dropMax") ?? "",
+      reviewed: searchParams.get("reviewed") ?? "",
+      search: searchParams.get("search") ?? "",
     });
   }, [searchParams]);
 
@@ -56,8 +57,10 @@ const Filters = ({ categories = [] }: FiltersProps) => {
 
     // Add non-empty filter values to URL
     Object.entries(newFilters).forEach(([key, value]) => {
-      if (value && value.trim() !== "") {
+      if (typeof value === "string" && value.trim() !== "") {
         params.set(key, value);
+      } else {
+        params.delete(key);
       }
     });
 

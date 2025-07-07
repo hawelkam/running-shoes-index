@@ -17,15 +17,15 @@ import { UserRepository } from "@/utils/database";
 
 describe("Database Utils", () => {
   it("should have UserRepository methods", () => {
-    expect(UserRepository.getUserByUsername).toBeDefined();
-    expect(UserRepository.getUserByAccessToken).toBeDefined();
-    expect(UserRepository.upsertUser).toBeDefined();
-    expect(UserRepository.updateUserRole).toBeDefined();
-    expect(UserRepository.deleteUser).toBeDefined();
-    expect(UserRepository.createTable).toBeDefined();
+    expect(UserRepository["getUserByUsername"]).toBeDefined();
+    expect(UserRepository["getUserByAccessToken"]).toBeDefined();
+    expect(UserRepository["upsertUser"]).toBeDefined();
+    expect(UserRepository["updateUserRole"]).toBeDefined();
+    expect(UserRepository["deleteUser"]).toBeDefined();
+    expect(UserRepository["createTable"]).toBeDefined();
   });
 
   it("should be properly mocked for testing", () => {
-    expect(jest.isMockFunction(UserRepository.getUserByUsername)).toBe(true);
+    expect(jest.isMockFunction(UserRepository["getUserByUsername"])).toBe(true);
   });
 });

@@ -2,9 +2,11 @@
 
 import { Input, Empty } from "antd";
 import { useState, useMemo } from "react";
-import BrandCard from "./BrandCard";
 import { List } from "antd";
+
 import { SanityBrand } from "@/types/Brand";
+
+import BrandCard from "./BrandCard";
 
 interface BrandsWithSearchProps {
   brands: SanityBrand[];

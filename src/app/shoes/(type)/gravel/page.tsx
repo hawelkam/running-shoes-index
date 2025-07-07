@@ -3,7 +3,7 @@ import ShoeTypePageLayout, {
 } from "@/components/features/shoes/ShoePurposePageLayout";
 import { FilteredShoePageProps } from "@/types/FilteredShoePageProps";
 
-export default async function GravelShoesPage(props: FilteredShoePageProps) {
+export default function GravelShoesPage(props: FilteredShoePageProps) {
   const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {

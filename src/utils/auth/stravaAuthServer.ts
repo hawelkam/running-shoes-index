@@ -4,6 +4,7 @@
 
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+
 import { UserRepository, type User } from "@/utils/database";
 
 export interface StravaUser {
@@ -28,7 +29,7 @@ export async function getStravaUser(): Promise<StravaUser | null> {
       return null;
     }
 
-    const jwtSecret = process.env["JWT_SECRET"] || "your-jwt-secret-key";
+    const jwtSecret = process.env["JWT_SECRET"] ?? "your-jwt-secret-key";
     const decoded = jwt.verify(authCookie.value, jwtSecret) as StravaUser;
 
     return decoded;

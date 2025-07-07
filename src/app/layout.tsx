@@ -4,6 +4,7 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout } from "antd";
 import { Content, Footer } from "antd/es/layout/layout";
+
 import ResponsiveHeader from "@/components/layout/ResponsiveHeader";
 
 const geistSans = localFont({

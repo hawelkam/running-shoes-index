@@ -1,8 +1,9 @@
 "use client";
 
-import { SanityRunningShoe } from "@/types/RunningShoe";
 import Image from "next/image";
 import Link from "next/link";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface ShoeComparisonDisplayProps {
   shoe1: SanityRunningShoe;
@@ -24,14 +25,14 @@ export default function ShoeComparisonDisplay({
         if (prices?.pl?.price) return `${prices.pl.price} PLN`;
         return "N/A";
       case "weight":
-        const weight = shoe.specs.m?.weight || shoe.specs.w?.weight;
+        const weight = shoe.specs.m?.weight ?? shoe.specs.w?.weight;
         return weight ? `${weight}g` : "N/A";
       case "drop":
-        const drop = shoe.specs.m?.drop || shoe.specs.w?.drop;
+        const drop = shoe.specs.m?.drop ?? shoe.specs.w?.drop;
         return drop !== undefined ? `${drop}mm` : "N/A";
       case "stackHeight":
-        const heelStack = shoe.specs.m?.heelStack || shoe.specs.w?.heelStack;
-        const dropValue = shoe.specs.m?.drop || shoe.specs.w?.drop;
+        const heelStack = shoe.specs.m?.heelStack ?? shoe.specs.w?.heelStack;
+        const dropValue = shoe.specs.m?.drop ?? shoe.specs.w?.drop;
         if (heelStack && dropValue !== undefined) {
           const forefoot = heelStack - dropValue;
           return `${heelStack}mm / ${forefoot}mm`;

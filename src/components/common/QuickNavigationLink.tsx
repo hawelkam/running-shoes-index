@@ -37,7 +37,7 @@ const QuickNavigationLink = ({
     >
       <div className="flex items-center">
         <div className="bg-blue-100 p-3 rounded-full mr-4">
-          {icon || defaultIcon}
+          {icon ?? defaultIcon}
         </div>
         <div>
           <h3 className="font-semibold text-gray-800 group-hover:text-white">

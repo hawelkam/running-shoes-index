@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Tabs, Card, Typography, Button, Space } from "antd";
 import { UserOutlined, ProductOutlined, StarOutlined } from "@ant-design/icons";
+
 import type { User } from "@/utils/database";
 
 const { Title, Paragraph } = Typography;

@@ -1,21 +1,22 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { Alert, Empty, Spin } from "antd";
+import { useSearchParams } from "next/navigation";
+
 import { SanityRunningShoe } from "@/types/RunningShoe";
 import ShoeTableElement from "@/components/features/shoes/ShoeTableElement";
 import ShoeTableCard from "@/components/features/shoes/ShoeTableCard";
-import GenericPagination from "../common/GenericPagination";
 import GenericFilters from "@/components/features/shoes/GenericFilters";
 import ResultsCount from "@/components/features/shoes/ResultsCount";
 import { client } from "@/sanity/client";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import {
   FilterParams,
   buildFilterConditions,
   hasActiveFilters,
 } from "@/utils/filterUtils";
 import { Category } from "@/actions/getCategories";
-import { Alert, Empty, Spin } from "antd";
+import GenericPagination from "@/components/common/GenericPagination";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -25,20 +26,20 @@ interface SearchResultsProps {
 
 const SearchResults = ({ categories = [] }: SearchResultsProps) => {
   const searchParams = useSearchParams();
-  const query = searchParams.get("query") || "";
-  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const query = searchParams.get("query") ?? "";
+  const currentPage = parseInt(searchParams.get("page") ?? "1", 10);
 
   // Get filter parameters from URL, memoized to avoid unnecessary re-renders
   const filters: FilterParams = React.useMemo(
     () => ({
-      category: searchParams.get("category") || "",
-      priceMin: searchParams.get("priceMin") || "",
-      priceMax: searchParams.get("priceMax") || "",
-      weightMin: searchParams.get("weightMin") || "",
-      weightMax: searchParams.get("weightMax") || "",
-      dropMin: searchParams.get("dropMin") || "",
-      dropMax: searchParams.get("dropMax") || "",
-      reviewed: searchParams.get("reviewed") || "",
+      category: searchParams.get("category") ?? "",
+      priceMin: searchParams.get("priceMin") ?? "",
+      priceMax: searchParams.get("priceMax") ?? "",
+      weightMin: searchParams.get("weightMin") ?? "",
+      weightMax: searchParams.get("weightMax") ?? "",
+      dropMin: searchParams.get("dropMin") ?? "",
+      dropMax: searchParams.get("dropMax") ?? "",
+      reviewed: searchParams.get("reviewed") ?? "",
       search: query, // Use the main query as search filter
     }),
     [searchParams, query]
@@ -114,7 +115,7 @@ const SearchResults = ({ categories = [] }: SearchResultsProps) => {
       }
     }
 
-    getShoes(query || "", currentPage, filters);
+    void getShoes(query || "", currentPage, filters);
   }, [query, currentPage, filters]);
 
   if (loading) {

@@ -1,7 +1,8 @@
 "use client";
 
-import { SanityRunningShoe } from "@/types/RunningShoe";
 import Link from "next/link";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface LatestReleasesProps {
   shoes: SanityRunningShoe[];

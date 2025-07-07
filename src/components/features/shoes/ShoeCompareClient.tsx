@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import { SanityRunningShoe } from "@/types/RunningShoe";
+
 import ShoeComparisonDisplay from "./ShoeComparisonDisplay";
 import ShoeSelector from "./ShoeSelector";
 
@@ -17,7 +19,7 @@ export default function ShoeCompareClient() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchShoes();
+    void fetchShoes();
   }, []);
 
   const fetchShoes = async () => {
@@ -27,7 +29,7 @@ export default function ShoeCompareClient() {
       if (!response.ok) {
         throw new Error("Failed to fetch shoes");
       }
-      const data = await response.json();
+      const data = (await response.json()) as SanityRunningShoe[];
       setShoes(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -49,7 +51,9 @@ export default function ShoeCompareClient() {
       <div className="text-center py-8">
         <p className="text-red-600 mb-4">Error loading shoes: {error}</p>
         <button
-          onClick={fetchShoes}
+          onClick={() => {
+            void fetchShoes();
+          }}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           Try Again

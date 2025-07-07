@@ -1,9 +1,10 @@
+import { redirect } from "next/navigation";
+
 import AdminClient from "@/components/features/admin/AdminClient";
 import {
   getStravaUser,
   getUserFromDatabase,
 } from "@/utils/auth/stravaAuthServer";
-import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
   // Get authenticated user

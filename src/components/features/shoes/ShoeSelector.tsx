@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { SanityRunningShoe } from "@/types/RunningShoe";
 import Image from "next/image";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface ShoeSelectorProps {
   shoes: SanityRunningShoe[];

@@ -1,6 +1,7 @@
-import { RunningShoe, SanityRunningShoe } from "@/types/RunningShoe";
 import { Image } from "antd";
 import Link from "next/link";
+
+import { RunningShoe, SanityRunningShoe } from "@/types/RunningShoe";
 
 export const mapToRunningShoe = (shoe: SanityRunningShoe): RunningShoe => ({
   name: shoe.name,
@@ -98,9 +99,9 @@ export const mapToRunningShoeSpecs = (shoe: SanityRunningShoe) => [
   {
     key: "4",
     label: "Men's stack height",
-    children:
-      shoe.specs.m?.heelStack &&
-      `${shoe.specs.m?.heelStack}mm - ${shoe.specs.m?.heelStack - shoe.specs.m!.drop!}mm`,
+    children: shoe.specs.m?.heelStack
+      ? `${shoe.specs.m.heelStack}mm - ${shoe.specs.m.heelStack - shoe.specs.m.drop!}mm`
+      : "-",
   },
   {
     key: "5",
@@ -115,9 +116,9 @@ export const mapToRunningShoeSpecs = (shoe: SanityRunningShoe) => [
   {
     key: "7",
     label: "Women's stack height",
-    children:
-      shoe.specs.w?.heelStack &&
-      `${shoe.specs.w?.heelStack}mm - ${shoe.specs.w?.heelStack - shoe.specs.w!.drop!}mm`,
+    children: shoe.specs.w?.heelStack
+      ? `${shoe.specs.w.heelStack}mm - ${shoe.specs.w.heelStack - shoe.specs.w.drop!}mm`
+      : "-",
   },
   {
     key: "8",

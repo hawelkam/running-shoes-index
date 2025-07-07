@@ -84,5 +84,7 @@ export function buildFilterConditions(
 }
 
 export function hasActiveFilters(filters: FilterParams): boolean {
-  return Object.values(filters).some((value) => value && value.trim() !== "");
+  return Object.values(filters).some(
+    (value) => typeof value === "string" && value.trim() !== ""
+  );
 }

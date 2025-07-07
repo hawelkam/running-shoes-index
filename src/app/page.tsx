@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import { SanityRunningShoe } from "@/types/RunningShoe";
 import { client } from "@/sanity/client";
-import Link from "next/link";
 import QuickNavigationLink from "@/components/common/QuickNavigationLink";
 import LatestReleases from "@/components/layout/LatestReleases";
 import LatestReviews from "@/components/layout/LatestReviews";

@@ -1,7 +1,8 @@
-import { client } from "@/sanity/client";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+
+import { client } from "@/sanity/client";
 import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   getStravaUser,

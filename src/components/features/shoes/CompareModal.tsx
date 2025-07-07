@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "antd";
+import { useState } from "react";
+
 import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   prepareHeightInMM,
@@ -7,8 +10,6 @@ import {
   preparePriceInfo,
   prepareWeight,
 } from "@/utils/helpers";
-import { Button } from "antd";
-import { useState } from "react";
 
 interface ModalProps {
   shoe: SanityRunningShoe;

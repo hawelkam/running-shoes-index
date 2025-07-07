@@ -1,10 +1,7 @@
-import { client } from "@/sanity/client";
 import { Suspense } from "react";
+
+import { client } from "@/sanity/client";
 import { SanityRunningShoe } from "@/types/RunningShoe";
-import GenericFilters from "./GenericFilters";
-import ResultsCount from "./ResultsCount";
-import ShoeTableElement from "./ShoeTableElement";
-import ShoeTableCard from "./ShoeTableCard";
 import {
   FilterParams,
   buildFilterConditions,
@@ -12,6 +9,11 @@ import {
 } from "@/utils/filterUtils";
 import { getCategories } from "@/actions/getCategories";
 import GenericPagination from "@/components/common/GenericPagination";
+
+import GenericFilters from "./GenericFilters";
+import ResultsCount from "./ResultsCount";
+import ShoeTableElement from "./ShoeTableElement";
+import ShoeTableCard from "./ShoeTableCard";
 
 interface ShoePurposePageProps {
   searchParams: Promise<{
@@ -83,7 +85,7 @@ async function getData(
 export default async function ShoeTypePageLayout(props: ShoePurposePageProps) {
   const { config } = props;
   const searchParams = await props.searchParams;
-  const currentPage = parseInt(searchParams.page || "1", 10);
+  const currentPage = parseInt(searchParams.page ?? "1", 10);
 
   const filters: FilterParams = {
     category: searchParams.category,

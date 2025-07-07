@@ -3,9 +3,7 @@ import ShoePurposePageLayout, {
 } from "@/components/features/shoes/ShoePurposePageLayout";
 import { FilteredShoePageProps } from "@/types/FilteredShoePageProps";
 
-export default async function GymTreadmillShoesPage(
-  props: FilteredShoePageProps
-) {
+export default function GymTreadmillShoesPage(props: FilteredShoePageProps) {
   const shoePurposeProps: ShoePurposePageProps = {
     searchParams: props.searchParams,
     config: {

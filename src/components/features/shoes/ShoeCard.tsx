@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Card from "antd/es/card/Card";
 import Title from "antd/es/typography/Title";
+
 import { RunningShoe } from "@/types/RunningShoe";
 
 interface IProps {

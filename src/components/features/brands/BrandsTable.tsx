@@ -1,8 +1,10 @@
 "use client";
 
-import { SanityBrand } from "@/types/Brand";
-import BrandCard from "./BrandCard";
 import { List } from "antd";
+
+import { SanityBrand } from "@/types/Brand";
+
+import BrandCard from "./BrandCard";
 
 interface BrandsTableProps {
   brands: SanityBrand[];

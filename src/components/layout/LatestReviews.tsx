@@ -1,8 +1,9 @@
 "use client";
 
-import { SanityRunningShoe } from "@/types/RunningShoe";
 import Link from "next/link";
 import Image from "next/image";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
 
 interface ReviewWithShoe {
   _id: string;

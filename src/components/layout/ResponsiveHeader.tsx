@@ -9,13 +9,15 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
-import SearchInput from "./SearchInput";
+
 import { getStravaAuthUrl } from "@/utils/auth/getStravaAuthUrl";
 import {
   getStravaUserInfo,
   clearStravaAuth,
   type StravaUserInfo,
 } from "@/utils/auth/stravaAuth";
+
+import SearchInput from "./SearchInput";
 
 export default function ResponsiveHeader() {
   const [searchVisible, setSearchVisible] = useState(false);

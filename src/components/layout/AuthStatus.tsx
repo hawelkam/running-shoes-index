@@ -8,6 +8,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
+
 import {
   getStravaUserInfo,
   clearStravaAuth,
@@ -54,7 +55,7 @@ export default function AuthStatus({
 
     // Fetch database user info if authenticated
     if (user) {
-      fetchDatabaseUser();
+      void fetchDatabaseUser();
     }
 
     setLoading(false);
@@ -64,7 +65,7 @@ export default function AuthStatus({
     try {
       const response = await fetch("/api/user/info");
       if (response.ok) {
-        const data = await response.json();
+        const data = (await response.json()) as { user: DatabaseUser };
         setDbUser(data.user);
       }
     } catch (error) {

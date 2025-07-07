@@ -1,4 +1,5 @@
 import { SanityDocument } from "next-sanity";
+
 import { SanityRunningShoe } from "./RunningShoe";
 
 export type SanityRunningShoeReview = SanityDocument & {

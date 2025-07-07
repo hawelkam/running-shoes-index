@@ -1,9 +1,10 @@
-import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+import { client } from "@/sanity/client";
 import { SanityRunningShoe } from "@/types/RunningShoe";
 import { SanityRunningShoeReview } from "@/types/RunningShoeReview";
 import { preparePriceInUSD, prepareReleaseDate } from "@/utils/helpers";
@@ -225,13 +226,13 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
                 </span>
               </div>
 
-              {(review.weightL || review.weightR) && (
+              {(review.weightL ?? review.weightR) && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">Weight:</span>
                   <span className="font-medium">
                     {review.weightL && review.weightR
                       ? `${review.weightL}g / ${review.weightR}g (L/R)`
-                      : `${review.weightL || review.weightR}g`}
+                      : `${review.weightL ?? review.weightR}g`}
                   </span>
                 </div>
               )}
@@ -239,7 +240,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
           </div>
 
           {/* Video Reviews */}
-          {(review.enReview || review.plReview) && (
+          {(review.enReview ?? review.plReview) && (
             <div className="border-t border-gray-200 pt-6">
               <h2 className="text-xl font-semibold mb-4">Video Reviews</h2>
               <div className="space-y-4">

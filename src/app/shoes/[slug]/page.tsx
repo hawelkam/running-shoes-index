@@ -1,8 +1,9 @@
-import { client } from "@/sanity/client";
 import { notFound } from "next/navigation";
 import React from "react";
-import { SanityRunningShoe } from "@/types/RunningShoe";
 import { Image } from "antd";
+import Link from "next/link";
+
+import { SanityRunningShoe } from "@/types/RunningShoe";
 import {
   isCurrentYearRelease,
   prepareHeightInMM,
@@ -13,7 +14,7 @@ import {
   prepareReleaseDate,
   prepareWeight,
 } from "@/utils/helpers";
-import Link from "next/link";
+import { client } from "@/sanity/client";
 import { SanityRunningShoeReview } from "@/types/RunningShoeReview";
 import CompareModal from "@/components/features/shoes/CompareModal";
 
