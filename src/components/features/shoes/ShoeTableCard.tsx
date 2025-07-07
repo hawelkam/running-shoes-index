@@ -25,7 +25,7 @@ const ShoeTableCard = ({ shoe }: ShoeTableCardProps) => {
             <h3 className="font-semibold text-lg">{shoe.name}</h3>
             <div className="flex items-center mt-1">
               <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                {shoe.categories?.join(", ") ?? "No Category"}
+                {shoe.categories?.length ? shoe.categories.join(", ") : "No Category"}
               </span>
             </div>
           </div>
