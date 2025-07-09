@@ -49,22 +49,13 @@ export async function getStravaUser(): Promise<StravaUser | null> {
     console.log("🔓 getStravaUser: Attempting to verify JWT token");
     const decoded = jwt.verify(authCookie.value, jwtSecret) as StravaUser;
 
-    console.log("✅ getStravaUser: JWT verification successful:", {
-      userId: decoded.id,
-      firstName: decoded.firstName,
-      lastName: decoded.lastName,
-      hasAccessToken: !!decoded.stravaAccessToken,
-      hasRefreshToken: !!decoded.stravaRefreshToken,
-      expiresAt: decoded.stravaExpiresAt,
-      isExpired: Date.now() > decoded.stravaExpiresAt * 1000,
-    });
-
+    console.log(
+      "getStravaUser: JWT verification successful for user:",
+      decoded.id
+    );
     return decoded;
   } catch (error) {
-    console.error(
-      "❌ getStravaUser: Error verifying Strava auth token:",
-      error
-    );
+    console.error("getStravaUser: Error verifying Strava auth token:", error);
     return null;
   }
 }
