@@ -56,10 +56,25 @@ export class UserRepository {
 
   // Get user by access token
   static async getUserByAccessToken(accessToken: string): Promise<User | null> {
+    console.log(
+      "🔍 UserRepository.getUserByAccessToken: Querying database for accessToken:",
+      {
+        accessTokenLength: accessToken?.length,
+        accessTokenPrefix: accessToken?.substring(0, 10),
+      }
+    );
+
     const result = await sql`
       SELECT * FROM users WHERE accesstoken = ${accessToken}
     `;
-    return (result[0] as User) || null;
+
+    console.log("🗄️ UserRepository.getUserByAccessToken: Query result:", {
+      resultCount: result.length,
+      hasFirstResult: !!result[0],
+      rawResult: result[0],
+    });
+
+    return (result[0] as User) ?? null;
   }
 
   // Update user access token
