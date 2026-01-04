@@ -23,7 +23,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, notes, previousVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}, image, nextVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper[]->, foam[]->, plate, outsole[]->}, stability, notes}}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper, foam, plate, outsole}, notes, previousVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper, foam, plate, outsole}, stability, notes}, image, nextVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper, foam, plate, outsole}, stability, notes}}`,
       {},
       { next: { revalidate: 60 } }
     );
@@ -61,6 +61,7 @@ const ShoePage = async (props: { params: Params }) => {
   if (!shoe) {
     notFound(); // Trigger 404 page if the shoe is not found
   }
+  console.log("Shoe data:", shoe);
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <nav className="flex mb-6" aria-label="Breadcrumb">
@@ -153,15 +154,11 @@ const ShoePage = async (props: { params: Params }) => {
               </div>
               <div className="flex flex-col">
                 <span className="text-gray-500 text-sm">Upper</span>
-                <span className="font-medium">
-                  {shoe.specs.upper?.map((upp) => upp.name).join(", ")}
-                </span>
+                <span className="font-medium">{shoe.specs.upper}</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-gray-500 text-sm">Foam</span>
-                <span className="font-medium">
-                  {shoe.specs.foam?.map((foam) => foam.name).join(", ")}
-                </span>
+                <span className="font-medium">{shoe.specs.foam}</span>
               </div>
               <div className="flex flex-col">
                 <span className="text-gray-500 text-sm">Plate</span>
@@ -169,11 +166,7 @@ const ShoePage = async (props: { params: Params }) => {
               </div>
               <div className="flex flex-col">
                 <span className="text-gray-500 text-sm">Outsole</span>
-                <span className="font-medium">
-                  {shoe.specs.outsole
-                    ?.map((outsole) => outsole.name)
-                    .join(", ")}
-                </span>
+                <span className="font-medium">{shoe.specs.outsole}</span>
               </div>
             </div>
           </div>

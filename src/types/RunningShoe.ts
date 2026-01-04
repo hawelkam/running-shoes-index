@@ -30,10 +30,10 @@ export type SanityRunningShoe = SanityDocument & {
           heelStack?: number | undefined;
         }
       | undefined;
-    upper?: { name: string }[] | undefined;
-    foam?: { name: string }[] | undefined;
-    plate: string;
-    outsole?: { name: string }[] | undefined;
+    upper?: string | undefined;
+    foam?: string | undefined;
+    plate?: string | undefined;
+    outsole?: string | undefined;
   };
   slug: { current: string };
   notes: string;

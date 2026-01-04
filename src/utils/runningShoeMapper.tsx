@@ -128,12 +128,12 @@ export const mapToRunningShoeSpecs = (shoe: SanityRunningShoe) => [
   {
     key: "9",
     label: "Upper",
-    children: shoe.specs.upper?.map((f) => f.name).join(", "),
+    children: shoe.specs.upper,
   },
   {
     key: "10",
     label: "Foam",
-    children: shoe.specs.foam?.map((f) => f.name).join(", "),
+    children: shoe.specs.foam,
   },
   {
     key: "11",
@@ -143,7 +143,7 @@ export const mapToRunningShoeSpecs = (shoe: SanityRunningShoe) => [
   {
     key: "12",
     label: "Outsole",
-    children: shoe.specs.outsole?.map((o) => o.name).join(", "),
+    children: shoe.specs.outsole,
   },
   {
     key: "13",

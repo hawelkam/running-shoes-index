@@ -118,18 +118,15 @@ describe("Helper Functions", () => {
   });
 
   describe("prepareListDividedByComma", () => {
-    it("should format array of items with names", () => {
-      const items = [
-        { name: "EVA foam" },
-        { name: "TPU plate" },
-        { name: "Carbon fiber" },
-      ];
-      const result = prepareListDividedByComma(items);
+    it("should return the string value", () => {
+      const result = prepareListDividedByComma(
+        "EVA foam, TPU plate, Carbon fiber"
+      );
       expect(result).toBe("EVA foam, TPU plate, Carbon fiber");
     });
 
-    it("should handle empty array", () => {
-      const result = prepareListDividedByComma([]);
+    it("should handle empty string", () => {
+      const result = prepareListDividedByComma("");
       expect(result).toBe("-");
     });
 

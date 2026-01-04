@@ -76,11 +76,9 @@ export function prepareWeight(weight: number | undefined): string {
   }
   return "-";
 }
-export function prepareListDividedByComma(
-  items: { name: string }[] | undefined
-): string {
-  if (items && items.length > 0) {
-    return items.map((u) => u.name).join(", ");
+export function prepareListDividedByComma(value: string | undefined): string {
+  if (value && value.length > 0) {
+    return value;
   }
   return "-";
 }
