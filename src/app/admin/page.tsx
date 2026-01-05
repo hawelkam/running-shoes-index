@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-// import AdminClient from "@/components/features/admin/AdminClient";
+import AdminDashboardClient from "@/components/features/admin/AdminDashboardClient";
 import {
   getStravaUser,
   getUserFromDatabase,
@@ -33,17 +33,15 @@ export default async function AdminPage() {
 
     console.log("AdminPage: Admin access granted");
 
-    // Temporarily return a simple div instead of AdminClient to test
     return (
-      <div className="p-8">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p>Welcome, {dbUser.username}!</p>
-        <p>Role: {dbUser.role}</p>
-        <p>User ID: {dbUser.id}</p>
-      </div>
+      <AdminDashboardClient
+        user={{
+          id: dbUser.id ?? 0,
+          username: dbUser.username,
+          role: dbUser.role,
+        }}
+      />
     );
-
-    // return <AdminClient user={dbUser} />;
   } catch (error) {
     console.error("AdminPage error:", error);
     redirect("/");

@@ -61,7 +61,6 @@ const ShoePage = async (props: { params: Params }) => {
   if (!shoe) {
     notFound(); // Trigger 404 page if the shoe is not found
   }
-  console.log("Shoe data:", shoe);
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <nav className="flex mb-6" aria-label="Breadcrumb">

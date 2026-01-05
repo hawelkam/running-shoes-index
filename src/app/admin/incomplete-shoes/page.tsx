@@ -48,12 +48,9 @@ async function getIncompleteShoesData(): Promise<IncompleteShoe[]> {
         if (!shoe.releaseInfo?.us?.price) missingFields.push("US Price");
 
         // Check materials
-        if (!shoe.specs?.foam || shoe.specs.foam.length === 0)
-          missingFields.push("Foam");
-        if (!shoe.specs?.upper || shoe.specs.upper.length === 0)
-          missingFields.push("Upper");
-        if (!shoe.specs?.outsole || shoe.specs.outsole.length === 0)
-          missingFields.push("Outsole");
+        if (!shoe.specs?.foam) missingFields.push("Foam");
+        if (!shoe.specs?.upper) missingFields.push("Upper");
+        if (!shoe.specs?.outsole) missingFields.push("Outsole");
         if (!shoe.specs?.plate) missingFields.push("Plate");
 
         // Check men's specs

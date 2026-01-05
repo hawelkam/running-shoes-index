@@ -1,11 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { client } from "@/sanity/client";
 import { SanityRunningShoe } from "@/types/RunningShoe";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const query = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc){
+    const { searchParams } = new URL(request.url);
+    const minimal = searchParams.get("minimal") === "true";
+
+    // Minimal query for dropdowns - only fetches _id, name, and brand name
+    const minimalQuery = `*[_type == "runningShoe"]|order(lower(name) asc){
+      _id,
+      name,
+      brand->{name}
+    }`;
+
+    const fullQuery = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc){
       _id,
       name,
       slug,
@@ -16,6 +26,8 @@ export async function GET() {
       specs,
       releaseInfo
     }`;
+
+    const query = minimal ? minimalQuery : fullQuery;
 
     const data = await client.fetch<SanityRunningShoe[]>(
       query,
