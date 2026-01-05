@@ -14,7 +14,10 @@ import {
   Divider,
   DatePicker,
 } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+
+import type { ShoeInfoResponse } from "@/app/api/admin/fetch-shoe-info/route";
 
 interface Brand {
   _id: string;
@@ -99,6 +102,7 @@ export default function CreateShoeDialog({
 }: CreateShoeDialogProps) {
   const [form] = Form.useForm<CreateShoeFormValues>();
   const [loading, setLoading] = useState(false);
+  const [fetchingInfo, setFetchingInfo] = useState(false);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [shoes, setShoes] = useState<ShoeReference[]>([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -226,6 +230,101 @@ export default function CreateShoeDialog({
   const handleCancel = () => {
     form.resetFields();
     onClose();
+  };
+
+  const handleFetchFromPerplexity = async () => {
+    const shoeName = form.getFieldValue("name") as string;
+    if (!shoeName || shoeName.trim().length < 2) {
+      message.warning("Please enter a shoe name first");
+      return;
+    }
+
+    setFetchingInfo(true);
+    try {
+      const response = await fetch("/api/admin/fetch-shoe-info", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shoeName: shoeName.trim() }),
+      });
+
+      const result = (await response.json()) as {
+        success?: boolean;
+        data?: ShoeInfoResponse;
+        error?: string;
+      };
+
+      if (!response.ok || !result.success || !result.data) {
+        throw new Error(result.error ?? "Failed to fetch shoe info");
+      }
+
+      const data = result.data;
+
+      // Find brand ID by name
+      const brandId = data.brand
+        ? brands.find((b) => b.name.toLowerCase() === data.brand?.toLowerCase())
+            ?._id
+        : undefined;
+
+      // Build form values object, only including defined values
+      const formValues: Partial<CreateShoeFormValues> = {
+        name: data.name ?? shoeName,
+        wideAvailable: data.wideAvailable ?? false,
+      };
+
+      if (brandId) formValues.brandId = brandId;
+      if (data.purpose) formValues.purpose = data.purpose;
+      if (data.stability) formValues.stability = data.stability;
+      if (data.categories) formValues.categories = data.categories;
+
+      // Release info
+      if (data.releaseInfo?.pl?.date)
+        formValues.plReleaseDate = dayjs(
+          data.releaseInfo.pl.date
+        ) as unknown as Date;
+      if (data.releaseInfo?.pl?.price)
+        formValues.plPrice = data.releaseInfo.pl.price;
+      if (data.releaseInfo?.eu?.date)
+        formValues.euReleaseDate = dayjs(
+          data.releaseInfo.eu.date
+        ) as unknown as Date;
+      if (data.releaseInfo?.eu?.price)
+        formValues.euPrice = data.releaseInfo.eu.price;
+      if (data.releaseInfo?.us?.date)
+        formValues.usReleaseDate = dayjs(
+          data.releaseInfo.us.date
+        ) as unknown as Date;
+      if (data.releaseInfo?.us?.price)
+        formValues.usPrice = data.releaseInfo.us.price;
+
+      // Specs
+      if (data.specs?.m?.weight) formValues.mWeight = data.specs.m.weight;
+      if (data.specs?.m?.drop) formValues.mDrop = data.specs.m.drop;
+      if (data.specs?.m?.heelStack)
+        formValues.mHeelStack = data.specs.m.heelStack;
+      if (data.specs?.w?.weight) formValues.wWeight = data.specs.w.weight;
+      if (data.specs?.w?.drop) formValues.wDrop = data.specs.w.drop;
+      if (data.specs?.w?.heelStack)
+        formValues.wHeelStack = data.specs.w.heelStack;
+      if (data.specs?.upper) formValues.upper = data.specs.upper;
+      if (data.specs?.foam) formValues.foam = data.specs.foam;
+      if (data.specs?.plate) formValues.plate = data.specs.plate;
+      if (data.specs?.outsole) formValues.outsole = data.specs.outsole;
+
+      // Description as notes
+      if (data.description) formValues.notes = data.description;
+
+      // Update form with fetched data
+      form.setFieldsValue(formValues);
+
+      message.success("Shoe information fetched successfully!");
+    } catch (error) {
+      console.error("Error fetching shoe info:", error);
+      message.error(
+        error instanceof Error ? error.message : "Failed to fetch shoe info"
+      );
+    } finally {
+      setFetchingInfo(false);
+    }
   };
 
   const tabItems = [
@@ -542,6 +641,14 @@ export default function CreateShoeDialog({
       footer={[
         <Button key="cancel" onClick={handleCancel}>
           Cancel
+        </Button>,
+        <Button
+          key="fetch"
+          icon={<SearchOutlined />}
+          loading={fetchingInfo}
+          onClick={() => void handleFetchFromPerplexity()}
+        >
+          Fetch info from Perplexity
         </Button>,
         <Button
           key="submit"
