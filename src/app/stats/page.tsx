@@ -26,9 +26,46 @@ export default function StatsPage() {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* 2025 H1 Statistics */}
+        {/* 2026 Full Year Statistics */}
         <Link
-          href="/stats/2025-h1"
+          href="/stats/2026"
+          className="group bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+        >
+          <div className="flex items-center mb-4">
+            <div className="bg-green-100 p-3 rounded-lg">
+              <svg
+                className="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-800 group-hover:text-green-600 transition-colors ml-3">
+              2026 Full Year
+            </h3>
+          </div>
+          <p className="text-gray-600 mb-4">
+            Statistics for shoes released in Poland throughout 2026, with
+            quarterly breakdown and daily trainer analysis.
+          </p>
+          <div className="text-sm text-gray-500">
+            • Full year + quarterly breakdown
+            <br />
+            • Price comparisons (PLN & EUR)
+            <br />• Daily trainer category breakdown
+          </div>
+        </Link>
+
+        {/* 2025 Full Year Statistics */}
+        <Link
+          href="/stats/2025"
           className="group bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
         >
           <div className="flex items-center mb-4">
@@ -48,15 +85,15 @@ export default function StatsPage() {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors ml-3">
-              2025 First Half
+              2025 Full Year
             </h3>
           </div>
           <p className="text-gray-600 mb-4">
-            Statistics for shoes released in Poland from January to June 2025,
-            including overall trends and daily trainer analysis.
+            Statistics for shoes released in Poland throughout 2025, with
+            quarterly breakdown and daily trainer analysis.
           </p>
           <div className="text-sm text-gray-500">
-            • Average drop and weight analysis
+            • Full year + quarterly breakdown
             <br />
             • Price comparisons (PLN & EUR)
             <br />• Daily trainer category breakdown

@@ -12,18 +12,34 @@ interface ShoeStats {
   averagePriceEUR: number;
 }
 
+interface QuarterlyStats {
+  q1: ShoeStats;
+  q2: ShoeStats;
+  q3: ShoeStats;
+  q4: ShoeStats;
+}
+
 interface StatsData {
   allShoes: ShoeStats;
   dailyTrainers: ShoeStats;
+  quarterlyAll: QuarterlyStats;
+  quarterlyDailyTrainers: QuarterlyStats;
   rawShoes: SanityRunningShoe[];
 }
 
-async function getFirstHalf2025Stats(): Promise<StatsData> {
+const QUARTER_DATES = {
+  q1: { start: "2025-01-01", end: "2025-03-31" },
+  q2: { start: "2025-04-01", end: "2025-06-30" },
+  q3: { start: "2025-07-01", end: "2025-09-30" },
+  q4: { start: "2025-10-01", end: "2025-12-31" },
+};
+
+async function get2025Stats(): Promise<StatsData> {
   const query = `*[
     _type == "runningShoe" &&
     defined(releaseInfo.pl.date) &&
     releaseInfo.pl.date >= "2025-01-01" &&
-    releaseInfo.pl.date <= "2025-06-30"
+    releaseInfo.pl.date <= "2025-12-31"
   ]{
     _id,
     name,
@@ -43,7 +59,7 @@ async function getFirstHalf2025Stats(): Promise<StatsData> {
     // Calculate stats for all shoes
     const allShoes = calculateStats(shoes);
 
-    // Filter and calculate stats for daily trainers
+    // Filter daily trainers
     const dailyTrainerShoes = shoes.filter((shoe) =>
       shoe.categories?.some(
         (cat) =>
@@ -53,33 +69,61 @@ async function getFirstHalf2025Stats(): Promise<StatsData> {
     );
     const dailyTrainers = calculateStats(dailyTrainerShoes);
 
+    // Calculate quarterly stats
+    const quarterlyAll = calculateQuarterlyStats(shoes);
+    const quarterlyDailyTrainers = calculateQuarterlyStats(dailyTrainerShoes);
+
     return {
       allShoes,
       dailyTrainers,
+      quarterlyAll,
+      quarterlyDailyTrainers,
       rawShoes: shoes,
     };
   } catch (error) {
-    console.error("Failed to fetch 2025 H1 stats:", error);
+    console.error("Failed to fetch 2025 stats:", error);
+    const emptyStats: ShoeStats = {
+      count: 0,
+      averageDrop: 0,
+      averageWeight: 0,
+      averageHeelStack: 0,
+      averagePricePLN: 0,
+      averagePriceEUR: 0,
+    };
+    const emptyQuarterly: QuarterlyStats = {
+      q1: emptyStats,
+      q2: emptyStats,
+      q3: emptyStats,
+      q4: emptyStats,
+    };
     return {
-      allShoes: {
-        count: 0,
-        averageDrop: 0,
-        averageWeight: 0,
-        averageHeelStack: 0,
-        averagePricePLN: 0,
-        averagePriceEUR: 0,
-      },
-      dailyTrainers: {
-        count: 0,
-        averageDrop: 0,
-        averageWeight: 0,
-        averageHeelStack: 0,
-        averagePricePLN: 0,
-        averagePriceEUR: 0,
-      },
+      allShoes: emptyStats,
+      dailyTrainers: emptyStats,
+      quarterlyAll: emptyQuarterly,
+      quarterlyDailyTrainers: emptyQuarterly,
       rawShoes: [],
     };
   }
+}
+
+function filterShoesByQuarter(
+  shoes: SanityRunningShoe[],
+  quarter: keyof typeof QUARTER_DATES
+): SanityRunningShoe[] {
+  const { start, end } = QUARTER_DATES[quarter];
+  return shoes.filter((shoe) => {
+    const date = shoe.releaseInfo?.pl?.date;
+    return date && date >= start && date <= end;
+  });
+}
+
+function calculateQuarterlyStats(shoes: SanityRunningShoe[]): QuarterlyStats {
+  return {
+    q1: calculateStats(filterShoesByQuarter(shoes, "q1")),
+    q2: calculateStats(filterShoesByQuarter(shoes, "q2")),
+    q3: calculateStats(filterShoesByQuarter(shoes, "q3")),
+    q4: calculateStats(filterShoesByQuarter(shoes, "q4")),
+  };
 }
 
 function calculateStats(shoes: SanityRunningShoe[]): ShoeStats {
@@ -106,31 +150,22 @@ function calculateStats(shoes: SanityRunningShoe[]): ShoeStats {
   let priceCountEUR = 0;
 
   shoes.forEach((shoe) => {
-    // Drop calculation (men's drop)
     if (shoe.specs?.m?.drop) {
       totalDrop += shoe.specs.m.drop;
       dropCount++;
     }
-
-    // Weight calculation (men's weight)
     if (shoe.specs?.m?.weight) {
       totalWeight += shoe.specs.m.weight;
       weightCount++;
     }
-
-    // Heel stack calculation (men's heel stack)
     if (shoe.specs?.m?.heelStack) {
       totalHeelStack += shoe.specs.m.heelStack;
       heelStackCount++;
     }
-
-    // Price PLN calculation
     if (shoe.releaseInfo?.pl?.price) {
       totalPricePLN += shoe.releaseInfo.pl.price;
       priceCountPLN++;
     }
-
-    // Price EUR calculation
     if (shoe.releaseInfo?.eu?.price) {
       totalPriceEUR += shoe.releaseInfo.eu.price;
       priceCountEUR++;
@@ -160,7 +195,6 @@ function calculateStats(shoes: SanityRunningShoe[]): ShoeStats {
 
 function formatCurrency(amount: number, currency: string): string {
   if (amount === 0) return "N/A";
-
   return new Intl.NumberFormat("pl-PL", {
     style: "currency",
     currency,
@@ -173,7 +207,6 @@ function StatCard({ title, stats }: { title: string; stats: ShoeStats }) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
       <h3 className="text-xl font-semibold text-gray-800 mb-6">{title}</h3>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <div className="text-center">
           <div className="text-3xl font-bold text-blue-600 mb-2">
@@ -181,35 +214,30 @@ function StatCard({ title, stats }: { title: string; stats: ShoeStats }) {
           </div>
           <div className="text-sm text-gray-600">Total Shoes</div>
         </div>
-
         <div className="text-center">
           <div className="text-3xl font-bold text-green-600 mb-2">
             {stats.averageDrop > 0 ? `${stats.averageDrop}mm` : "N/A"}
           </div>
           <div className="text-sm text-gray-600">Avg. Drop (Men)</div>
         </div>
-
         <div className="text-center">
           <div className="text-3xl font-bold text-purple-600 mb-2">
             {stats.averageWeight > 0 ? `${stats.averageWeight}g` : "N/A"}
           </div>
           <div className="text-sm text-gray-600">Avg. Weight (Men)</div>
         </div>
-
         <div className="text-center">
           <div className="text-3xl font-bold text-cyan-600 mb-2">
             {stats.averageHeelStack > 0 ? `${stats.averageHeelStack}mm` : "N/A"}
           </div>
           <div className="text-sm text-gray-600">Avg. Heel Stack (Men)</div>
         </div>
-
         <div className="text-center">
           <div className="text-3xl font-bold text-orange-600 mb-2">
             {formatCurrency(stats.averagePricePLN, "PLN")}
           </div>
           <div className="text-sm text-gray-600">Avg. Price (PLN)</div>
         </div>
-
         <div className="text-center">
           <div className="text-3xl font-bold text-red-600 mb-2">
             {formatCurrency(stats.averagePriceEUR, "EUR")}
@@ -221,8 +249,92 @@ function StatCard({ title, stats }: { title: string; stats: ShoeStats }) {
   );
 }
 
-export default async function Stats2025H1Page() {
-  const { allShoes, dailyTrainers, rawShoes } = await getFirstHalf2025Stats();
+function QuarterlyBreakdown({
+  title,
+  quarterly,
+}: {
+  title: string;
+  quarterly: QuarterlyStats;
+}) {
+  const quarters = [
+    { key: "q1" as const, label: "Q1 (Jan-Mar)" },
+    { key: "q2" as const, label: "Q2 (Apr-Jun)" },
+    { key: "q3" as const, label: "Q3 (Jul-Sep)" },
+    { key: "q4" as const, label: "Q4 (Oct-Dec)" },
+  ];
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+      <h3 className="text-xl font-semibold text-gray-800 mb-6">{title}</h3>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="text-left p-3 border-b font-medium">Quarter</th>
+              <th className="text-center p-3 border-b font-medium">Shoes</th>
+              <th className="text-center p-3 border-b font-medium">
+                Avg. Drop
+              </th>
+              <th className="text-center p-3 border-b font-medium">
+                Avg. Weight
+              </th>
+              <th className="text-center p-3 border-b font-medium">
+                Avg. Heel Stack
+              </th>
+              <th className="text-center p-3 border-b font-medium">
+                Avg. Price (PLN)
+              </th>
+              <th className="text-center p-3 border-b font-medium">
+                Avg. Price (EUR)
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {quarters.map(({ key, label }) => {
+              const stats = quarterly[key];
+              return (
+                <tr key={key} className="border-b hover:bg-gray-50">
+                  <td className="p-3 font-medium">{label}</td>
+                  <td className="p-3 text-center text-blue-600 font-semibold">
+                    {stats.count}
+                  </td>
+                  <td className="p-3 text-center">
+                    {stats.averageDrop > 0 ? `${stats.averageDrop}mm` : "N/A"}
+                  </td>
+                  <td className="p-3 text-center">
+                    {stats.averageWeight > 0
+                      ? `${stats.averageWeight}g`
+                      : "N/A"}
+                  </td>
+                  <td className="p-3 text-center">
+                    {stats.averageHeelStack > 0
+                      ? `${stats.averageHeelStack}mm`
+                      : "N/A"}
+                  </td>
+                  <td className="p-3 text-center">
+                    {formatCurrency(stats.averagePricePLN, "PLN")}
+                  </td>
+                  <td className="p-3 text-center">
+                    {formatCurrency(stats.averagePriceEUR, "EUR")}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export default async function Stats2025Page() {
+  const {
+    allShoes,
+    dailyTrainers,
+    quarterlyAll,
+    quarterlyDailyTrainers,
+    rawShoes,
+  } = await get2025Stats();
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -234,35 +346,50 @@ export default async function Stats2025H1Page() {
               Home
             </Link>
             <span>&gt;</span>
-            <span className="text-gray-800">2025 H1 Statistics</span>
+            <Link href="/stats" className="hover:text-blue-600">
+              Statistics
+            </Link>
+            <span>&gt;</span>
+            <span className="text-gray-800">2025</span>
           </div>
         </nav>
 
         <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          2025 First Half Statistics
+          2025 Full Year Statistics
         </h1>
         <p className="text-lg text-gray-600 mb-4">
-          Statistics for running shoes released in Poland between January and
-          June 2025
+          Statistics for running shoes released in Poland throughout 2025
         </p>
         <p className="text-sm text-gray-500">
-          Data period: January 1, 2025 - June 30, 2025
+          Data period: January 1, 2025 - December 31, 2025
         </p>
       </header>
 
-      {/* Statistics Cards */}
+      {/* Full Year Statistics Cards */}
       <div className="space-y-8">
-        {/* All Shoes Statistics */}
-        <StatCard title="All Shoes Released in 2025 H1" stats={allShoes} />
-
-        {/* Daily Trainers Statistics */}
+        <StatCard title="All Shoes Released in 2025" stats={allShoes} />
         <StatCard
-          title="Daily Trainers Released in 2025 H1"
+          title="Daily Trainers Released in 2025"
           stats={dailyTrainers}
         />
       </div>
 
-      {/* Detailed Breakdown */}
+      {/* Quarterly Breakdowns */}
+      <div className="mt-12 space-y-8">
+        <h2 className="text-2xl font-bold text-gray-800">
+          Quarterly Breakdown
+        </h2>
+        <QuarterlyBreakdown
+          title="All Shoes - Quarterly Stats"
+          quarterly={quarterlyAll}
+        />
+        <QuarterlyBreakdown
+          title="Daily Trainers - Quarterly Stats"
+          quarterly={quarterlyDailyTrainers}
+        />
+      </div>
+
+      {/* Methodology */}
       <div className="mt-12 bg-gray-50 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Methodology
@@ -298,7 +425,7 @@ export default async function Stats2025H1Page() {
       {rawShoes.length > 0 && (
         <div className="mt-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Sample Shoes ({rawShoes.length} total)
+            All Shoes ({rawShoes.length} total)
           </h2>
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className="max-h-96 overflow-y-auto">

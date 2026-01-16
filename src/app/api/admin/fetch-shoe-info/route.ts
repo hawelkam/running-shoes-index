@@ -276,7 +276,7 @@ export async function POST(request: NextRequest) {
         Authorization: `Bearer ${perplexityApiKey}`,
       },
       body: JSON.stringify({
-        model: "sonar",
+        model: "sonar-pro",
         messages,
         max_tokens: 2000,
         temperature: 0.1,
