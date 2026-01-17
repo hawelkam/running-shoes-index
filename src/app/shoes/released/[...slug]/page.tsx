@@ -44,6 +44,7 @@ async function getShoes(
     const baseDateConditions = [
       '_type == "runningShoe"',
       "defined(slug.current)",
+      "!defined(nextVersion)",
       `((releaseInfo.pl.date > "${slug[0]}-${slug[1] ?? "01"}-00" && releaseInfo.pl.date < "${slug[0]}-${slug[1] ?? "12"}-32") ||
          (releaseInfo.eu.date > "${slug[0]}-${slug[1] ?? "01"}-00" && releaseInfo.eu.date < "${slug[0]}-${slug[1] ?? "12"}-32") ||
          (releaseInfo.us.date > "${slug[0]}-${slug[1] ?? "01"}-00" && releaseInfo.us.date < "${slug[0]}-${slug[1] ?? "12"}-32"))`,

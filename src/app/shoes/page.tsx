@@ -39,7 +39,11 @@ async function getData(page: number = 1, filters: FilterParams = {}) {
   const end = start + ITEMS_PER_PAGE - 1;
 
   // Build filter conditions using the utility function
-  const baseConditions = ['_type == "runningShoe"', "defined(slug.current)"];
+  const baseConditions = [
+    '_type == "runningShoe"',
+    "defined(slug.current)",
+    "!defined(nextVersion)",
+  ];
   const filterConditions = buildFilterConditions(baseConditions, filters);
   const whereClause = filterConditions.join(" && ");
 

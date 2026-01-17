@@ -54,6 +54,7 @@ async function getShoesByBrand(
     const countQuery = `count(*[
         _type == "runningShoe" &&
         defined(slug.current) &&
+        !defined(nextVersion) &&
         brand->.slug.current == "${slug}"
       ])`;
 
@@ -68,6 +69,7 @@ async function getShoesByBrand(
       `*[
         _type == "runningShoe" &&
         defined(slug.current) &&
+        !defined(nextVersion) &&
         brand->.slug.current == "${slug}"
       ]|order(lower(name) asc)[${start}...${end + 1}]{
         _id,

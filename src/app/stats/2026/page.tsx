@@ -37,6 +37,7 @@ const QUARTER_DATES = {
 async function get2026Stats(): Promise<StatsData> {
   const query = `*[
     _type == "runningShoe" &&
+    !defined(nextVersion) &&
     defined(releaseInfo.pl.date) &&
     releaseInfo.pl.date >= "2026-01-01" &&
     releaseInfo.pl.date <= "2026-12-31"

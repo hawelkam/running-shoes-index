@@ -67,20 +67,6 @@ async function getIncompleteShoesData(): Promise<IncompleteShoe[]> {
           if (!menSpecs.heelStack) missingFields.push("Men's Heel Stack");
         }
 
-        // Check women's specs
-        const womenSpecs = shoe.specs?.w;
-        if (
-          !womenSpecs ||
-          (!womenSpecs.weight && !womenSpecs.drop && !womenSpecs.heelStack)
-        ) {
-          missingFields.push("Women's Specifications");
-        } else {
-          if (!womenSpecs.weight) missingFields.push("Women's Weight");
-          if (!womenSpecs.drop && womenSpecs.drop !== 0)
-            missingFields.push("Women's Drop");
-          if (!womenSpecs.heelStack) missingFields.push("Women's Heel Stack");
-        }
-
         return {
           ...shoe,
           missingFields,
@@ -108,7 +94,6 @@ function getMissingFieldColor(field: string): string {
     return "bg-purple-100 text-purple-800";
   }
   if (field.includes("Men's")) return "bg-blue-100 text-blue-800";
-  if (field.includes("Women's")) return "bg-pink-100 text-pink-800";
   return "bg-gray-100 text-gray-800";
 }
 
@@ -182,9 +167,6 @@ export default async function IncompleteShoesPage() {
           </span>
           <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
             Men&apos;s Specs
-          </span>
-          <span className="bg-pink-100 text-pink-800 px-2 py-1 rounded">
-            Women&apos;s Specs
           </span>
         </div>
       </div>

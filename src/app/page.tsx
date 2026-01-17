@@ -23,7 +23,7 @@ interface ReviewWithShoe {
 }
 
 async function getData() {
-  const query = `*[_type == "runningShoe" && defined(slug.current)]|order(_createdAt desc)[0...3]{_id, name, slug, purpose, categories[], image, releaseInfo}`;
+  const query = `*[_type == "runningShoe" && defined(slug.current) && !defined(nextVersion)]|order(_createdAt desc)[0...3]{_id, name, slug, purpose, categories[], image, releaseInfo}`;
 
   const data = await client.fetch<SanityRunningShoe[]>(
     query,

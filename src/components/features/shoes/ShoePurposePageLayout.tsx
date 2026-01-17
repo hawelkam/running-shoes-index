@@ -52,6 +52,7 @@ async function getData(
   const baseConditions = [
     '_type == "runningShoe"',
     "defined(slug.current)",
+    "!defined(nextVersion)",
     `purpose == "${purpose}"`,
   ];
 

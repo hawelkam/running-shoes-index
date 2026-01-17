@@ -23,7 +23,7 @@ type Params = Promise<{ slug: string }>;
 async function getShoe(slug: string): Promise<SanityRunningShoe | null> {
   try {
     const shoe = await client.fetch<SanityRunningShoe>(
-      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper, foam, plate, outsole}, notes, previousVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper, foam, plate, outsole}, stability, notes}, image, nextVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper, foam, plate, outsole}, stability, notes}}`,
+      `*[_type == "runningShoe" && slug.current == "${slug}"][0]{_id, name, brand->, purpose, releaseInfo, categories[], stability, specs { m, w, upper, foam, plate, outsole}, notes, previousVersion-> { name, purpose, releaseInfo, categories[], slug, image, specs { m, w, upper, foam, plate, outsole}, stability, notes}, image, nextVersion-> { name, releaseInfo, categories[], slug, image, specs { m, w, upper, foam, plate, outsole}, stability, notes}}`,
       {},
       { next: { revalidate: 60 } }
     );

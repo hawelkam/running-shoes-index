@@ -9,13 +9,13 @@ export async function GET(request: NextRequest) {
     const minimal = searchParams.get("minimal") === "true";
 
     // Minimal query for dropdowns - only fetches _id, name, and brand name
-    const minimalQuery = `*[_type == "runningShoe"]|order(lower(name) asc){
+    const minimalQuery = `*[_type == "runningShoe" && !defined(nextVersion)]|order(lower(name) asc){
       _id,
       name,
       brand->{name}
     }`;
 
-    const fullQuery = `*[_type == "runningShoe" && defined(slug.current)]|order(lower(name) asc){
+    const fullQuery = `*[_type == "runningShoe" && defined(slug.current) && !defined(nextVersion)]|order(lower(name) asc){
       _id,
       name,
       slug,
